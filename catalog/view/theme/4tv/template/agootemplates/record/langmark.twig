@@ -1,0 +1,22 @@
+{% if languages|length > 1 %}
+ <div id="form-language">
+ 
+<div class="header-language-wrapper btn-group">
+
+ {% for language in languages %}
+ 
+<div class="header-language {% if language.current %}active{% endif %}">
+ <button class="btn btn-link btn-block language-select" onclick="window.location = '{{ language.url }}'">{% if language.name == "Ukrainian" %}Ua{% else %}Ru{% endif %}</button>
+ </div>
+
+ 
+<div class="header-language-border"></div>
+
+ {% endfor %}
+
+ </div>
+
+ 
+ 
+ </div>
+{% endif %}

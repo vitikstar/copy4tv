@@ -1,0 +1,662 @@
+
+{% if (items) %}
+		<div id="megamenu" class="oct_container-megamenu vertical {% if (not_home) %}megamenu-not-home{% endif %}">
+			<div class="megamenu-wrapper">
+				<div class="m-menu-title-wrap">
+				<span class="m-menu-button">
+					<span></span>
+					<span></span>
+					<span></span>
+				</span>
+					<span class="m-menu-title">Каталог товаров</span>
+				</div>
+				<ul class="oct_megamenu shift-left" {% if (not_home) %} style="display: none" {% endif %}>
+					<li>
+						<p class="oct_close-menu"></p>
+						<p class="oct_open-menu mobile-disabled"></p>
+{#						<!--<a href="{{ href_all_product }}" class="clearfix">{{ text_all_product }}</a>-->#}
+					</li>
+					{% for item in items %}
+						{% if (item['children']) %}
+							{% if (item['item_type'] == 2) %}
+								{% if (item['display_type'] == 1) %}
+									<li class="with-sub-menu hover simple-menu">
+										<p class="oct_close-menu"></p>
+										<p class="oct_open-menu"></p>
+										<a href="{{ item['href'] }}" class="clearfix" {{ item['open_link_type'] ? 'target="_blank"' : '' }}>{% if (item['image']) %}<img src="{{ item['image'] }}" alt="{{ item['title'] }}" />{% endif %}{{ item['title'] }}</a>
+										<div class="sub-menu">
+											<div class="content">
+												<div class="row">
+													<div class="col-sm-12 mobile-enabled">
+														<div class="row">
+															{% for children in item['children'] %}
+																{% if (children['children']) %}
+																	<div class="col-sm-12 static-menu parent-static-menu">
+																		<div class="menu">
+																			<a href="{{ children['href'] }}" class="main-menu with-submenu">{{ children['name'] }}</a>
+																			<div class="oct_show_cat"></div>
+																			<div class="oct_hide_cat"></div>
+																			<ul class="children-classic">
+																				{% for child in children['children'] %}
+																					<li><a href="{{ child['href'] }}" >{{ child['name'] }}</a></li>
+																				{% endfor %}
+																			</ul>
+																		</div>
+																	</div>
+																{% else %}
+																	<div class="col-sm-12 static-menu {% if (children['child_3_level']) %}parent-static-menu{% endif %}">
+																		<div class="menu">
+																			<a href="{{ children['href'] }}" class="main-menu with-submenu">{{ children['name'] }}</a>
+																			{% if (children['child_3_level']) %}
+																				<div class="oct_show_cat"></div>
+																				<div class="oct_hide_cat"></div>
+																				<ul class="children-classic child-3-level-items">
+                                                                                    {% for child_3_level in children['child_3_level'] %}
+																						<li class="child-3-level-item">
+																							<div class="child-3-level-item-link">
+																								<a href="{{ child_3_level['href'] }}">
+																									<img src="{{ child_3_level['thumb'] }}" alt="" class="img-responsive">
+																								</a>
+																								<a href="{{ child_3_level['href'] }}">
+																									<span class="child-3-level-item-name">{{ child_3_level['name'] }}</span>
+																								</a>
+																								<span class="child-3-level-item-quantity">{{ child_3_level['count'] }}</span>
+																							</div>
+																						</li>
+                                                                                    {% endfor %}
+																				</ul>
+                                                                            {% endif %}
+
+																		</div>
+																	</div>
+																{% endif %}
+															{% endfor %}
+														</div>
+													</div>
+													{% if (item['description']) %}
+														<div class="col-sm-4 mobile-enabled ocmm-description">{{ item['description'] }}</div>
+													{% endif %}
+												</div>
+											</div>
+										</div>
+									</li>
+								{% else %}
+									<li class="with-sub-menu hover">
+										<p class="oct_close-menu"></p>
+										<p class="oct_open-menu"></p>
+										<a href="{{ item['href'] }}" class="clearfix" {{ item['open_link_type'] ? 'target="_blank"' : '' }}>{% if (item['image']) %}<img src="{{ item['image'] }}" alt="{{ item['title'] }}" />{% endif %}{{ item['title'] }}</a>
+
+										<div class="sub-menu wide-sub-menu" style="width: 280%; right: 0px;">
+											<div class="content">
+												<div class="row">
+													<div class="col-sm-{% if  (item['description']|length < 15) %}12{% else %}8{% endif %} mobile-enabled">
+														<div class="row wide-menu-row">
+															{% for children in item['children'] %}
+																{% if (children['children']) %}
+																	<div class="col-sm-{% if (item['description']|length < 15) %}3{% else %}4{% endif %} static-menu {% if (item['show_img'] == 1) %}{{ "with-img" }}{% else %} {{ "without-img" }}{% endif %}">
+																		<div class="menu">
+																			<a href="{{ children['href'] }}" class="main-menu with-submenu">
+																				{% if (item['show_img'] == 1) %}
+																					<img class="menu-cats-img" src="{{ children['thumb'] }}" alt="{{ children['name'] }}"/>
+																				{% endif %}
+																			<span>{{ children['name'] }}</span>
+																			</a>
+
+																			<div class="oct_show_cat"></div>
+																			<div class="oct_hide_cat"></div>
+																			<ul>
+																				{% set countstop = 0 %}
+																				{% for child in children['children'] %}
+																					{% set countstop = countstop + 1 %}
+																					<li><a href="{{ child['href'] }}" >{{ child['name'] }}</a></li>
+																					{% if (countstop > item['limit_item']) %}
+
+																						<li><a class="see-all-cats" href="{{ children['href'] }}" >{{ text_all_category }}...</a></li>
+																					{% endif %}
+																				{% endfor %}
+																			</ul>
+																		</div>
+																	</div>
+																{% else %}
+																	<div class="col-sm-{% if (item['description']|length < 15) %}3{% else %}4{% endif %} static-menu">
+																		<div class="menu">
+																			<ul>
+																				<li>
+																					<a href="{{ children['href'] }}" class="main-menu with-submenu">
+																						{% if (item['show_img'] == 1) %}
+																							<img class="menu-cats-img" src="{{ children['thumb'] }}" alt="{{ children['name'] }}"/>
+																						{% endif %}
+																					<span>{{ children['name'] }}</span>
+																					</a>
+																				</li>
+																			</ul>
+																		</div>
+																	</div>
+																{% endif %}
+															{% endfor %}
+														</div>
+													</div>
+													{% if (item['description']) %}
+														<div class="col-sm-4 mobile-enabled ocmm-description">{{ item['description'] }}</div>
+													{% endif %}
+												</div>
+											</div>
+										</div>
+									</li>
+								{% endif %}
+							{% endif %}
+
+							{% if (item['item_type'] == 3) %}
+								{# #}
+								<li class="with-sub-menu hover">
+									<p class="oct_close-menu"></p>
+									<p class="oct_open-menu"></p>
+									<a href="{{ item['href'] }}" class="clearfix" {{ item['open_link_type'] ? 'target="_blank"' : '' }}>{% if (item['image']) %}<img src="{{ item['image'] }}" alt="{{ item['title'] }}" />{% endif %}{{ item['title'] }}</a>
+
+									<div class="sub-menu wide-sub-menu" style="width: 280%; right: 0px;">
+										<div class="content">
+											<div class="row">
+												<div class="col-sm-{% if (item['description']|length < 15) %}12{% else %}8{% endif %} mobile-enabled">
+													<div class="row">
+														{% if (item['children']) %}
+															{% for children in item['children'] %}
+																<div class="col-sm-{% if (item['description']|length < 15) %}2{% else %}4{% endif %} static-menu">
+																	<div class="menu">
+																		<ul class="brands-ul">
+																			<li>
+																				<a href="{{ children['href'] }}" class="main-menu with-submenu"><img src="{{ children['thumb'] }}" alt="alt" class="img-responsive" /><span>{{ children['name'] }}</span></a>
+																			</li>
+																		</ul>
+																	</div>
+																</div>
+															{% endfor %}
+														{% endif %}
+													</div>
+												</div>
+												{% if (item['description']) %}
+													<div class="col-sm-4 mobile-enabled ocmm-description">{{ item['description'] }}</div>
+												{% endif %}
+											</div>
+										</div>
+									</div>
+								</li>
+								{# #}
+							{% endif %}
+
+
+							{% if (item['item_type'] == 5) %}
+								{# #}
+								<li class="with-sub-menu hover simple-menu">
+									<p class="oct_close-menu"></p>
+									<p class="oct_open-menu"></p>
+									<a href="{{ item['href'] }}" class="clearfix" {{ item['open_link_type'] ? 'target="_blank"' : '' }}>{% if (item['image']) %}<img src="{{ item['image'] }}" alt="{{ item['title'] }}" />{% endif %}{{ item['title'] }}</a>
+
+									<div class="sub-menu" style="width: 100%; right: 0px;">
+										<div class="content">
+											<div class="row">
+												<div class="col-sm-12 mobile-enabled">
+													<div class="row">
+														{% if (item['children']) %}
+															{% for children in item['children'] %}
+																<div class="col-sm-12 static-menu">
+																	<div class="menu">
+																		<ul>
+																			<li>
+																				<a href="{{ children['href'] }}" class="main-menu with-submenu"><span>{{ children['title'] }}</span></a>
+																			</li>
+																		</ul>
+																	</div>
+																</div>
+															{% endfor %}
+														{% endif %}
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</li>
+								{# #}
+							{% endif %}
+
+						{% else %}
+							{% if (item['item_type'] == 7 and item['custom_html']) %}
+								{# #}
+								<li class="with-sub-menu hover">
+									<p class="oct_close-menu"></p>
+									<p class="oct_open-menu mobile-disabled"></p>
+									<a href="{{ item['href'] }}" class="clearfix" {{ item['open_link_type'] ? 'target="_blank"' : '' }}>{% if (item['image']) %}<img src="{{ item['image'] }}" alt="{{ item['title'] }}" />{% endif %}{{ item['title'] }}</a>
+
+									<div class="sub-menu wide-sub-menu" style="width: 280%; right: 0px;">
+										<div class="content html-content">
+											<div class="row">
+												<div class="col-sm-{% if (item['description']|length < 15) %}12{% else %}8{% endif %} mobile-enabled">
+													{{ item['custom_html'] }}
+												</div>
+												{% if (item['description']) %}
+													<div class="col-sm-4 mobile-enabled ocmm-description">{{ item['description'] }}</div>
+												{% endif %}
+											</div>
+										</div>
+									</div>
+								</li>
+								{# #}
+							{% else %}
+								{# #}
+								<li>
+									<p class="oct_close-menu"></p>
+									<p class="oct_open-menu mobile-disabled"></p>
+									<a href="{{ item['href'] }}" class="clearfix"{{ item['open_link_type'] ? 'target="_blank"' : '' }}>{% if (item['image']) %}<img src="{{ item['image'] }}" alt="{{ item['title'] }}" />{% endif %}{{ item['title'] }}</a>
+								</li>
+								{# #}
+							{% endif %}
+
+
+						{% endif %}
+					{% endfor %}
+				</ul>
+			</div>
+		</div>
+	<nav class="menu-wrap" id="menu1">
+		<div class="menu-inner">
+			<div class="modal-custom">
+				<a href="#mm-0" class="close"></a>
+			</div>
+			<ul class="head-links-mob">
+				{% for item in items %}
+					<li data-image="{{ item['image'] }}">
+						{% if (item['children']) %}
+							<span><img src="{{ item['image'] }}" class="mob-menu-icon" alt=""><span>{{ item['title'] }}</span></span>
+							<ul>
+							{% for child in item['children'] %}
+								{% if (child['children']) %}
+									<li>
+										<span>{{ child['name'] }}</span>
+										<ul>
+											{% for children in child['children'] %}
+												<li><a href="{{ children['href'] }}" >{{ children['name'] }}</a></li>
+											{% endfor %}
+										</ul>
+									</li>
+								{% else %}
+										{% if (child['child_3_level']) %}
+											<li>
+												<span>{{ child['name'] }}</span>
+												<ul>
+													{% for child_3_level in child['child_3_level'] %}
+														<li><a href="{{ child_3_level['href'] }}" >{{ child_3_level['name'] }}</a></li>
+													{% endfor %}
+												</ul>
+											</li>
+										{% else %}
+											<li><a href="{{ child['href'] }}">{{ child['name'] }}</a></li>
+										{% endif %}
+								{% endif %}
+							{% endfor %}
+							</ul>
+						{% else %}
+							<a href="{{ item['href'] }}"><img src="{{ item['image'] }}" class="mob-menu-icon" alt=""><span>{{ item['title'] }}</span></a>
+						{% endif %}
+					</li>
+				{% endfor %}
+			</ul>
+			<div class="head-bar head-bar-mob">
+				<a href="https://www.facebook.com/HairCompanyUkraine" class="head-bar-icon social-fb" target="_blank" rel="noopener noreferrer"></a>
+				<a href="https://www.instagram.com/haircompanyukraine" class="head-bar-icon social-in" target="_blank" rel="noopener noreferrer"></a>
+				<a href="" class="head-bar-icon social-youtube" target="_blank" rel="noopener noreferrer"></a>
+			</div>
+		</div>
+		<a href="#body-main" class="close-btn" id="close-button"></a>
+	</nav>
+	<script>
+		$(document).ready(function(){
+
+			$('.banner-top-wrap .close').click(function() {
+				$.cookie('banner_top_cookie', '1', { expires: 1, path: '/' }); // 1 day
+				$('.banner-top-wrap').remove();
+			});
+
+			if (window.innerWidth < 1200) {
+				// $('#menu1').show();
+				$("#menu1").mmenu({
+					"extensions": [
+						"pagedim-black"
+					]
+				});
+
+				var menu_close_btn = $('#menu1 .modal-custom').clone();
+                $('#menu1 .modal-custom').remove();
+                menu_close_btn.appendTo('.mm-panel');
+
+			}
+
+
+//			document.addEventListener(
+//					"DOMContentLoaded", () => {
+//						new Mmenu( "#my-menu", {
+//							"extensions": [
+//								"pagedim-black"
+//							]
+//						});
+//					}
+//			);
+		});
+	</script>
+
+
+
+
+	<script>
+		function setEqualHeight(columns) {
+			var tallestcolumn = 0;
+			columns.each(
+					function() {
+						currentHeight = $(this).height();
+						if(currentHeight > tallestcolumn) {
+							tallestcolumn = currentHeight;
+						}
+					}
+			);
+			columns.height(tallestcolumn);
+		}
+
+		function setEqualHeightNoImage(columns) {
+			var tallestcolumn1 = 0;
+			columns.each(
+					function() {
+						currentHeight1 = $(this).height();
+						if(currentHeight1 > tallestcolumn1) {
+							tallestcolumn1 = currentHeight1;
+						}
+					}
+			);
+			columns.height(tallestcolumn1);
+		}
+		function viewport() {
+			var e = window, a = 'inner';
+			if (!('innerWidth' in window )) {
+				a = 'client';
+				e = document.documentElement || document.body;
+			}
+			return { width : e[ a+'Width' ] , height : e[ a+'Height' ] };
+		}
+
+		$(document).ready(function() {
+
+
+
+			var b4 = viewport().width;
+
+
+			if (b4 >= 992) {
+				setEqualHeight($(".wide-menu-row .static-menu.with-img"));
+				setEqualHeightNoImage($(".wide-menu-row .static-menu.without-img"));
+			}
+
+			if (b4 <= 992) {
+
+				$( ".mob-menu-ul" ).append( "<div class=\"sidebar-account-header oct-sidebar-header\">{{ text_acc }}</div>" );
+				$( ".sidebar-account" ).clone().appendTo( ".mob-menu-ul" );
+				$("#menu-mobile").append( $( ".mob-menu-ul" ) );
+
+				$( ".mob-menu-ul" ).append( "<div class=\"sidebar-info-header oct-sidebar-header\">{{ text_info }}</div>" );
+				$(".mob-menu-ul").append( $( ".sidebar-info" ) );
+
+				$( ".mob-menu-ul" ).append( "<div class=\"sidebar-settings-header oct-sidebar-header\">{{ text_settings }}</div>" );
+				$(".mob-menu-ul").append($("#currency-div"));
+
+				$( "#currency-div .dropdown-toggle" ).click(function() {
+					$( "#currency-div .dropdown-menu" ).toggleClass('opened');
+				});
+				$(".mob-menu-ul").append($("#language-div"));
+
+				$( "#language-div .dropdown-toggle" ).click(function() {
+					$( "#language-div .dropdown-menu" ).toggleClass('opened');
+				});
+
+				$(".mob-menu-ul").append($("#sidebar-contacts"));
+				$(".mob-menu-ul").append($("#sidebar-map"));
+				$( "<div class=\"sidebar-contacts-header oct-sidebar-header\">{{ text_contacts }}</div>" ).insertBefore( "#sidebar-contacts" );
+
+				$(".new-menu-togglee").one("click", false);
+
+				$('nav#menu-mobile').mmenu({
+					extensions: ['effect-menu-fade', 'effect-panels-slide-0', 'effect-listitems-fade', 'shadow-page', 'shadow-panels'],
+					counters: false,
+					navbar: {
+						title: "{{ text_menu }}"
+					},
+					navbars: [{
+						position: 'top',
+						content: [
+							'prev',
+							'title',
+							'close'
+						]
+					}],
+					offCanvas: {
+						position: 'top',
+						zposition: 'front'
+					}
+				});
+			}
+
+
+
+		});
+
+		$(window).on('resize', function(){
+
+			var b5 = viewport().width;
+
+			if (b5 > 992) {
+				$(".top-currency").append($("#currency-div"));
+				$(".top-language").append($("#language-div"));
+			} else {
+				$("#currency-div").insertBefore('#sidebar-contacts');
+				$("#language-div").insertBefore('#sidebar-contacts');
+
+			}
+		});
+		var b6 = viewport().width;
+		if (b6 > 992) {
+			$('.oct_megamenu').hover(function () {
+				$('#bluring').css('visibility', 'visible')},function () {
+				$('#bluring').css('visibility', 'hidden')
+			});
+			$('#bluring').bind('touchstart touchend', function(e) {
+				e.preventDefault();
+				$('#bluring').css('visibility', 'visible')},function () {
+				$('#bluring').css('visibility', 'hidden')
+			});
+
+			var menuHeight = $('.oct_megamenu').outerHeight();
+			$('.oct_megamenu li.with-sub-menu .sub-menu .content').css('height', menuHeight);
+			$('.with-sub-menu').mouseenter(function(){
+				menuHeight = $(this).parent().outerHeight();
+				var childMenuHeight = $(this).find('.sub-menu .content').outerHeight();
+				if (childMenuHeight > menuHeight) {
+					var menuHeight = childMenuHeight;
+					$('.oct_megamenu').css({height:menuHeight + 'px'});
+				}
+			});
+		}
+	</script>
+
+	<!-- Mobile -->
+
+
+
+	<ul class="mob-menu-ul sort-ord" style="display: none">
+		{% for item in items %}
+			{% if (item['item_type'] == 2) %}
+				{# #}
+				<li class="sss">
+					<a href="{{ item['href'] }}" {{ item['open_link_type'] ? 'target="_blank"' : '' }}>{{ item['title'] }}</a>
+					<ul>
+						{% for children in item['children'] %}
+
+							<li>
+								<a href="{{ children['href'] }}">{{ children['name'] }}</a>
+								{% if (children['children']) %}
+									<ul>
+										{% for child in children['children'] %}
+											<li>
+												<a href="{{ child['href'] }}" >{{ child['name'] }}</a>
+											</li>
+										{% endfor %}
+									</ul>
+								{% endif %}
+							</li>
+						{% endfor %}
+						</li>
+					</ul>
+				</li>
+			{% endif %}
+			{% if (item['children']) %}
+				{% if (item['item_type'] == 3) %}
+					{# #}
+					<li>
+						<a href="{{ item['href'] }}" {{ item['open_link_type'] ? 'target="_blank"' : '' }}>{{ item['title'] }}</a>
+						<ul>
+							{% if (item['children']) %}
+								{% for children in item['children'] %}
+									<li>
+										<a href="{{ children['href'] }}">{{ children['name'] }}</a>
+
+									</li>
+								{% endfor %}
+							{% endif %}
+						</ul>
+					</li>
+				{% endif %}
+			{% endif %}
+			{% if (item['item_type'] == 5) %}
+				{# #}
+				<li>
+					<a href="{{ item['href'] }}" {{ item['open_link_type'] ? 'target="_blank"' : '' }}>{{ item['title'] }}</a>
+					<ul>
+						{% if (item['children']) %}
+							{% for children in item['children'] %}
+								<li>
+									<a href="{{ children['href'] }}">{{ children['title'] }}</a>
+
+								</li>
+							{% endfor %}
+						{% endif %}
+					</ul>
+				</li>
+			{% endif %}
+			{% if (item['item_type'] == 1) %}
+				{# #}
+				<li>
+					<a href="{{ item['href'] }}" {{ item['open_link_type'] ? 'target="_blank"' : '' }}>{{ item['title'] }}</a>
+				</li>
+			{% endif %}
+		{% endfor %}
+	</ul>
+
+
+{% endif %}
+
+<script>
+    $(document).ready(function() {
+        $('.with-sub-menu').hover(function() {
+                $(this).addClass('active');
+            },
+            function() {
+                $(this).removeClass('active');
+            }
+		);
+
+
+
+        $('.megamenu-not-home .m-menu-title-wrap').click(function() {
+            if ($('.megamenu-not-home').hasClass('open')) {
+                $('.megamenu-not-home .oct_megamenu').fadeOut();
+                $('.megamenu-not-home').removeClass('open');
+			} else {
+                $('.megamenu-not-home .oct_megamenu').fadeIn();
+                $('.megamenu-not-home').addClass('open');
+			}
+
+            var vert_menu_height = $('.vertical .megamenu-wrapper').height();
+            $('.vertical ul.oct_megamenu>li>.sub-menu').height(vert_menu_height);
+            $('ul.oct_megamenu li .sub-menu .content .static-menu .menu ul.children-classic').height(vert_menu_height - 50);
+
+		});
+
+
+    });
+</script>
+
+<style>
+	.show-menu{
+		margin-top: 0 !important;
+		opacity: 1 !important;
+		visibility: visible !important;
+	}
+</style>
+<script>
+    function showMenu(){
+        if($(".megamenu-wrapper").attr('class')=='megamenu-wrapper') $(".megamenu-wrapper").addClass("show-menu");
+        else $(".megamenu-wrapper").removeClass("show-menu");
+    }
+</script>
+
+
+<script>
+	$(document).ready(function() {
+
+	    var vert_menu_height = $('.vertical .megamenu-wrapper').height();
+	    $('.vertical ul.oct_megamenu>li>.sub-menu').height(vert_menu_height);
+	    $('ul.oct_megamenu li .sub-menu .content .static-menu .menu ul.children-classic').height(vert_menu_height - 50);
+
+
+	    var main_category_count = $('.vertical ul.oct_megamenu>li').length;
+
+	    var dop_category_count = 0;
+        $('.vertical ul.oct_megamenu>li').each(function() {
+            var dop_category_count = $(this).find('.sub-menu .static-menu').length;
+
+           	if (main_category_count < dop_category_count) {
+           	    var eq_index = dop_category_count - main_category_count + 1;
+                $(this).find('.sub-menu .static-menu').removeClass('static-menu-hidden');
+                $(this).find('.sub-menu').remove('static-menu-more-btn');
+
+           	    for (var i=1; i <= eq_index; i++) {
+                    $(this).find('.sub-menu .static-menu').eq(-i).addClass('static-menu-hidden');
+				}
+                $(this).find('.sub-menu .mobile-enabled > .row').append('<div class="col-sm-12 static-menu-more-btn"><span class="static-menu-more-btn-inner"></span></div>');
+			}
+		});
+
+        $('.static-menu-more-btn-inner').click(function () {
+
+            if ($(this).hasClass('active')) {
+//                $(this).parent().parent().find('.static-menu-hidden').removeClass('static-menu-hidden-active');
+			} else {
+                $(this).parent().parent().find('.static-menu-hidden').removeClass('static-menu-hidden-active');
+                $(this).parent().parent().find('.static-menu-hidden').addClass('static-menu-hidden-active');
+
+                var children_level_2_height_plus = 0;
+                if (window.innerHeight <= 800 && window.innerWidth >= 1200) {
+                    children_level_2_height_plus = -7;
+				} else {
+                    children_level_2_height_plus = 1;
+				}
+                var children_level_2_height = $(this).closest('.content').height() + children_level_2_height_plus;
+                $(this).closest('.content').find('.child-3-level-items').height(children_level_2_height);
+
+			}
+//            $(this).toggleClass('active');
+            $(this).hide();
+
+
+        });
+
+//	    var vert_sub_menu_height = $('ul.oct_megamenu li.simple-menu .sub-menu .content > .row').height();
+//	    if (vert_sub_menu_height > vert_menu_height) {
+//            $('.vertical ul.oct_megamenu>li>.sub-menu').height(vert_sub_menu_height);
+//		}
+	})
+</script>

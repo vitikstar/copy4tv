@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>{NAME}</name>
+    <id>{MOD}</id>
+    <version>{VERSION}</version>
+    <vqmver required="true">2.4.0</vqmver>
+    <author>admin@opencartadmin.com</author>
+    <code>{MOD}</code>
+    <link>http://opencartadmin.com</link>
+
+<file path="catalog/controller/startup/maintenance.php" error="skip">
+	<operation error="skip">
+        <search position="after"><![CDATA[function index() {]]></search>
+        <add position="after"><![CDATA[
+	 	$file = DIR_SYSTEM.'../catalog/controller/record/front.php';
+	 	if (file_exists($file)) {
+			if (function_exists('modification')) {
+				require_once(modification($file));
+			} else {
+				require_once($file);
+			}
+		 	new ControllerRecordFront($this->registry);
+	 	}
+    ]]></add>
+	</operation>
+</file>
+
+<file path="catalog/controller/common/maintenance.php" error="skip">
+	<operation error="skip">
+        <search position="after"><![CDATA[function index() {]]></search>
+        <add position="after"><![CDATA[
+	 	$file = DIR_SYSTEM.'../catalog/controller/record/front.php';
+	 	if (file_exists($file)) {
+			if (function_exists('modification')) {
+				require_once(modification($file));
+			} else {
+				require_once($file);
+			}
+	 		new ControllerRecordFront($this->registry);
+	 	}
+    ]]></add>
+	</operation>
+</file>
+
+<file path="system/library/url.php" error="skip">
+    <operation error="skip">
+        <search regex="true" position="replace"><![CDATA[~(.*?)function addRewrite[(](.*?)\{~]]></search>
+        <add position="replace"><![CDATA[
+$1function addRewrite($2{
+		// SEO CMS code
+		if (is_callable(array($this->sc_registry, 'get'))) {
+			$this->sc_registry->get('controller_record_url')->before($rewrite);
+		}
+		// End of SEO CMS code
+]]></add>
+    </operation>
+    <operation error="skip">
+        <search position="before"><![CDATA[return $url;]]></search>
+        <add position="before"><![CDATA[
+		// SEO CMS code
+		if (is_callable(array($this->sc_registry, 'get'))) {
+			$url = $this->sc_registry->get('controller_record_url')->after($url);
+		}
+		//End of SEO CMS code
+    ]]></add>
+    </operation>
+    <operation error="skip">
+        <search position="after"><![CDATA[private $ssl;]]></search>
+        <add position="after"><![CDATA[
+	// SEO CMS vars
+	private $sc_registry = Array();
+	// End of SEO CMS vars
+    ]]></add>
+    </operation>
+    <operation error="skip">
+        <search position="before"><![CDATA[public function addRewrite]]></search>
+        <add position="before"><![CDATA[
+ 	// SEO CMS function
+ 	public function seocms_setRegistry($registry) {
+		$this->sc_registry = $registry;
+	}
+	// End of SEO CMS function
+    ]]></add>
+    </operation>
+
+</file>
+
+<file path="system/library/document.php" error="skip">
+    <operation error="skip">
+        <search  position="after"><![CDATA[private $title;]]></search>
+        <add position="after"><![CDATA[
+	// SEO CMS vars
+	private $sc_og_image;
+	private $sc_og_description;
+	private $sc_og_title;
+	private $sc_og_type;
+	private $sc_og_url;
+	private $sc_robots;
+	private $sc_hreflang = array();
+	private $sc_removelinks = array();
+	//End of SEO CMS vars
+]]></add>
+    </operation>
+
+    <operation error="skip">
+        <search  position="before"><![CDATA[public function getLinks]]></search>
+        <add position="before"><![CDATA[
+    // SEO CMS functions
+	public function setSCRobots($str) {
+		$this->sc_robots = $str;
+	}
+	public function getSCRobots() {
+		return $this->sc_robots;
+	}
+	public function setSCHreflang($hreflang = array()) {
+		$this->sc_hreflang = $hreflang;
+	}
+	public function getSCHreflang() {
+		return $this->sc_hreflang;
+	}
+	public function setSCOgImage($image) {
+		$this->sc_og_image = $image;
+	}
+	public function getSCOgImage() {
+		return $this->sc_og_image;
+	}
+	public function setSCOgType($og_type) {
+		$this->sc_og_type = $og_type;
+	}
+	public function getSCOgType() {
+		return $this->sc_og_type;
+	}
+	public function setSCOgTitle($title) {
+		$this->sc_og_title = $title;
+	}
+	public function getSCOgTitle() {
+		return $this->sc_og_title;
+	}
+	public function setSCOgDescription($description) {
+		$this->sc_og_description = $description;
+	}
+	public function getSCOgDescription() {
+		return $this->sc_og_description;
+	}
+	public function setSCOgUrl($url) {
+		$this->sc_og_url = $url;
+	}
+	public function getSCOgUrl() {
+		return $this->sc_og_url;
+	}
+	public function removeSCLink($href) {
+		$this->sc_removelinks[$href] = $href;
+	}
+	//End of SEO CMS functions
+]]></add>
+    </operation>
+
+    <operation error="skip">
+        <search position="replace"><![CDATA[return $this->links;]]></search>
+        <add position="replace"><![CDATA[
+		// SEO CMS code
+		if (is_array($this->links) && !empty($this->links)) {
+			foreach ($this->links as $links => $linksarray) {
+				if (isset($this->sc_removelinks) && !empty($this->sc_removelinks) && isset($this->sc_removelinks[$links])) {
+					unset($this->links[$links]);
+				}
+			}
+		}
+		//End of SEO CMS code
+		return $this->links;
+]]></add>
+    </operation>
+</file>
+
+
+
+<file path="system/library/response.php" error="skip">
+    <operation error="skip">
+        <search position="after"><![CDATA[private $output;]]></search>
+        <add position="after"><![CDATA[
+	//Jet Cache vars
+	private $sc_registry = Array();
+	//End of Jet Cache vars
+    ]]></add>
+    </operation>
+    <operation error="skip">
+        <search position="before"><![CDATA[public function addHeader]]></search>
+        <add position="before"><![CDATA[
+ 	public function seocms_setRegistry($registry) {
+		$this->sc_registry = $registry;
+	}
+
+ 	public function seocms_getHeaders() {
+		return $this->headers;
+	}
+ 	public function seocms_getOutput() {
+		return $this->output;
+	}
+    ]]></add>
+    </operation>
+
+    <operation error="skip">
+        <search position="before"><![CDATA[if ($this->output)]]></search>
+        <add position="before"><![CDATA[
+			if (is_callable(array($this->sc_registry, 'get')) && $this->output) {
+            	if (defined('DIR_CATALOG')) {
+            	} else {
+	           		if (function_exists('agoo_cont')) {
+		           		agoo_cont('record/pagination', $this->sc_registry);
+						$this->output = $this->sc_registry->get('controller_record_pagination')->setPagination($this->output);
+						unset($this->controller_record_pagintation);
+
+	            		if ($this->sc_registry->get('config')->get('google_sitemap_blog_status')) {
+		            		if (isset($this->sc_registry) && $this->sc_registry) {
+		            			agoo_cont('record/google_sitemap_blog', $this->sc_registry);
+		                		$this->output = $this->sc_registry->get('controller_record_google_sitemap_blog')->setSitemap($this->output);
+		                	}
+	                	}
+                	}
+                }
+			}
+    ]]></add>
+    </operation>
+</file>
+
+<file path="system/engine/model.php" error="skip">
+   <operation error="skip">
+        <search position="after"><![CDATA[$this->registry = $registry;]]></search>
+        <add position="after"><![CDATA[
+		if (defined('DIR_CATALOG')) {
+			if (!defined('SC_VERSION')) define('SC_VERSION', (int)substr(str_replace('.','',VERSION), 0, 2));
+
+			if (function_exists('modification')) {
+				require_once(modification(DIR_SYSTEM . 'helper/seocmsprofunc.php'));
+			} else {
+				require_once(DIR_SYSTEM . 'helper/seocmsprofunc.php');
+			}
+
+			$this->registry->set('admin_work', true);
+			$this->registry->set('seocms_is_admin', true);
+		}
+		if (is_callable(array($this->response, 'seocms_setRegistry')) && $this->registry) {
+			$this->response->seocms_setRegistry($this->registry);
+		}
+    ]]></add>
+    </operation>
+</file>
+
+
+<file path="{ADMIN}/controller/common/column_left.php">
+    <operation error="skip">
+        <search  position="before"><![CDATA[return $this->load->view]]></search>
+        <add position="before"><![CDATA[
+			$data['ascp_settings'] = $this->config->get('ascp_settings');
+			if (isset($data['ascp_settings']['menu_admin_status']) && $data['ascp_settings']['menu_admin_status']) {
+				if (file_exists(DIR_SYSTEM . 'helper/seocmsprofunc.php')) {
+					if (function_exists('modification')) {
+						require_once(modification(DIR_SYSTEM . 'helper/seocmsprofunc.php'));
+					} else {
+						require_once(DIR_SYSTEM . 'helper/seocmsprofunc.php');
+					}
+			        agoo_cont_admin('module/blog', $this->registry);
+			        $data['sc_menus'] = $this->controller_module_blog->sc_menu();
+			    }
+			}
+    ]]></add>
+    </operation>
+</file>
+
+<file path="{ADMIN}/view/template/common/column_left.tpl">
+    <operation error="skip">
+        <search position="replace"><![CDATA[</nav>]]></search>
+        <add position="replace"><![CDATA[<?php if (isset($sc_menus)) { echo $sc_menus; } ?></nav>]]></add>
+    </operation>
+</file>
+
+<file path="{ADMIN}/view/template/common/column_left.twig">
+    <operation error="skip">
+        <search  position="before"><![CDATA[<div id="stats">]]></search>
+        <add position="before"><![CDATA[{% if (sc_menus is defined) %} {{ sc_menus }} {% endif %}]]></add>
+    </operation>
+</file>
+
+<file path="{ADMIN}/controller/common/header.php">
+    <operation error="skip">
+        <search  position="before"><![CDATA[$this->template]]></search>
+        <add position="before"><![CDATA[
+			$data['ascp_settings'] = $this->config->get('ascp_settings');
+			if (isset($data['ascp_settings']['menu_admin_status']) && $data['ascp_settings']['menu_admin_status']) {
+				if (file_exists(DIR_SYSTEM . 'helper/seocmsprofunc.php')) {
+					if (function_exists('modification')) {
+						require_once(modification(DIR_SYSTEM . 'helper/seocmsprofunc.php'));
+					} else {
+						require_once(DIR_SYSTEM . 'helper/seocmsprofunc.php');
+					}
+			        agoo_cont_admin('module/blog', $this->registry);
+			        $this->data['sc_menus'] = $this->controller_module_blog->sc_menu();
+			    }
+			}
+    ]]></add>
+    </operation>
+</file>
+
+<file path="{ADMIN}/view/template/common/header.tpl">
+    <operation error="skip">
+        <search  position="before"><![CDATA[<li id="store">]]></search>
+        <add position="before"><![CDATA[<?php if (isset($sc_menus)) { echo $sc_menus; } ?>]]></add>
+    </operation>
+</file>
+
+<file path="catalog/model/design/layout.php" error="skip">
+    <operation error="skip">
+        <search position="before"><![CDATA[if ($query->num_rows)]]></search>
+        <add position="before"><![CDATA[
+		// SEO CMS code
+        if (isset($query->row['layout_id'])) {
+        	if ($this->registry->get('seocmslib')) {
+        		$query->row['layout_id'] = $this->seocmslib->sc_getLayout($query->row['layout_id']);
+        	}
+        }
+		// End of SEO CMS code
+]]></add>
+    </operation>
+</file>
+
+</modification>

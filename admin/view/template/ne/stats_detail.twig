@@ -1,0 +1,344 @@
+{{ header }}{{ column_left }}
+<div id="content">
+    <div class="page-header">
+        <div class="container-fluid">
+            <div class="pull-right">
+                <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a>
+            </div>
+            <h1>{{ heading_title }}</h1>
+        </div>
+    </div>
+    <div class="container-fluid">
+        {% if (error_warning) %}
+            <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+        {% endif %}
+        {% if (success) %}
+            <div class="alert alert-success"><i class="fa fa-check-circle"></i> {{ success }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+        {% endif %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-bar-chart"></i> {{ entry_heading }}</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row" style="margin-bottom:20px;">
+                    <div class="col-md-2 text-center">
+                        <label class="control-label">{{ entry_total_recipients }}</label>
+                        <p class="form-control-static">
+                            <span class="label label-default">{{ recipients_total }}</span>
+                        </p>
+                    </div>
+                    <div class="col-md-2 text-center">
+                        <label class="control-label">{{ entry_total_views }}</label>
+                        <p class="form-control-static">
+                            <span class="label label-default">{{ views_total }}</span>
+                        </p>
+                    </div>
+                    <div class="col-md-2 text-center">
+                        <label class="control-label text-success">{{ entry_sent }}</label>
+                        <p class="form-control-static text-success">
+                            <span class="label label-success">{{ detail['queue'] - failed_total }} {{ text_of }} {{ detail['recipients'] }}</span><br/>{{ detail['recipients'] ? ((detail['queue'] - failed_total) / detail['recipients'] * 100)|round() : 0 }}%
+                        </p>
+                    </div>
+                    <div class="col-md-2 text-center">
+                        <label class="control-label text-success">{{ entry_read }}</label>
+                        <p class="form-control-static text-success">
+                            <span class="label label-success">{{ detail['read'] }} {{ text_of }} {{ detail['queue'] }}</span><br/>{{ detail['queue'] ? (detail['read'] / detail['queue'] * 100)|round() : 0 }}%
+                        </p>
+                    </div>
+                    <div class="col-md-2 text-center">
+                        <label class="control-label text-danger">{{ entry_total_failed }}</label>
+                        <p class="form-control-static">
+                            <span class="label label-danger">{{ failed_total }}</span>
+                        </p>
+                    </div>
+                    <div class="col-md-2 text-center">
+                        <label class="control-label text-danger">{{ entry_unsubscribe_clicks }}</label>
+                        <p class="form-control-static">
+                            <span class="label label-danger">{{ detail['unsubscribe_clicks'] }}</span>
+                        </p>
+                    </div>
+                </div>
+
+                {% if (detail['tracks']) %}
+                    <fieldset>
+                        <legend>{{ entry_track }}</legend>
+                        <div class="table-responsive">
+                            <table class="table table-condensed">
+                                <thead>
+                                <tr>
+                                    <th class="text-left">{{ entry_url }}</th>
+                                    <th class="text-right">{{ entry_clicks }}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for entry in detail['tracks'] %}
+                                    <tr>
+                                        <td class="text-left"><a href="{{ entry['url'] }}" target="_blank">{{ entry['url'] }}</a></td>
+                                        <td class="text-right"><span class="label label-default">{{ entry['clicks'] }}</span></td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </fieldset>
+                {% endif %}
+                <fieldset>
+                    <legend>{{ entry_chart }}</legend>
+                    <div id="chart-views" style="width:100%;height:260px;margin-bottom:20px;"></div>
+                </fieldset>
+                {% if (attachments) %}
+                    <fieldset>
+                        <legend>{{ entry_attachments }}</legend>
+                        {% for key,attachment in attachments %}
+                            {{ key + 1 ~ '. ' }}<a href="{{ store_url ~ attachment['path'] }}" target="_blank" class="btn btn-link"><i class="fa fa-paperclip"></i> {{ attachment['filename'] }}</a><br/>
+                        {% endfor %}
+                    </fieldset>
+                {% endif %}
+                <fieldset>
+                    <legend>{{ entry_recipients }}</legend>
+                    <div class="well">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="control-label" for="input-name">{{ column_name }}</label>
+                                    <input type="text" name="filter_name" value="{{ filter_name }}" placeholder="{{ column_name }}" id="input-name" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="control-label" for="input-email">{{ column_email }}</label>
+                                    <input type="text" name="filter_email" value="{{ filter_email }}" placeholder="{{ column_email }}" id="input-email" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="control-label" for="input-success">{{ column_success }}</label>
+                                    <select name="filter_success" id="input-success" class="form-control">
+                                        <option value=""></option>
+                                        {% if (filter_success == '1') %}
+                                            <option value="1" selected="selected">{{ entry_yes }}</option>
+                                        {% else %}
+                                            <option value="1">{{ entry_yes }}</option>
+                                        {% endif %}
+                                        {% if (filter_success == '0') %}
+                                            <option value="0" selected="selected">{{ entry_no }}</option>
+                                        {% else %}
+                                            <option value="0">{{ entry_no }}</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                                <button type="button" id="button-filter" class="btn btn-primary pull-right"><i class="fa fa-search"></i> {{ button_filter }}</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                            <td class="text-left">
+                                {% if (sort == 'name') %}
+                                    <a href="{{ sort_name }}" class="{{ order|lower }}">{{ column_name }}</a>
+                                {% else %}
+                                    <a href="{{ sort_name }}">{{ column_name }}</a>
+                                {% endif %}
+                            </td>
+                            <td class="text-left">
+                                {% if (sort == 'c.email') %}
+                                    <a href="{{ sort_email }}" class="{{ order|lower }}">{{ column_email }}</a>
+                                {% else %}
+                                    <a href="{{ sort_email }}">{{ column_email }}</a>
+                                {% endif %}
+                            </td>
+                            <td class="text-right">
+                                {% if (sort == 's.views') %}
+                                    <a href="{{ sort_views }}" class="{{ order|lower }}">{{ column_views }}</a>
+                                {% else %}
+                                    <a href="{{ sort_views }}">{{ column_views }}</a>
+                                {% endif %}
+                            </td>
+                            <td class="text-right">
+                                {% if (sort == 'clicks') %}
+                                    <a href="{{ sort_clicks }}" class="{{ order|lower }}">{{ column_clicks }}</a>
+                                {% else %}
+                                    <a href="{{ sort_clicks }}">{{ column_clicks }}</a>
+                                {% endif %}
+                            </td>
+                            <td class="text-right">
+                                {% if (sort == 'success') %}
+                                    <a href="{{ sort_success }}" class="{{ order|lower }}">{{ column_success }}</a>
+                                {% else %}
+                                    <a href="{{ sort_success }}">{{ column_success }}</a>
+                                {% endif %}
+                            </td>
+                            <td class="text-right">{{ column_actions }}</td>
+                            </thead>
+                            <tbody>
+                            {% if (recipients) %}
+                                {% for recipient in recipients %}
+                                    <tr>
+                                        <td class="text-left">{{ recipient['name'] is defined ? recipient['name'] : '' }}</td>
+                                        <td class="text-left">{{ recipient['email'] }}</td>
+                                        <td class="text-right">{{ recipient['views'] }}</td>
+                                        <td class="text-right">{{ recipient['clicks'] }}</td>
+                                        <td class="text-right">
+                                            {% if (recipient['success'] == '1') %}
+                                                {{ entry_yes }}
+                                            {% else %}
+                                                {{ entry_no }}
+                                            {% endif %}
+                                        </td>
+                                        <td align="right">
+                                            <a href="{{ detail_link ~ recipient['stats_personal_id'] }}" data-toggle="tooltip" title="{{ button_details }}" class="btn btn-primary show-detail"><i class="fa fa-eye"></i></a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td class="text-center" colspan="6">{{ text_no_results }}</td>
+                                </tr>
+                            {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 text-left">{{ pagination }}</div>
+                        <div class="col-sm-6 text-right">{{ results }}</div>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend>{{ entry_raw_log }}</legend>
+                    <div class="form-group">
+                        <textarea class="form-control" style="width:100%;resize:vertical;" rows="10" disabled>{{ raw_log }}</textarea>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+        <p class="text-center small">Newsletter Enhancements OpenCart Module v3.9</p>
+    </div>
+
+    <div class="modal fade" id="detail-modal" tabindex="-1" role="dialog" aria-labelledby="detail-modal-label" aria-hidden="true">
+        <div class="modal-dialog" style="min-width:600px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body"></div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="view/javascript/jquery/flot/jquery.flot.js"></script>
+    <script type="text/javascript" src="view/javascript/jquery/flot/jquery.flot.resize.min.js"></script>
+
+    <script type="text/javascript"><!--
+        $('#button-filter').on('click', function() {
+            var url = 'index.php?route=ne/stats/detail&user_token={{ user_token }}&id={{ detail["stats_id"] }}';
+
+            var filter_name = $('input[name=\'filter_name\']').val();
+
+            if (filter_name) {
+                url += '&filter_name=' + encodeURIComponent(filter_name);
+            }
+
+            var filter_email = $('input[name=\'filter_email\']').val();
+
+            if (filter_email) {
+                url += '&filter_email=' + encodeURIComponent(filter_email);
+            }
+
+            var filter_success = $('select[name=\'filter_success\']').val();
+
+            if (filter_success) {
+                url += '&filter_success=' + encodeURIComponent(filter_success);
+            }
+
+            location = url;
+        });
+
+        $(function (){
+            $.ajax({
+                type: 'get',
+                url: 'index.php?route=ne/stats/chart&user_token={{ user_token }}&id={{ detail["stats_id"] }}',
+                dataType: 'json',
+                success: function(json) {
+
+                    var option = {
+                        shadowSize: 0,
+                        colors: ['#1065D2'],
+                        bars: {
+                            show: true,
+                            fill: true,
+                            lineWidth: 1
+                        },
+                        grid: {
+                            backgroundColor: '#FFFFFF',
+                            hoverable: true
+                        },
+                        points: {
+                            show: false
+                        },
+                        xaxis: {
+                            show: true,
+                            ticks: json['xaxis']
+                        },
+                        yaxis: {
+                            minTickSize: 1,
+                            tickDecimals: 0
+                        }
+                    };
+
+                    $.plot('#chart-views', [json['views']], option);
+
+                    $('#chart-views').bind('plothover', function(event, pos, item) {
+                        $('.tooltip').remove();
+
+                        if (item) {
+                            console.log(pos);
+                            console.log(item);
+
+                            $('<div id="tooltip" class="tooltip top in"><div class="tooltip-arrow"></div><div class="tooltip-inner">' + item.datapoint[1] + ' {{ text_views }}<br/>' + json['days'][item.dataIndex] + '</div></div>').prependTo('body');
+
+                            $('#tooltip').css({
+                                position: 'absolute',
+                                left: item.pageX - ($('#tooltip').outerWidth() / 2),
+                                top: item.pageY - $('#tooltip').outerHeight(),
+                                pointer: 'cusror'
+                            }).fadeIn('slow');
+
+                            $('#chart-views').css('cursor', 'pointer');
+                        } else {
+                            $('#chart-views').css('cursor', 'auto');
+                        }
+                    });
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+                }
+            });
+
+            $('.show-detail').bind('click', function() {
+                var url = this.href;
+
+                $('#detail-modal .modal-title').text('{{ entry_track }}');
+                $('#detail-modal .modal-body').html('<p class="text-center"><i class="fa fa-refresh fa-spin"></i></p>');
+                $('#detail-modal').modal('show');
+
+                $.ajax({
+                    type: 'get',
+                    url: url,
+                    dataType: 'html',
+                    success: function(data) {
+                        $('#detail-modal .modal-body').html(data);
+                    }
+                });
+
+                return false;
+            });
+        });
+        //--></script>
+</div>
+{{ footer }}

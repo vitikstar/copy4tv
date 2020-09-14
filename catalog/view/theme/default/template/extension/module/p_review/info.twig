@@ -1,0 +1,110 @@
+{{ header }}
+<div class="container">
+  <ul class="breadcrumb">
+    {% for breadcrumb in breadcrumbs %}
+    <li> <a href="{{ breadcrumb['href'] }}"> {{ breadcrumb['text'] }} </a> </li>
+    {% endfor %}
+  </ul>
+  <div class="row">{{ column_left }}
+    {% if column_left and column_right %}
+    {% set class = 'col-sm-6' %}
+    {% elseif column_left or column_right %}
+    {% set class = 'col-sm-9' %}
+    {% else %}
+    {% set class = 'col-sm-12' %}
+    {% endif %}
+    <div id="content" class="{{ class }}">{{ content_top }}
+      <h1>{{ text_title }}</h1>
+	  <div class="row p-review-profile">
+		<div class="col-md-4 text-center">
+		  <div class="image"><a href="{{ product_href }}"><img src="{{ product_image }}" alt="{{ product }}" title="{{ product }}" /></a></div>
+		  <h4><a href="{{ product_href }}">{{ product }}</a></h4>
+		  <a href="{{ product_href }}" class="btn btn-primary btn-sm btn-block">{{ button_product }}</a>
+		</div>
+		<div class="col-md-8">
+		  <table class="table table-striped table-bordered">
+		    {% if avatar %}
+		    <tr>
+			  <td class="text-center" colspan="2">
+			    <img src="{{ avatar }}" alt="{{ name }}" />
+			  </td>
+			</tr>
+			{% endif %}
+		    {% if name %}
+		    <tr>
+		      <td class="text-left"><strong>{{ entry_name }}:</strong></td>
+			  <td class="text-right">{{ name }}</td>
+		    </tr>
+			{% endif %}
+			{% if city %}
+		    <tr>
+		      <td class="text-left"><strong>{{ entry_city }}:</strong></td>
+			  <td class="text-right">{{ city }}</td>
+		    </tr>
+			{% endif %}
+			{% if rating %}
+		    <tr>
+		      <td class="text-left"><strong>{{ entry_rating }}:</strong></td>
+			  <td class="text-right">
+			    {% if rating %}
+				<span class="rating">
+				  {% for i in 1..5 %}
+				  {% if rating < i %}
+				  <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-2x"></i></span>
+				  {% else %}
+				  <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span>
+				  {% endif %}
+				  {% endfor %}
+				</span>
+				{% endif %}
+			  </td>
+		    </tr>
+			{% endif %}
+			{% if date_added %}
+		    <tr>
+		      <td class="text-left"><strong>{{ entry_date_added }}:</strong></td>
+			  <td class="text-right">{{ date_added }}</td>
+		    </tr>
+			{% endif %}
+		  </table>
+		</div>
+	  </div>
+	  <div class="row p-review-text">
+	    <div class="col-md-12">
+	      {% if text %}
+		  <h2>{{ entry_text }}</h2>
+		  <p>{{ text }}</p>
+		  {% endif %}
+		  {% if good %}
+		  <h2>{{ entry_good }}</h2>
+		  <p>{{ good }}</p>
+		  {% endif %}
+		  {% if bad %}
+		  <h2>{{ entry_bad }}</h2>
+		  <p>{{ bad }}</p>
+		  {% endif %}
+		  {% if image %}
+		  <h2>{{ entry_image }}</h2>
+		  <p class="p-thumbnail-info">{% for value in image %}<a href="{{ value['thumb'] }}"><img src="{{ value['thumbnail'] }}" class="img-thumbnail"></a>{% endfor %}</p>
+		  <script type="text/javascript"><!--
+			  $('.p-thumbnail-info a').on('click', function() {
+					$('.p-thumbnail-info').magnificPopup({
+						type:'image',
+						delegate: 'a',
+						gallery: {
+							enabled:true
+						}
+					});
+				});
+		  //--></script>
+		  {% endif %}
+		  {% if comment %}
+		  <h2>{{ entry_comment }}</h2>
+		  <p><blockquote>{{ comment }}</blockquote></p>
+		  {% endif %}
+		</div>
+	  </div>
+	{{ content_bottom }}</div>
+  {{ column_right }}</div>
+</div>
+{{ footer }}

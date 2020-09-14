@@ -1,0 +1,314 @@
+<div class="modal fade modal-custom" id="text-login-register">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-title">Войдите на сайт используя</div>
+            </div>
+            <div class="modal-body">
+                <div class="login-wrap">
+                    <div class="l-r-sms-email-btn-wrap">
+                        <button type="button" class="btn btn-default active" id="btel">Номер телефона</button>
+                        <button type="button" class="btn btn-default" id="bemail">Электронную почту</button>
+                    </div>
+                    <div class="l-r-main-block"></div>
+                    <div class="l-r-footer">
+                        <div class="wrcocbutbig-or-block">
+                            <div class="wrcocbutbig-or-block-line-1"></div>
+                        </div>
+                        <span class="titlesoc">или используйте для входа на сайт свой аккаунт в соцсети:</span>
+                        <div class="wrcocbutbig">
+                            {{ SOCNETAUTH2_DATA.code }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div><div class="modal fade modal-custom register-modal" id="text-login-register">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-title">Зарегестрируйтесь используя</div>
+            </div>
+            <div class="modal-body">
+                <div class="login-wrap">
+                    <div class="l-r-sms-email-btn-wrap">
+                        <button type="button" class="btn btn-default active" id="btel">Номер телефона</button>
+                        <button type="button" class="btn btn-default" id="bemail">Электронную почту</button>
+                    </div>
+                    <div class="l-r-main-block  register-modal-main-block"></div>
+                    <div class="l-r-footer">
+                        <div class="wrcocbutbig-or-block">
+                            <div class="wrcocbutbig-or-block-line-1"></div>
+                        </div>
+                        <span class="titlesoc">или используйте для регистрации свой аккаунт в соцсетях:</span>
+                        <div class="wrcocbutbig">
+                            {{ SOCNETAUTH2_DATA.code }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade modal-custom" id="text-login-register">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-title"></div>
+            </div>
+            <div class="modal-body">
+                <div class="login-wrap">
+                    <div class="l-r-sms-email-btn-wrap">
+                        <button type="button" class="btn btn-default active" id="btel">Номер телефона</button>
+                        <button type="button" class="btn btn-default" id="bemail">Электронную почту</button>
+                    </div>
+                    <div class="l-r-main-block"></div>
+                    <div class="l-r-footer">
+                        <div class="wrcocbutbig-or-block">
+                            <div class="wrcocbutbig-or-block-line-1"></div>
+                        </div>
+                        <span class="titlesoc">или используйте для входа на сайт свой аккаунт в соцсети:</span>
+                        <div class="wrcocbutbig">
+                            {{ SOCNETAUTH2_DATA.code }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        loadTemplateLoginTelephone();
+        $("#btel").on('click', function () {
+            $(".l-r-sms-email-btn-wrap button").removeClass("active");
+            $(this).addClass('active');
+            loadTemplateLoginTelephone();
+        })
+        $("#bemail").on('click', function () {
+            console.log($(this));
+            $(".l-r-sms-email-btn-wrap button").removeClass("active");
+            $(this).addClass('active');
+            loadTemplateLoginEmail();
+        })
+    });
+
+    function loadTemplateLoginTelephone() {
+        $.ajax({
+            url: 'index.php?route=extension/module/sirius_auth_register_popup/loadTemplateLoginTelephone',
+            dataType: 'html',
+            success: function (html) {
+                $('.l-r-main-block').html(html);
+            }
+        });
+    }
+
+    function loadTemplateLoginEmail() {
+        $.ajax({
+            url: 'index.php?route=extension/module/sirius_auth_register_popup/loadTemplateLoginEmail',
+            dataType: 'html',
+            success: function (html) {
+                $('.l-r-main-block').html(html);
+                $(".lr-code-activation-text-repeat").on('click', function () {
+                    console.log($(this));
+                    $.ajax({
+                        url: 'index.php?route=extension/module/sirius_auth_register_popup/loadTemplateRegister',
+                        dataType: 'html',
+                        success: function (html) {
+                            $('.l-r-main-block').html(html);
+                        }
+                    });
+                })
+            }
+        });
+    }
+
+
+</script>
+<script>
+
+
+    $('#bemail').click(function () {
+        $('#gofromphone').css('display', 'none');
+        $('#gofromemail').css('display', 'block');
+    });
+    $('#btel').click(function () {
+        $('#gofromemail').css('display', 'none');
+        $('#gofromphone').css('display', 'block');
+    });
+    $('#gofromemail_button').click(function () { // авторизація по емейл
+        $.ajax({
+            url: 'index.php?route=extension/module/sirius_auth_register_popup/login-register-email',
+            type: 'post',
+            data: $('#gofromemail-form').serialize(),
+            dataType: 'json',
+            success: function (json) {
+                console.log(json);
+                if (json['warning']) {
+                    $('#gofromemail-form').find('.warning').text('');
+                    for (warning in json['warning']['warning']) {
+                        console.log(warning);
+                        $('#gofromemail-form').find('#input-' + warning + '-warning').text(json['warning']['warning'][warning]);
+                    }
+                    if (json['empty_password']) $('#input-password-empty-warning').text(json['warning']['warning']['empty_password']);
+
+                    if (json['error_passwords_not_match']) $('#input-password-not-match').text(json['warning']['error_passwords_not_match']);
+                }
+                if (json['reload']) {
+                    location = window.location.href;
+                }
+                if (json['redirect']) {
+                    location = json['redirect'];
+                }
+                if (json['empty_password']) {
+                    $("#empty_repeat_password_wrap").css('display', 'block');
+                    $('#empty_repeat_password').removeAttr('disabled');
+                }
+                if (json['success']) {
+                    if (json['register']) {
+                        $('#gofromemail_button').val(json['continue']);
+                        $('#gofromemail').find('.titlesoc').text(json['success']);
+                        $('#gofromemail').find('.register_w').css('display', 'block');
+                        $('#gofromemail').find('.register_w input').removeAttr('disabled');
+                        $('#gofromemail').find('#email').removeAttr('disabled');
+                        $('#gofromemail').find('#password').removeAttr('disabled');
+                        $('#gofromemail').find('#email').css('display', 'none');
+                        $('#gofromemail').find('#password').css('display', 'none');
+                        $('#gofromemail').find('input[name="email"]').val(json['email']);
+                        $('#gofromemail').find('input[name="email"]').attr("placeholder", json['email']);
+                        $('.login-wrap').css('display', 'none');
+                    } else if (json['customer_register_id']) {
+                        $('#gofromemail').find('.customer_register_id').val(json['customer_register_id']);
+                        $('#gofromemail').find('.titlesoc').text(json['success']);
+                        $('#gofromemail').find('.register_w').css('display', 'none');
+                        $('#gofromemail').find('#email').attr('disabled', 'disabled');
+                        $('#gofromemail').find('#password').attr('disabled', 'disabled');
+                        $('#gofromemail').find('.register_w input').attr('disabled', 'disabled');
+                        $('#gofromemail-form').find('input[name="access-code"]').removeAttr('disabled');
+                        $('#gofromemail-form').find('input[name="access-code"]').css('display', 'block');
+                        $('#gofromemail').find(".access-code").css('display', 'block');
+                        $('#access-code').removeAttr('disabled');
+                        $('#access-code').css('display', 'block');
+                    }
+                }
+            }
+        });
+    });
+    $('#gofromphone_button').click(function () {
+        $.ajax({
+            url: 'index.php?route=extension/module/sirius_auth_register_popup/login-register',
+            type: 'post',
+            data: $('#gofromphone_form').serialize(),
+            dataType: 'json',
+            success: function (json) {
+                console.log(json);
+
+                if (json['success']) {
+                    if (json['login']) { //показуєм поле для вводу пароля відісланого на телефон і пробуєм авторизуватись
+                        $('#gofromphone_button').val(json['login']);
+                        $('#gofromphone').find('.titlesoc').css('display', 'block');
+                        $('#gofromphone_form').find('.access-code').css('display', 'block');
+                        $('#gofromphone_form').find('input[name="access-code"]').removeAttr('disabled');
+                        $('#gofromphone_form').find('input[name="access-code"]').css('display', 'block');
+                        $('#gofromphone').find('input[name="telephone"]').css('display', 'none');
+                        $('#text-login-register').find('.access_code_label').text(json['success']);
+                        $('#gofromphone').find('input[name="telephone"]').attr('disabled', 'disabled');
+                        $('.login-wrap').css('display', 'none');
+                        $('#gofromphone').find('.customer_register_id').val('');
+                        $('#gofromphone').find('.customer_id').val(json['customer_id']);
+                    } else if (json['continue']) {
+                        $('#gofromphone_button').val(json['continue']);
+                        $('#gofromphone').find('.titlesoc').text(json['success']);
+                        $('#gofromphone').find('.register_w').css('display', 'block');
+                        $('#gofromphone').find('.register_w input').removeAttr('disabled');
+                        $('#gofromphone').find('input[name="telephone"]').css('display', 'none');
+                        $('.login-wrap').css('display', 'none');
+                    } else if (json['customer_register_id']) {
+                        $('#gofromphone').find('.customer_register_id').val(json['customer_register_id']);
+                        $('#gofromphone').find('.customer_id').val('');
+                        $('#gofromphone').find('.titlesoc').text(json['success']);
+                        $('#gofromphone').find('.register_w').css('display', 'none');
+                        $('#gofromphone').find('.register_w input').attr('disabled', 'disabled');
+                        $('#gofromphone_form').find('input[name="access-code"]').removeAttr('disabled');
+                        $('#gofromphone_form').find('input[name="access-code"]').css('display', 'block');
+                        $('#gofromphone').find(".access-code").css('display', 'block');
+                        $('#access-code').removeAttr('disabled');
+                        $('#access-code').css('display', 'block');
+                    }
+                }
+                if (json['reload']) {
+                    location = window.location.href;
+                }
+                if (json['redirect']) {
+                    location = json['redirect'];
+                }
+                if (json['error']) {
+                    $('#text-login-register').find('.access-code').after(json['error']);
+                }
+                if (json['error_register']) {
+                    $('#text-login-register').find('.error').text('');
+                    for (error in json['error_register']) {
+                        $('#text-login-register').find('#input-' + error + '-error').text(json['error_register'][error]);
+                    }
+                }
+                if (json['success_register']) {
+                    $('#text-login-register').find('#customer_register_id').val(json['customer_register_id']);
+                    $('#text-login-register').find('#customer_register_id').removeAttr('disabled');
+                    $('#text-login-register').find('#register-block').css('display', 'none');
+                    $('#text-login-register').find('.info').text(json['success_register']);
+                    $('#text-login-register').find('.access-code').css('display', 'block');
+                    $('#text-login-register').find('#access-code').removeAttr('disabled');
+                }
+                console.log(json);
+            },
+        });
+    });
+</script>
+
+<style>
+    .ahtung {
+        font-family: opensansbold;
+        color: #9e0b0f;
+    }
+
+    .gotoyourroom {
+        width: 585px;
+        margin: 0 auto;
+        background: #fff;
+        padding-top: 35px;
+        text-align: center;
+        padding-bottom: 40px;
+    }
+
+    .modal-body {
+        text-align: center !important;
+    }
+
+    #btel .part1, #bemail .part1 {
+        background: url(image/vtel.png) center center no-repeat #9DD81E;
+    }
+
+    #gofromphone {
+        display: none;
+    }
+
+    html[lang="ru"] .account_socnetauth2_bline_links table .socnetauth2_buttons:before {
+        content: "Ваш Facebook аккаунт";
+    }
+
+    html[lang="ru"] .account_socnetauth2_bline_links table td:nth-of-type(2) .socnetauth2_buttons:before {
+        content: "Ваш Google аккаунт";
+    }
+
+    html[lang="ua"] .account_socnetauth2_bline_links table .socnetauth2_buttons:before {
+        content: "Ваш Facebook акаунт";
+    }
+
+    html[lang="ua"] .account_socnetauth2_bline_links table td:nth-of-type(2) .socnetauth2_buttons:before {
+        content: "Ваш Google акаунт";
+    }
+</style>

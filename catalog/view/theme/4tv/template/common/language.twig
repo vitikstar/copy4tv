@@ -1,0 +1,14 @@
+  <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-language">
+    <div class="header-language-wrapper btn-group">
+
+        {% for language in languages %}
+          <div class="header-language {% if language.code == code %}active{% endif %}">
+            <button class="btn btn-link btn-block language-select" type="button" name="{{ language.code }}">{% if language.name == "Ukrainian" %}Ua{% else %}Ru{% endif %}</button>
+          </div>
+          <div class="header-language-border"></div>
+        {% endfor %}
+
+    </div>
+    <input type="hidden" name="code" value="uk-ua" />
+    <input type="hidden" name="redirect" value="" />
+  </form>

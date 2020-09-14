@@ -1,0 +1,71 @@
+<div class="newsletter-wrapper-main">
+    <form action="" method="post" class="newsletter-form-wrapper form-horizontal">
+        <div class="newsletter-title">{% if lang == 'ru' %}Хотите быть в курсе последних новостей?{% else %}Хочете бути в курсі останніх новин?{% endif %}<div class="newsletter-title-icon"></div></div>
+        <div class="newsletter-text">{% if lang == 'ru' %}Подписывайтесь на нашу рассылку и получайте уведомления о новых поступлениях, популярных товарах и брендах, ближайших акциях и распродажах.{% else %}Підписуйтесь на нашу розсилку і отримуйте повідомлення про нові надходження, популярних товарах і брендах, найближчих акції та розпродажі.{% endif %}</div>
+        <div class="newsletter-form">
+            <div id="form-newsletter-error">
+                <div id="newsletter-email">
+                    <input type="email" name="txtemail" id="txtemail" value="" placeholder="Ваш e-mail" class="form-control"  />
+                </div>
+                <span>
+                <button type="submit" class="btn btn-default" onclick="return addNewsletter();">{% if lang == 'ru' %}Подписаться{% else %}Підписатися{% endif %}</button>
+            </span>
+            </div>
+        </div>
+    </form>
+
+    <script>
+        function addNewsletter() {
+            var emailpattern = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+            var email = $('#txtemail').val();
+            if(email != "") {
+                if(!emailpattern.test(email)) {
+                    $("#text-danger-newsletter").remove();
+                    $("#form-newsletter-error").removeClass("has-error");
+                    $("#newsletter-email").append('<div class="text-danger" id="text-danger-newsletter">{{ error_news_email_invalid }}</div>');
+                    $("#form-newsletter-error").addClass("has-error");
+
+                    return false;
+                } else {
+                    $.ajax({
+                        url: 'index.php?route=extension/module/newsletters/add',
+                        type: 'post',
+                        data: 'email=' + $('#txtemail').val(),
+                        dataType: 'json',
+                        async:false,
+                        success: function(json) {
+                            if (json['error']) {
+                                $("#newsletter-email").append('<div class="text-danger" id="text-danger-newsletter">{{ error_news_email_invalid }}</div>');
+                                return false;
+                            }
+                            if (json.message == true) {
+                                $('#form-newsletter-error').html('<div class="text-success" id="text-success-newsletter">{{ text_newsletter_sent }}</div>');
+                            } else {
+                                $("#text-danger-newsletter").remove();
+                                $("#form-newsletter-error").removeClass("has-error");
+                                $("#newsletter-email").append(json.message);
+                                $("#form-newsletter-error").addClass("has-error");
+                            }
+                        }
+                    });
+                    return false;
+                }
+            } else {
+                $("#text-danger-newsletter").remove();
+                $("#form-newsletter-error").removeClass("has-error");
+                $("#newsletter-email").append('<div class="text-danger" id="text-danger-newsletter">{{ error_news_email_required }}</div>');
+                $("#form-newsletter-error").addClass("has-error");
+                return false;
+            }
+        }
+    </script>
+    <style>
+        #text-success-newsletter {
+            font-size: 18px;
+            text-align: center;
+            font-weight: 700;
+        }
+    </style>
+</div>
+
+

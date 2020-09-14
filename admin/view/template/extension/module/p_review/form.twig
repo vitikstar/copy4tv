@@ -1,0 +1,390 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        <button type="submit" form="form-p-review" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+        <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb['href'] }}">{{ breadcrumb['text'] }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if error_warning %}
+    <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_form }}</h3>
+      </div>
+      <div class="panel-body">
+        <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-p-review" class="form-horizontal">
+		  <input type="hidden" name="store_url" value="{{ store_url }}">
+		  <input type="hidden" name="store_name" value="{{ store_name }}">
+		  <ul class="nav nav-tabs">
+            <li class="active"><a href="#tab-general" data-toggle="tab">{{ tab_general }}</a></li>
+            <li><a href="#tab-data" data-toggle="tab">{{ tab_data }}</a></li>
+			{% if field_avatar or field_image %}
+            <li><a href="#tab-image" data-toggle="tab">{{ tab_image }}</a></li>
+			{% endif %}
+            <li><a href="#tab-seo" data-toggle="tab">{{ tab_seo }}</a></li>
+            <li><a href="#tab-design" data-toggle="tab">{{ tab_design }}</a></li>
+          </ul>
+		  <div class="tab-content">
+            <div class="tab-pane active" id="tab-general">
+		      <div class="form-group required">
+				<label class="col-sm-2 control-label" for="input-product">{{ entry_product }}</label>
+				<div class="col-sm-10">
+				  <input type="text" name="product" value="{{ product }}" placeholder="{{ entry_product }}" id="input-product" class="form-control" />
+				  <input type="hidden" name="product_id" value="{{ product_id }}" />
+				  {% if error_product %}
+				  <div class="text-danger">{{ error_product }}</div>
+				  {% endif %}
+				</div>
+			  </div>
+		      {% if field_title %}
+		      <div class="form-group{% if field_title == 2 %} required{% endif %}">
+			    <label class="col-sm-2 control-label" for="input-title">{{ entry_title }}</label>
+				<div class="col-sm-10">
+				  <input type="text" name="title" value="{{ title }}" placeholder="{{ entry_title }}" id="input-title" class="form-control" />
+				  {% if error_title %}
+				  <div class="text-danger">{{ error_title }}</div>
+				  {% endif %}
+				</div>
+		      </div>
+		      {% endif %}
+		      {% if field_city %}
+		      <div class="form-group{% if field_city == 2 %} required{% endif %}">
+				<label class="col-sm-2 control-label" for="input-city">{{ entry_city }}</label>
+				<div class="col-sm-10">
+				  <input type="text" name="city" value="{{ city }}" placeholder="{{ entry_city }}" id="input-city" class="form-control" />
+				  {% if error_city %}
+				  <div class="text-danger">{{ error_city }}</div>
+				  {% endif %}
+				</div>
+		      </div>
+			  {% endif %}
+		      {% if field_email %}
+		      <div class="form-group{% if field_email == 2 %} required{% endif %}">
+				<label class="col-sm-2 control-label" for="input-email">{{ entry_email }}</label>
+				<div class="col-sm-10">
+				  <input type="text" name="email" value="{{ email }}" placeholder="{{ entry_email }}" id="input-email" class="form-control" />
+				  {% if error_email %}
+				  <div class="text-danger">{{ error_email }}</div>
+				  {% endif %}
+				</div>
+		      </div>
+		      {% endif %}
+		      {% if field_name %}
+		      <div class="form-group{% if field_name == 2 %} required{% endif %}">
+				<label class="col-sm-2 control-label" for="input-name">{{ entry_name }}</label>
+				<div class="col-sm-10">
+				  <input type="text" name="name" value="{{ name }}" placeholder="{{ entry_name }}" id="input-name" class="form-control" />
+				  {% if error_name %}
+				  <div class="text-danger">{{ error_name }}</div>
+				  {% endif %}
+				</div>
+		      </div>
+		      {% endif %}
+		      {% if field_text %}
+		      <div class="form-group{% if field_text == 2 %} required{% endif %}">
+				<label class="col-sm-2 control-label" for="input-text">{{ entry_text }}</label>
+				<div class="col-sm-10">
+				  <textarea name="text" cols="60" rows="8" placeholder="{{ entry_text }}" id="input-text" class="form-control">{{ text }}</textarea>
+				  {% if error_text %}
+				  <div class="text-danger">{{ error_text }}</div>
+				  {% endif %}
+				</div>
+		      </div>
+		      {% endif %}
+		      {% if field_good %}
+		      <div class="form-group{% if field_good == 2 %} required{% endif %}">
+				<label class="col-sm-2 control-label" for="input-good">{{ entry_good }}</label>
+				<div class="col-sm-10">
+				  <textarea name="good" cols="60" rows="8" placeholder="{{ entry_good }}" id="input-good" class="form-control">{{ good }}</textarea>
+				  {% if error_good %}
+				  <div class="text-danger">{{ error_good }}</div>
+				  {% endif %}
+				</div>
+		      </div>
+		      {% endif %}
+		      {% if field_bad %}
+		      <div class="form-group{% if field_bad == 2 %} required{% endif %}">
+				<label class="col-sm-2 control-label" for="input-bad">{{ entry_bad }}</label>
+				<div class="col-sm-10">
+				  <textarea name="bad" cols="60" rows="8" placeholder="{{ entry_bad }}" id="input-bad" class="form-control">{{ bad }}</textarea>
+				  {% if error_bad %}
+				  <div class="text-danger">{{ error_bad }}</div>
+				  {% endif %}
+				</div>
+		      </div>
+		      {% endif %}
+		      {% if field_email and email and store_url %}
+		      <div class="form-group">
+				<label class="col-sm-2 control-label" for="input-alert">{{ entry_alert }}</label>
+				<div class="col-sm-10">
+				  <input id="input-alert" type="checkbox" name="alert" value="1"/>
+				</div>
+		      </div>
+		      {% endif %}
+		      <div class="form-group">
+				<label class="col-sm-2 control-label" for="input-comment">{{ entry_comment }}</label>
+				<div class="col-sm-10">
+				  <textarea name="comment" cols="60" rows="8" placeholder="{{ entry_comment }}" id="input-comment" class="form-control summernote">{{ comment }}</textarea>
+				</div>
+		      </div>
+		      {% if field_rating %}
+		      <div class="form-group{% if field_rating == 2 %} required{% endif %}">
+				<label class="col-sm-2 control-label" for="input-rating">{{ entry_rating }}</label>
+				<div class="col-sm-10">
+				  <select name="rating" class="form-control" id="input-rating">
+					<option value="">{{ text_select }}</option>
+					{% for i in 1..5 %}
+					{% if rating == i %}
+					<option value="{{ i }}" selected="selected">{{ i }}</option>
+					{% else %}
+					<option value="{{ i }}">{{ i }}</option>
+					{% endif %}
+					{% endfor %}
+				  </select>
+				  {% if error_rating %}
+				  <div class="text-danger">{{ error_rating }}</div>
+				  {% endif %}
+				</div>
+		      </div>
+		      {% endif %}
+			</div>
+			<div class="tab-pane" id="tab-data">
+		      <div class="form-group">
+			    <label class="col-sm-2 control-label" for="input-language">{{ entry_language }}</label>
+				<div class="col-sm-10">
+				  <select name="language_id" id="input-language" class="form-control">
+					{% for language in languages %}
+					{% if language['language_id'] == language_id %}
+					<option value="{{ language['language_id'] }}" selected="selected">{{ language['name'] }}</option>
+					{% else %}
+					<option value="{{ language['language_id'] }}">{{ language['name'] }}</option>
+					{% endif %}
+					{% endfor %}
+				  </select>
+				</div>
+		      </div>
+		      <div class="form-group">
+				<label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
+				<div class="col-sm-10">
+				  <select name="status" id="input-status" class="form-control">
+					{% if status %}
+					<option value="1" selected="selected">{{ text_enabled }}</option>
+					<option value="0">{{ text_disabled }}</option>
+					{% else %}
+					<option value="1">{{ text_enabled }}</option>
+					<option value="0" selected="selected">{{ text_disabled }}</option>
+					{% endif %}
+				  </select>
+				</div>
+		      </div>			  			  
+		      <div class="form-group">
+				<label class="col-sm-2 control-label" for="input-date-added">{{ entry_date_added }}</label>
+				<div class="col-sm-3">
+				  <div class="input-group date">
+					<input type="text" name="date_added" value="{{ date_added }}" placeholder="{{ entry_date_added }}" data-date-format="YYYY-MM-DD HH:mm:ss" id="input-date-added" class="form-control" />
+					<span class="input-group-btn">
+					<button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
+					</span></div>
+				</div>
+		      </div>
+		      <div class="form-group">
+				<label class="col-sm-2 control-label">{{ entry_store }}</label>
+				<div class="col-sm-10">
+				  <div class="well well-sm" style="height: 150px; overflow: auto;">
+					{% for store in stores %}
+					<div class="checkbox">
+					  <label> {% if store.store_id in p_review_store %}
+						<input type="checkbox" name="p_review_store[]" value="{{ store.store_id }}" checked="checked" />
+						{{ store.name }}
+						{% else %}
+						<input type="checkbox" name="p_review_store[]" value="{{ store.store_id }}" />
+						{{ store.name }}
+						{% endif %} </label>
+					</div>
+					{% endfor %}
+				  </div>
+				</div>
+			  </div>
+			</div>
+			{% if field_avatar or field_image %}
+			<div class="tab-pane" id="tab-image">
+			  {% if field_avatar %}
+		      <div class="form-group{% if field_avatar == 3 %} required{% endif %}">
+				<label class="col-sm-2 control-label" for="input-avatar">{{ entry_avatar }}</label>
+				<div class="col-sm-10">
+				  <a href="" id="thumb-avatar" data-toggle="image" class="img-thumbnail"><img src="{{ thumb }}" alt="" title="" data-placeholder="{{ placeholder }}" /></a><input type="hidden" name="avatar" value="{{ avatar }}" id="input-avatar" />
+				  {% if error_avatar %}
+				  <div class="text-danger">{{ error_avatar }}</div>
+				  {% endif %}
+				</div>
+		      </div>
+		      {% endif %}
+		      {% if field_image %}
+		      <div class="form-group{% if field_image == 3 %} required{% endif %}">
+				<label class="col-sm-2 control-label">{{ entry_image }}</label>
+				<div class="col-sm-10">
+				  <div id="image">
+					{% set image_row = 0 %}
+					{% if image %}
+					{% for value in image %}
+					<span><a href="" id="thumb-image{{ image_row }}" data-toggle="image" class="img-thumbnail"><img src="{{ value.thumb }}" alt="" title="" data-placeholder="{{ placeholder }}" /></a><input type="hidden" name="image[]" value="{{ value.image }}" id="input-image{{ image_row }}"/></span>
+					{% set image_row = image_row + 1 %}
+					{% endfor %}
+					{% endif %}
+					<span><a onclick="addImage();" href="" id="thumb-image{{ image_row }}" data-toggle="image" class="img-thumbnail"><img src="{{ placeholder }}" alt="" title="" data-placeholder="{{ placeholder }}"/></a><input type="hidden" name="image[]" value="" id="input-image{{ image_row }}" /></span>
+				  </div>
+				  {% if error_image %}
+				  <div class="text-danger">{{ error_image }}</div>
+				  {% endif %}
+				</div>
+		      </div>
+		      {% endif %}
+			</div>
+			{% endif %}
+			<div class="tab-pane" id="tab-seo">
+              <div class="alert alert-info"><i class="fa fa-info-circle"></i> {{ text_keyword }}</div>            
+              <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <td class="text-left">{{ entry_store }}</td>
+		              <td class="text-left">{{ entry_keyword }}</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for store in stores %}
+                    <tr>
+                      <td class="text-left">{{ store.name }}</td>
+                      <td class="text-left">{% for language in languages %}
+                        <div class="input-group"><span class="input-group-addon"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /></span>
+                          <input type="text" name="p_review_seo_url[{{ store.store_id }}][{{ language.language_id }}]" value="{% if p_review_seo_url[store.store_id][language.language_id] %}{{ p_review_seo_url[store.store_id][language.language_id] }}{% endif %}" placeholder="{{ entry_keyword }}" class="form-control" />
+                        </div>
+                        {% if error_keyword[store.store_id][language.language_id] %}
+                        <div class="text-danger">{{ error_keyword[store.store_id][language.language_id] }}</div>
+                        {% endif %} 
+                        {% endfor %}</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+			<div class="tab-pane" id="tab-design">
+              <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <td class="text-left">{{ entry_store }}</td>
+                      <td class="text-left">{{ entry_layout }}</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {% for store in stores %}
+                  <tr>
+                    <td class="text-left">{{ store.name }}</td>
+                    <td class="text-left"><select name="p_review_layout[{{ store.store_id }}]" class="form-control">
+                        <option value=""></option>
+                        {% for layout in layouts %}
+                        {% if p_review_layout[store.store_id] and p_review_layout[store.store_id] == layout.layout_id %}
+                        <option value="{{ layout.layout_id }}" selected="selected">{{ layout.name }}</option>
+                        {% else %}
+                        <option value="{{ layout.layout_id }}">{{ layout.name }}</option>
+                        {% endif %}
+                        {% endfor %}
+                      </select></td>
+                  </tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+	      </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  {% if editor %}
+  <link href="view/javascript/p_review/wysibb/theme/default/wbbtheme.css" rel="stylesheet" />
+  <script type="text/javascript" src="view/javascript/p_review/wysibb/jquery.wysibb.min.js"></script>
+  <script type="text/javascript" src="view/javascript/p_review/wysibb/lang/{{ wysibb_language }}.js"></script>
+  {% endif %}
+  <link href="view/javascript/codemirror/lib/codemirror.css" rel="stylesheet" />
+  <link href="view/javascript/codemirror/theme/monokai.css" rel="stylesheet" />
+  <script type="text/javascript" src="view/javascript/codemirror/lib/codemirror.js"></script> 
+  <script type="text/javascript" src="view/javascript/codemirror/lib/xml.js"></script> 
+  <script type="text/javascript" src="view/javascript/codemirror/lib/formatting.js"></script> 
+  <script type="text/javascript" src="view/javascript/summernote/summernote.js"></script>
+  <link href="view/javascript/summernote/summernote.css" rel="stylesheet" />
+  <script type="text/javascript" src="view/javascript/summernote/summernote-image-attributes.js"></script> 
+  <script type="text/javascript" src="view/javascript/summernote/opencart.js"></script> 
+  <script type="text/javascript"><!--
+      {% if field_image %}
+	  var image_row = {{ image_row }};
+		
+	  function addImage() {
+		  image_row++; 
+		  
+		  html = '<span><a onclick="addImage();" href="" id="thumb-image' + image_row + '" data-toggle="image" class="img-thumbnail"><img src="{{ placeholder }}" alt="" title="" data-placeholder="{{ placeholder }}"/></a><input type="hidden" name="image[]" value="" id="input-image' + image_row + '" /></span> ';
+		
+		  $('#image .img-thumbnail').removeAttr('onclick');
+		  $('#image').append(html);
+	  }
+	  {% endif %}
+	  $('.date').datetimepicker({
+
+	  });
+	  {% if editor %}
+	  $(document).ready(function() {
+		  var wbbOpt = {
+			  buttons:'bold,italic,underline,strike,fontcolor,fontsize,|,bullist,numlist,|,video,link,smilebox',
+			  lang: '{{ wysibb_language }}',
+			  smileList: [
+				  {% if smiles %}
+				  {% for smile in smiles %}
+				  {title: '', img: '<img src="{{ smile['url'] }}" class="smile">', bbcode:":{{ smile['name'] }}:"},
+				  {% endfor %}
+				  {% endif %}
+			  ]
+		  }
+	      {% if editor %}
+		  $("#input-text, #input-good, #input-bad").wysibb(wbbOpt);
+	      {% endif %}
+	  });
+	  {% endif %}
+//--></script>
+  <script type="text/javascript"><!--
+      $('input[name=\'product\']').autocomplete({
+	      'source': function(request, response) {
+		      $.ajax({
+			      url: 'index.php?route=catalog/product/autocomplete&user_token={{ user_token }}&filter_name=' +  encodeURIComponent(request),
+			      dataType: 'json',			
+			      success: function(json) {
+				      response($.map(json, function(item) {
+					      return {
+						      label: item['name'],
+						      value: item['product_id']
+					      }
+				      }));
+			      }
+		      });
+	      },
+	      'select': function(item) {
+		      $('input[name=\'product\']').val(item['label']);
+		      $('input[name=\'product_id\']').val(item['value']);		
+	      }	
+      });
+//--></script>
+</div>
+{{ footer }}

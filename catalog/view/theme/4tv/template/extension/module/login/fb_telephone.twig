@@ -1,0 +1,46 @@
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+       <link href="/catalog/view/javascript/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen"/>
+       <script src="/catalog/view/javascript/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+
+
+       <link href="/catalog/view/javascript/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+       <link href="//fonts.googleapis.com/css?family=Open+Sans:400,400i,300,700" rel="stylesheet" type="text/css"/>
+
+       <link href="/catalog/view/theme/4tv/stylesheet/stylesheet.css" rel="stylesheet">
+       <link href="/catalog/view/theme/4tv/stylesheet/adaptive.css" rel="stylesheet">
+       <script src="catalog/view/javascript/jquery.maskedinput.min.js" type="text/javascript"></script>
+
+
+<div>
+      <div class="modal-header">
+        <div class="modal-title">Введите номер мобильного телефона</div>
+      </div>
+      <div class="modal-body">
+            <div class="login-wrap">
+                  <div class="l-r-main-block">
+                  <!-- tel-03 -->
+                        <div class="lr-tel ch-block">
+                              <div class="form-group">
+                                    <input type="tel" name="fb_telephone" id="relation_telephone" class="lr-tel-input-complete lr-tel-input form-control" placeholder="+38 (ХХХ) ХХХ - ХХ - ХХ" value="">
+                                    <p class="text-danger error-telephone"></p>
+                              </div>
+                              <div class="ch-block-btn-wrap">
+                              <input id="continue" type="button" value="Далее" onclick="foo()" id="" class="lr-btn-next btn btn-default">
+                              </div>
+                        </div>
+                  </div>
+            </div>
+      </div>
+</div>
+<script>
+function foo(){
+      location.href =  'index.php?route=extension/module/socnetauth2/facebook&first=1&relation_telephone='+ $("#relation_telephone").val();    //Текущая страница
+}
+$('input[name="fb_telephone"]').mask("+38 (099) 999-99-99");
+</script>
+<style>
+	a.socnetauth2_buttons:hover img
+	{
+		opacity: 0.8;
+	}
+	</style>

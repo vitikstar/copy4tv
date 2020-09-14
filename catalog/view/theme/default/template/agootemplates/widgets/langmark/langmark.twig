@@ -1,0 +1,28 @@
+{% if (langmark != '' or html != '') %}
+<div id="cmswidget-{{ cmswidget }}" class="cmswidget">
+{{langmark }}
+{{html }}
+</div>
+
+{% if (settings_widget['anchor'] is defined and settings_widget['anchor'] != '') %}
+<script>
+	$('#cmswidget-{{ cmswidget }}').hide();
+	{% if (settings_widget['doc_ready'] is defined and settings_widget['doc_ready']) %}
+	$(document).ready(function(){
+	 {% endif %}
+		var prefix = '{{ prefix }}';
+		var cmswidget = '{{ cmswidget }}';
+		var heading_title = '{{ heading_title }}';
+		var data = $('#cmswidget-{{ cmswidget }}').html();
+		{{ settings_widget['anchor'] }};
+		$('#cmswidget-{{ cmswidget }}').show();
+		delete data;
+		delete prefix;
+		delete cmswidget;
+	{% if (settings_widget['doc_ready'] is defined and settings_widget['doc_ready']) %}
+	});
+	 {% endif %}
+</script>
+ {% endif %}
+ {% endif %}
+

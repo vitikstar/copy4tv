@@ -1,0 +1,553 @@
+{{ header }}
+<div id="product-compare" class="container">
+
+    <div class="breadcrumb-product-wrap">
+            {{ column_megamenu }}
+
+        <ul class="breadcrumb">
+            {% set total = breadcrumbs|length %}
+            {% set counter = 0 %}
+            {% for breadcrumb in breadcrumbs %}
+                {{ breadcrumb['separator'] }}
+                {% set counter = counter + 1 %}
+                {% if (counter == total) %}
+                    <li>{{ breadcrumb['text'] }}</li>
+                {% else %}
+                    <li><a href="{{ breadcrumb['href'] }}">{{ breadcrumb['text'] }}</a></li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+
+    </div>
+
+    {% if success %}
+{#        <div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> {{ success }}#}
+{#            <button type="button" class="close" data-dismiss="alert">&times;</button>#}
+{#        </div>#}
+    {% endif %}
+    <div class="row">{{ column_left }}
+        {% if column_left and column_right %}
+            {% set class = 'col-sm-6' %}
+        {% elseif column_left or column_right %}
+            {% set class = 'col-sm-9' %}
+        {% else %}
+            {% set class = 'col-sm-12' %}
+        {% endif %}
+        <div id="content" class="{{ class }}">{{ content_top }}
+
+{#            <div class="compare-title">{{ text_heading_title }} <span>({{ count_products }})</span></div>#}
+            <div class="compare-title">{{ text_heading_title }}</div>
+
+
+            {% if products %}
+
+
+                {############## MOB version ############ #}
+
+
+            {% if (count_products > 2) %}
+                <script>
+                    $(document).ready(function () {
+
+                        function compare_scroll_container(el, click_btn) {
+                            var scroll_left_current = el.scrollLeft();
+                            scroll_left_current = Math.ceil(scroll_left_current);
+                            var block_width_current = el.width();
+
+                            var scroll_left_current_end = 0;
+                            {% if (count_products == 4) %}
+                            scroll_left_current_end = el.width();
+                            {% endif %}
+                            {% if (count_products == 3) %}
+                            scroll_left_current_end = el.width() / 2;
+                            {% endif %}
+
+
+                            var one_column_width = block_width_current / 2;
+//                            var window_width_current = window.innerWidth;
+
+
+                            if (click_btn) {
+                                if (click_btn.hasClass('sm-compare__scroll-btn-right')) {
+                                    var scroll_move = scroll_left_current + one_column_width;
+
+//                                    el.scrollLeft(scroll_move);
+
+                                    el.animate({scrollLeft: scroll_move}, 300);
+
+                                }
+
+                                if (click_btn.hasClass('sm-compare__scroll-btn-left')) {
+                                    var scroll_move = scroll_left_current - one_column_width;
+
+//                                    el.scrollLeft(scroll_move);
+
+                                    el.animate({scrollLeft: scroll_move}, 300);
+                                }
+                            }
+
+
+                            if (scroll_left_current === 0) {
+                                $('.sm-compare__scroll-btn-left').addClass('is-disabled');
+                            } else {
+                                $('.sm-compare__scroll-btn-left').removeClass('is-disabled');
+                            }
+
+                            if (scroll_left_current === scroll_left_current_end) {
+                                $('.sm-compare__scroll-btn-right').addClass('is-disabled');
+                            } else {
+                                $('.sm-compare__scroll-btn-right').removeClass('is-disabled');
+                            }
+                        }
+
+
+                        $('.sm-compare__scroll-container').scroll(function () {
+                            compare_scroll_container($(this));
+                        });
+
+                        $('.sm-compare__scroll-btn-right').click(function () {
+                            compare_scroll_container($('.sm-compare__scroll-container'), $(this));
+                        });
+
+                        $('.sm-compare__scroll-btn-left').click(function () {
+                            compare_scroll_container($('.sm-compare__scroll-container'), $(this));
+                        });
+                    });
+                </script>
+            {% endif %}
+
+                <div id="app-container" class="hidden-lg">
+                    <div class="page-wrap">
+                        <div class="container--small">
+                            <div class="sm-compare">
+
+                                {% if (count_products > 2) %}
+                                    <div class="sm-compare__scroll-btn-left is-disabled">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30">
+                                            <g fill="none" fill-rule="evenodd">
+                                                <path d="M0 0h30v30H0z"></path>
+                                                <path fill="#FFF" fill-rule="nonzero"
+                                                      d="M19.72 15.7l-6.04 6.01a.98.98 0 0 1-1.39 0 .98.98 0 0 1 0-1.38L17.63 15 12.3 9.67a.98.98 0 0 1 0-1.38.98.98 0 0 1 1.4 0l6.03 6.02a.98.98 0 0 1 0 1.38z"></path>
+                                            </g>
+                                        </svg>
+                                    </div>
+                                    <div class="sm-compare__scroll-btn-right">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30">
+                                            <g fill="none" fill-rule="evenodd">
+                                                <path d="M0 0h30v30H0z"></path>
+                                                <path fill="#FFF" fill-rule="nonzero"
+                                                      d="M19.72 15.7l-6.04 6.01a.98.98 0 0 1-1.39 0 .98.98 0 0 1 0-1.38L17.63 15 12.3 9.67a.98.98 0 0 1 0-1.38.98.98 0 0 1 1.4 0l6.03 6.02a.98.98 0 0 1 0 1.38z"></path>
+                                            </g>
+                                        </svg>
+                                    </div>
+                                {% endif %}
+
+
+                                {#<div class="sm-compare-sticky-head">#}
+                                {#<div class="sm-compare-sticky-head__controls">#}
+                                {##}
+                                {#</div>#}
+                                {#<div class="sm-compare-sticky-head__scroll-container">#}
+                                {#<div class="sm-compare-sticky-head__row">#}
+                                {#<div class="sm-compare-sticky-head__column">#}
+                                {##}
+                                {#</div>#}
+                                {#</div>#}
+                                {#</div>#}
+                                {#</div>#}
+
+
+                                <div class="sm-compare-control-panel">
+                                    <div class="compare-add-new-item-wrap">
+                                        <a class="compare-add-new-item" href="{{ compare_add_new_item_icon }}"><span
+                                                    class="compare-add-new-item-icon"></span><span>{{ text_goods_other_add }}</span></a>
+                                    </div>
+                                    <div class="compare-param-wrap">
+                                        <span class="compare-param-all">{{ text_all_parametr }}</span> <span
+                                                class="compare-param-dif">{{ text_only_merge }}</span>
+                                    </div>
+                                </div>
+                                <div class="sm-compare__global-container">
+                                    <div class="sm-compare__scroll-container">
+                                        <div class="sm-compare__content-container">
+
+                                            <div class="sm-compare__row">
+                                                {% for product in products %}
+                                                    <div class="sm-compare__column">
+                                                        <div class="compare-item-wrapper-1">
+
+                                                            <a href="javascript:void(0)" class="delete-1"  data-remove="{{ product.product_id }}"  category_id="{{ product.category_id }}"></a>
+
+                                                            <div class="compare-item-wrapper">
+
+                                                                {% if product.thumb %}
+                                                                    <div class="compare-item-img-wrap">
+                                                                        <a href="{{ product.href }}">
+                                                                            <img src="{{ product.thumb }}"
+                                                                                 alt="{{ product.name }}"
+                                                                                 title="{{ product.name }}"
+                                                                                 class="img-responsive"/>
+                                                                        </a>
+                                                                    </div>
+                                                                {% endif %}
+
+                                                                <div class="compare-item-main-wrap">
+                                                                    <div class="products-name give-me-ellipsis-1"><a
+                                                                                href="{{ product.href }}">{{ product.name }}</a>
+                                                                    </div>
+                                                                    {% if product.rating %}
+                                                                        <div class="products-inform">
+                                                                            <div class="rating">
+                                                                                {% for i in 1..5 %}
+                                                                                    {% if product.rating < i %} <span
+                                                                                            class="fa fa-stack"><i
+                                                                                                class="fa fa-star-o fa-stack-2x"></i></span> {% else %}
+                                                                                        <span class="fa fa-stack"><i
+                                                                                                    class="fa fa-star fa-stack-2x"></i><i
+                                                                                                    class="fa fa-star-o fa-stack-2x"></i></span> {% endif %}
+                                                                                {% endfor %}
+                                                                            </div>
+                                                                            {% if product.reviews %}
+                                                                                <div class="products-review-quantity"
+                                                                                     onclick="location='{{ product.href }}#tab-review'">
+                                                                                    <div class="products-review-quantity-icon">
+                                                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                             xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                                                             width="18"
+                                                                                             height="18"
+                                                                                             viewBox="0 0 18 18">
+                                                                                            <g>
+                                                                                                <g>
+                                                                                                    <image width="18"
+                                                                                                           height="18"
+                                                                                                           xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAABbklEQVQ4T63UMUiVYRTG8d8ViVzDoKglWgIhDB2CyBaRJkmDiBqCcnJwEgQxqCmQGgJxEAVBvKKIlmuL2FBLVlsIpd5IXJsUhIoD7weXr764ej3j4X3/nPOc55ySv6MBt3AbHTiTnuziLRbxCr+qv5ZynCuYxmlM4g228BsX0ImH+IkH+JD9rwZ1YxbPMYq9f1QbqSYMYgj3sBLJDBSVrOERFgoA+XQPZnAjKgtQaPIRS3haIyR7NoIAtgeoF2O4+J92ivgnsYGBAIUu3/D4kNVkz5/gUoC+437S6CisaygH6CC1VamihFah2WfcTUOZw2XcQWiTRfjsx3GAzqGStRZ+CNceJa6GZQJUxtc6xI4htdQ7/hOpiP7jMGSI35qtSBtW0Yf5GoU6j23E+N/nlzb0eoFn2C8ARjsZ5BNehx2KzsgpTKUzspluT5yRrrTYMfIJrOMlxvOgKKL6sF3HWTRiB+/SSn3BMG6iGct/AFy+UfqaNluTAAAAAElFTkSuQmCC"/>
+                                                                                                </g>
+                                                                                            </g>
+                                                                                        </svg>
+                                                                                    </div>
+                                                                                    <div class="products-review-quantity-number">
+                                                                                        {{ count_products }}
+                                                                                    </div> {# Сюда нужно вывести кол-во отзывов #}
+                                                                                </div>
+                                                                            {% endif %}
+                                                                        </div>
+                                                                    {% endif %}
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+
+
+                                            {% for attribute_group in attribute_groups %}
+                                                {% for key, attribute in attribute_group.attribute %}
+                                                    <div class="sm-compare__row sm-compare__row--title">
+                                                        <div>{{ attribute.name }}</div>
+                                                    </div>
+                                                    <div class="sm-compare__row">
+                                                        {% for product in products %}
+                                                            {% if product.attribute[key] %}
+                                                                <div class="sm-compare__column">
+                                                                    <div class="sm-compare__cell">{{ product.attribute[key] }}</div>
+                                                                </div>
+                                                            {% else %}
+                                                                <div class="sm-compare__column">
+                                                                    <div class="sm-compare__cell">
+                                                                        <div></div>
+                                                                    </div>
+                                                                </div>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </div>
+                                                {% endfor %}
+                                            {% endfor %}
+
+
+                                        </div>
+                                    </div>
+                                    <div class="sm-compare__content-container is-substrate">
+
+
+                                        <div class="sm-compare__row">
+                                            {% for product in products %}
+                                                <div class="sm-compare__column">
+                                                    <div class="compare-item-wrapper-1">
+
+                                                        <a href="javascript:void(0)" class="delete-1"  data-remove="{{ product.product_id }}"  category_id="{{ product.category_id }}"></a>
+
+                                                        <div class="compare-item-wrapper">
+
+                                                            {% if product.thumb %}
+                                                                <div class="compare-item-img-wrap">
+                                                                    <a href="{{ product.href }}">
+                                                                        <img src="{{ product.thumb }}"
+                                                                             alt="{{ product.name }}"
+                                                                             title="{{ product.name }}"
+                                                                             class="img-responsive"/>
+                                                                    </a>
+                                                                </div>
+                                                            {% endif %}
+
+                                                            <div class="compare-item-main-wrap">
+                                                                <div class="products-name give-me-ellipsis-1"><a
+                                                                            href="{{ product.href }}">{{ product.name }}</a>
+                                                                </div>
+                                                                {% if product.rating %}
+                                                                    <div class="products-inform">
+                                                                        <div class="rating">
+                                                                            {% for i in 1..5 %}
+                                                                                {% if product.rating < i %} <span
+                                                                                        class="fa fa-stack"><i
+                                                                                            class="fa fa-star-o fa-stack-2x"></i></span> {% else %}
+                                                                                    <span class="fa fa-stack"><i
+                                                                                                class="fa fa-star fa-stack-2x"></i><i
+                                                                                                class="fa fa-star-o fa-stack-2x"></i></span> {% endif %}
+                                                                            {% endfor %}
+                                                                        </div>
+                                                                        {% if product.reviews %}
+                                                                            <div class="products-review-quantity"
+                                                                                 onclick="location='{{ product.href }}#tab-review'">
+                                                                                <div class="products-review-quantity-icon">
+                                                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                         xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                                                         width="18"
+                                                                                         height="18"
+                                                                                         viewBox="0 0 18 18">
+                                                                                        <g>
+                                                                                            <g>
+                                                                                                <image width="18"
+                                                                                                       height="18"
+                                                                                                       xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAABbklEQVQ4T63UMUiVYRTG8d8ViVzDoKglWgIhDB2CyBaRJkmDiBqCcnJwEgQxqCmQGgJxEAVBvKKIlmuL2FBLVlsIpd5IXJsUhIoD7weXr764ej3j4X3/nPOc55ySv6MBt3AbHTiTnuziLRbxCr+qv5ZynCuYxmlM4g228BsX0ImH+IkH+JD9rwZ1YxbPMYq9f1QbqSYMYgj3sBLJDBSVrOERFgoA+XQPZnAjKgtQaPIRS3haIyR7NoIAtgeoF2O4+J92ivgnsYGBAIUu3/D4kNVkz5/gUoC+437S6CisaygH6CC1VamihFah2WfcTUOZw2XcQWiTRfjsx3GAzqGStRZ+CNceJa6GZQJUxtc6xI4htdQ7/hOpiP7jMGSI35qtSBtW0Yf5GoU6j23E+N/nlzb0eoFn2C8ARjsZ5BNehx2KzsgpTKUzspluT5yRrrTYMfIJrOMlxvOgKKL6sF3HWTRiB+/SSn3BMG6iGct/AFy+UfqaNluTAAAAAElFTkSuQmCC"/>
+                                                                                            </g>
+                                                                                        </g>
+                                                                                    </svg>
+                                                                                </div>
+                                                                                <div class="products-review-quantity-number">
+                                                                                    {{ count_products }}
+                                                                                </div> {# Сюда нужно вывести кол-во отзывов #}
+                                                                            </div>
+                                                                        {% endif %}
+                                                                    </div>
+                                                                {% endif %}
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+
+
+                                        {% for attribute_group in attribute_groups %}
+                                            {% for key, attribute in attribute_group.attribute %}
+                                                <div class="sm-compare__row sm-compare__row--title">
+                                                    <div>{{ attribute.name }}</div>
+                                                </div>
+                                                <div class="sm-compare__row">
+                                                    {% for product in products %}
+                                                        {% if product.attribute[key] %}
+                                                            <div class="sm-compare__column">
+                                                                <div class="sm-compare__cell">{{ product.attribute[key] }}</div>
+                                                            </div>
+                                                        {% else %}
+                                                            <div class="sm-compare__column">
+                                                                <div class="sm-compare__cell">
+                                                                    <div></div>
+                                                                </div>
+                                                            </div>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </div>
+                                            {% endfor %}
+                                        {% endfor %}
+
+
+                                    </div> <!----></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {############## end MOB version ############ #}
+
+
+
+
+
+                <table class="compare-table table table-bordered hidden-xs hidden-sm hidden-md">
+
+                    <tr>
+                        <td class="compare-add-new-item-wrap">
+                            <a class="compare-add-new-item"  href="{{ compare_add_new_item_icon }}"><span class="compare-add-new-item-icon"></span><span>{{ text_goods_other_add }}</span></a>
+                        </td>
+                        {% for product in products %}
+                            <td class="compare-item-wrapper-1 product-td-compare-id-{{ product.product_id }}">
+
+                                <a href="javascript:void(0)" class="delete-1"  data-remove="{{ product.product_id }}"  category_id="{{ product.category_id }}"></a>
+
+                                <div class="compare-item-wrapper">
+
+                                    {% if product.thumb %}
+                                        <div class="compare-item-img-wrap">
+                                            <a href="{{ product.href }}">
+                                                <img src="{{ product.thumb }}" alt="{{ product.name }}"
+                                                     title="{{ product.name }}" class="img-responsive"/>
+                                            </a>
+                                        </div>
+                                    {% endif %}
+
+                                    <div class="compare-item-main-wrap">
+                                        <div class="products-name give-me-ellipsis-1"><a
+                                                    href="{{ product.href }}">{{ product.name }}</a></div>
+                                        {% if product.rating %}
+                                            <div class="products-inform">
+                                                <div class="rating">
+                                                    {% for i in 1..5 %}
+                                                        {% if product.rating < i %} <span class="fa fa-stack"><i
+                                                                    class="fa fa-star-o fa-stack-2x"></i></span> {% else %}
+                                                            <span class="fa fa-stack"><i
+                                                                        class="fa fa-star fa-stack-2x"></i><i
+                                                                        class="fa fa-star-o fa-stack-2x"></i></span> {% endif %}
+                                                    {% endfor %}
+                                                </div>
+                                                {% if product.reviews %}
+                                                    <div class="products-review-quantity"
+                                                         onclick="location='{{ product.href }}#tab-review'">
+                                                        <div class="products-review-quantity-icon">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 xmlns:xlink="http://www.w3.org/1999/xlink" width="18"
+                                                                 height="18" viewBox="0 0 18 18">
+                                                                <g>
+                                                                    <g>
+                                                                        <image width="18" height="18"
+                                                                               xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAABbklEQVQ4T63UMUiVYRTG8d8ViVzDoKglWgIhDB2CyBaRJkmDiBqCcnJwEgQxqCmQGgJxEAVBvKKIlmuL2FBLVlsIpd5IXJsUhIoD7weXr764ej3j4X3/nPOc55ySv6MBt3AbHTiTnuziLRbxCr+qv5ZynCuYxmlM4g228BsX0ImH+IkH+JD9rwZ1YxbPMYq9f1QbqSYMYgj3sBLJDBSVrOERFgoA+XQPZnAjKgtQaPIRS3haIyR7NoIAtgeoF2O4+J92ivgnsYGBAIUu3/D4kNVkz5/gUoC+437S6CisaygH6CC1VamihFah2WfcTUOZw2XcQWiTRfjsx3GAzqGStRZ+CNceJa6GZQJUxtc6xI4htdQ7/hOpiP7jMGSI35qtSBtW0Yf5GoU6j23E+N/nlzb0eoFn2C8ARjsZ5BNehx2KzsgpTKUzspluT5yRrrTYMfIJrOMlxvOgKKL6sF3HWTRiB+/SSn3BMG6iGct/AFy+UfqaNluTAAAAAElFTkSuQmCC"/>
+                                                                    </g>
+                                                                </g>
+                                                            </svg>
+                                                        </div>
+                                                        <div class="products-review-quantity-number">5
+                                                        </div> {# Сюда нужно вывести кол-во отзывов #}
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                            </td>
+                        {% endfor %}
+                    </tr>
+
+                    <tr class="compare-tr-option">
+                        <td>
+                            {% if products|length>1 %}
+                            <div class="compare-param-wrap">
+                                <span class="compare-param-all compare-param-selected-btn">{{ text_all_parametr }}</span>
+                                <span class="compare-param-dif">{{ text_only_merge }}</span>
+                            </div>
+                            {% endif %}
+                        </td>
+                        {% for product in products %}
+                            <td class="product-td-compare-id-{{ product.product_id }}">
+                                <div class="products-wrapper">
+                                    <div class="button-group-new-wrapper product-thumb">
+                                        <div class="button-group-new">
+
+                                            <div class="compare-pr-wish-wrap">
+                                                {% if product.price %}
+                                                    <p class="price">
+                                                        {% if not product.special %}
+                                                            {{ product.price }}
+                                                        {% else %}
+                                                            <span class="price-new">{{ product.special }}</span> <span
+                                                                class="price-old">{{ product.price }}</span>
+                                                        {% endif %}
+                                                        {% if product.tax %} <span
+                                                                class="price-tax">{{ text_tax }} {{ product.tax }}</span> {% endif %}
+                                                    </p>
+                                                {% endif %}
+                                                <div class="products-compare-wish-btn">
+                                                    {# Тут при обновлении страницы Вишлист не активный, надо добисать в контроллере и вывести аналогично других страниц #}
+                                                    <button class="products-wish-btn product{{ product.product_id }}"
+                                                            type="button" data-toggle="tooltip" title=""
+                                                            onclick="wishlist.add('{{ product.product_id }}');"
+                                                            data-original-title="В закладки"></button>
+                                                </div>
+                                            </div>
+
+                                            <button class="products-buy-btn btn btn-default" type="button"
+                                                    onclick="cart.add('{{ product.product_id }}', '{{ product.minimum }}');">
+                                                <span class="products-buy-btn-icon"></span>
+                                                <span class="products-buy-btn-text">{{ button_cart }}</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </td>
+                        {% endfor %}
+                    </tr>
+
+                    {% for attribute_group in attribute_groups %}
+                        {% for key, attribute in attribute_group.attribute %}
+                            <tr class="compare-tr-attr">
+                                <td>{{ attribute.name }}</td>
+                                {% for product in products %}
+                                    {% if product.attribute[key] %}
+                                        <td data_key="{{ product.attribute[key] }}" class="product-td-compare-id-{{ product.product_id }}"> {{ product.attribute[key] }}</td>
+                                    {% else %}
+                                        <td class="product-td-compare-id-{{ product.product_id }}"></td>
+                                    {% endif %}
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    {% endfor %}
+
+                </table>
+
+                <script>
+                    $('.compare-param-dif').on('click',function () {
+                            $('.compare-param-all').removeClass('compare-param-selected-btn');
+                            $(this).addClass('compare-param-selected-btn');
+                        $('.compare-tr-attr').each(function() {
+                            var tr = $(this);
+                            var arr =[];
+                            tr.find('td').each(function(index) {
+                                var td = $(this);
+                                console.log(td);
+                                if(index!=0 && td.text()!=''){
+                                    arr.push(td.text());
+                                }
+                            });
+                            $.unique(arr);
+
+                            if(arr.length==1){
+                                tr.css('display','none');
+                            }
+                        });
+                    })
+                    $('.compare-param-all').on('click',function () {
+                        $('.compare-param-dif').removeClass('compare-param-selected-btn');
+                        $(this).addClass('compare-param-selected-btn');
+                        $('.compare-tr-attr').css('display','table-row');
+                    })
+                </script>
+
+
+
+
+
+
+            {% else %}
+                <p>{{ text_empty }}</p>
+                <div class="buttons">
+                    <div class="pull-right"><a href="{{ continue }}" class="btn btn-default">{{ button_continue }}</a>
+                    </div>
+                </div>
+            {% endif %}
+            {{ content_bottom }}</div>
+        {{ column_right }}</div>
+</div>
+{{ footer }}

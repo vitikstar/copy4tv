@@ -1,0 +1,431 @@
+{{ header }}
+<div id="checkout-checkout" class="container">
+  {% if error_warning %}
+  <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+  </div> 
+  {% endif %}
+  <div class="row">{{ column_megamenu }}
+    {% if column_megamenu and column_right %}
+    {% set class = 'col-sm-3' %}
+    {% elseif column_megamenu or column_right %}
+    {% set class = 'col-sm-9' %}
+    {% else %}
+    {% set class = 'col-sm-12' %}
+    {% endif %}
+    <div id="content" class="{{ class }}">
+        <ul class="breadcrumb">
+            {% set total = breadcrumbs|length %}
+            {% set counter = 0 %}
+            {% for breadcrumb in breadcrumbs %}
+                {{ breadcrumb['separator'] }}
+                {% set counter = counter + 1 %}
+                {% if (counter == total) %}
+                    <li>{{ breadcrumb['text'] }}</li>
+                {% else %}
+                    <li><a href="{{ breadcrumb['href'] }}">{{ breadcrumb['text'] }}</a></li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+        {{ content_top }}
+        <div class="ch-wrapper">
+        <div class="ch-wrapper-left">
+                <h1 class="hidden-xs hidden-sm hidden-md">{{ heading_title }}</h1>
+        {%  if(text_empty)  %}
+        <div class="ch-products-order text-center">
+<button class="ch-products-order-btn btn btn-default" onclick='javascript:window.location="/"'>{{ text_empty_continue }}</button>
+</div>
+        {% else %}
+                {################################1 етап#####################################}
+                <div class="ch-block-1 ch-block">
+                    <div class="ch-block-title">1. {{ text_your_details }}</div>
+                    <div class="ch-block-inner" id="form_login"></div>
+                </div>
+
+                {################################2 етап#####################################}
+                <div class="ch-block-2 ch-block">
+                    <div class="ch-block-title">2. {{ text_checkout_shipping_method }}</div>
+                    <div class="ch-del-pay-items" id="delivery_method_form"></div>
+                </div>
+
+                {################################3 етап#####################################}
+                <div class="ch-block-3 ch-block">
+                    <div class="ch-block-title">3. {{ text_checkout_payment_method }}</div>
+                    <div class="ch-del-pay-items" id="payment_method_form"></div>
+                </div>
+
+                {################################коментар#####################################}
+                <div class="ch-block-4 ch-block">
+                    <div class="ch-block-title">
+                        <span class="ch-block-title-icon"></span>
+                        <span class="ch-block-title-text">{{ text_comment_order }}</span>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-xs-12">
+                            <div class="form-group">
+                                <textarea class="form-control" name="" id="comment-order" placeholder="{{ text_c_order }}"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {################################умови#####################################}
+                <div class="ch-block-5 ch-block">
+                    <input type="checkbox" id="checkbox-input-mod" name="" class="checkbox-input-mod">
+                    <span>{{ text_agree }}</span>
+                </div>
+            </div>
+            {################################ваше замовлення#####################################}
+            <div class="ch-wrapper-right">
+                <div class="ch-main-title-h1 hidden-lg">{{ heading_title }}</div>
+                <div id="list-product-right-position">
+                    <div class="ch-products-block">
+                        <div class="ch-products-block-title">{{ text_checkout_order }}</div>
+                        <div class="ch-products-block-line"></div>
+                        <div class="ch-products">
+                        </div>
+                        <div class="ch-products-footer">
+                            <div class="ch-products-footer-info-wrap">
+                                <div class="ch-products-footer-info">
+
+                                </div>
+                                
+                                <div id="error_validate_checkout">
+
+                                </div>
+                                <!--<div class="ch-products-footer-info">
+                                    <div>Ваша скидка (10%):</div>
+                                    <div class="price">1205<span class="symbol-right"> грн</span></div>
+                                </div>-->
+                            </div>
+                            <div class="ch-products-footer-total">
+
+                            </div>
+                            <div class="ch-products-order text-center">
+                                <button class="ch-products-order-btn btn btn-default btn-no-active" id="order-confirmed">{{ text_order_confirmed }}</button>
+                            </div>
+                            <div class="ch-products-order-edit-wrap">
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+        {% endif %}
+                    </div>
+        </div>
+
+      {{ content_bottom }}
+    </div>
+    {{ column_right }}
+  </div>
+</div>
+<script type="text/javascript">
+$(document).on('change', 'input[name=\'account\']', function() {
+	if ($('#collapse-payment-address').parent().find('.panel-heading .panel-title > *').is('a')) {
+		if (this.value == 'register') {
+			$('#collapse-payment-address').parent().find('.panel-heading .panel-title').html('<a href="#collapse-payment-address" data-toggle="collapse" data-parent="#accordion" class="accordion-toggle">{{ text_checkout_account }} <i class="fa fa-caret-down"></i></a>');
+		} else {
+			$('#collapse-payment-address').parent().find('.panel-heading .panel-title').html('<a href="#collapse-payment-address" data-toggle="collapse" data-parent="#accordion" class="accordion-toggle">{{ text_checkout_payment_address }} <i class="fa fa-caret-down"></i></a>');
+		}
+	} else {
+		if (this.value == 'register') {
+			$('#collapse-payment-address').parent().find('.panel-heading .panel-title').html('{{ text_checkout_account }}');
+		} else {
+			$('#collapse-payment-address').parent().find('.panel-heading .panel-title').html('{{ text_checkout_payment_address }}');
+		}
+	}
+});
+
+
+$("#order-confirmed").on("click",function () {
+                    if(!$('#checkbox-input-mod').is(':checked')){
+                                $('#error_validate_checkout').prepend('<div class="alert alert-danger" role="alert" id="agreement_warning"><div class="text-center">Ви повинні погодитися з умовами угоди "Умови використання сайту"!</div></div>');
+                    }else{
+                            $('#agreement_warning').remove();
+                    }
+});
+
+
+function paymentFormShow(checkbox_confirm_object){
+    if(checkbox_confirm_object.is(':checked')){
+       // loadingAjax(true);
+        $.ajax({
+            url: 'index.php?route=checkout/confirm/method',
+            type: 'post',
+            data: {},
+            dataType: 'html',
+            beforeSend: function() {
+            },
+            success: function(html) {
+               // console.log(html);
+               // loadingAjax(false);
+                // $('.alert-dismissible, .text-danger').remove();
+                $(".ch-products-order").html(html);
+                $("#order-confirmed").on("click",function () {
+                        var name_delivery_checked = $("#ukrposhtaCheckbox input[name='delivery']:checked").val();
+                    	var post = {
+                                    'type_delivery_val': $('.delivery_type_select_change').find('option:selected').val(),
+                                    'type_delivery_id_val': $('.delivery_type_select_change').find('option:selected').attr('data-type'),
+                                    'region_delivery_adres_val': $('#inputRegionAdres').find('option:selected').val(),
+                                    'region_id_delivery_adres_val': $('#inputRegionAdres').find('option:selected').val(),
+                                    'region_delivery_samov_val': $('#inputRegionSamov').find('option:selected').val(),
+                                    'region_id_delivery_samov_val': $('#inputRegionSamov').find('option:selected').val(),
+                                    'city_delivery_adres_val': $('#inputCityAdres').find('option:selected').val(),
+                                    'city_delivery_samov_val': $('#inputCitySamov').find('option:selected').val(),
+                                    'city_delivery_samov_text': $('#inputCitySamov').find('option:selected').text(),
+                                    'customer_address_delivery_text': $("select[name='customer_address_delivery_id']").find('option:selected').text(),
+                                    'delivery_val': $('#inputNovaPoshta').find('option:selected').val(),
+                                    'delivery_text': $('#inputNovaPoshta').find('option:selected').text(),
+                                    'delivery_val_ukrposhta': $("input[name='delivery']:checked").val(),
+                                    'delivery_service_samov_val': $("select[name='delivery_service_samov']").find('option:selected').val(),
+                                    'delivery_service_adres_val': $("select[name='delivery_service_adres']").find('option:selected').val(),
+                                    'region_delivery_samov_text': $('#inputRegionSamov').find('option:selected').text(),
+                                    'text_house_val': $("input[name='text_house']").val(),
+                                    'poshtomat_address': $("input[name='poshtomat_address']").val(),
+                                    'shipping_address': $("textarea[name='shipping_address']").text(),
+                                    'text_flat_val': $("input[name='text_flat']").val(),
+                                    'text_street_val': $("input[name='text_street']").val(),
+                                    'text_delivery_feature_val': $("textarea[name='text_delivery_feature']").text(),
+                                    'new_address_or_default': $('.ch-del-pay-label-u .checkbox-input-mod:checked').val(),
+                                    'ch_del_input_1': $('#ch-del-input-1').is(':checked'), // Добавить новий Самовывоз из нашего магазина
+                                    'ch_del_input_2': $('#ch-del-input-2').is(':checked'), // Добавить новий Службой доставки
+                                    'ch_del_input_4': $('#ch-del-input-4').is(':checked'), //Вибрать существующий
+                                    'ch_del_input_5': $('#ch-del-input-5').is(':checked'), // Добавить новий
+                                    'name_delivery_checked': name_delivery_checked,
+                                    'text_address_shop': $("select[name='text_address_shop']").find('option:selected').text()
+	};
+	$.ajax({
+		url: 'index.php?route=checkout/component/delivery_method_form/save',
+		type: 'post',
+		data: post,
+		dataType: 'json',
+		beforeSend: function () {
+		},
+		success: function (json) {
+            $('#error_validate_checkout .alert-danger').remove();
+			$('.alert-dismissible, .text-danger').remove();
+            $('.ch-block-2 select').removeClass('is-invalid');
+            $('.ch-block-2 input').removeClass('is-invalid');
+			if (json['redirect']) {
+				location = json['redirect'];
+			} else if (json['error']) {
+				$.each(json['error'], function(item) {
+					$(item).addClass('is-invalid');
+				});
+                $('#error_validate_checkout').prepend('<div class="alert alert-danger" role="alert"><div class="text-center">Перевірте форму на помилки</div></div>');
+                } else {
+				var customer_id = json['customer_id'];
+                var name_delivery_checked = $("#ukrposhtaCheckbox input[name='delivery']:checked").val();
+				$.ajax({
+					url: 'index.php?route=account/account/editAddressDelivery',
+					data: {
+						'poshtomat_address': $("input[name='poshtomat_address']").val(),
+						'shipping_address': $('textarea[name="shipping_address"]').val(),
+						'shape_delivery_id': $('.checkbox-input-mod-shape:checked').val(),
+                        'ch_del_input_2': $('#ch-del-input-2').is(':checked'),
+						'new_address_or_default': $('.ch-del-pay-label-u .checkbox-input-mod:checked').val(),
+						'type_delivery_id': $(".delivery_type_select_change").find('option:selected').val(),
+						'service_delivery_id': $("select[name='delivery_service_samov']").find('option:selected').val(),
+						'branch_new_post': $("#inputNovaPoshta").find('option:selected').text(), 
+						'SiteKey': $("#inputNovaPoshta").find('option:selected').val(),
+						'region_id': $("#inputRegionSamov").find('option:selected').val(),
+						'zone_id': $("#inputCitySamov").find('option:selected').val(),
+						'region_name': $("#inputRegionSamov").find('option:selected').text(),
+						'zone_name': $("#inputCitySamov").find('option:selected').text(),
+						'service_delivery_name': $("select[name='delivery_service_samov']").find('option:selected').text(),
+						'street': $("input[name='text_street']").val(),
+						'house': $("input[name='text_house']").val(),
+						'address_shop_id': $("select[name='text_address_shop']").find('option:selected').val(),
+						'text_delivery_feature': $("textarea[name='text_delivery_feature']").val(),
+						'customer_address_delivery_id': $("select[name='customer_address_delivery_id']").find('option:selected').val(),
+						'default_address': 1,
+						'customer_id': customer_id,
+                        'ch_del_input_1': $('#ch-del-input-1').is(':checked'), // Добавить новий Самовывоз из нашего магазина
+                        'ch_del_input_2': $('#ch-del-input-2').is(':checked'), // Добавить новий Службой доставки
+                        'ch_del_input_4': $('#ch-del-input-4').is(':checked'), //Вибрать существующий
+                        'ch_del_input_5': $('#ch-del-input-5').is(':checked'), // Добавить новий
+                        'name_delivery_checked': name_delivery_checked,
+						'flat': $("input[name='text_flat']").val(),
+                        'is_invalid_select': $('.ch-block-2 select').hasClass('is-invalid'),
+                        'is_invalid_input': $('.ch-block-2 input').hasClass('is-invalid'),
+                        'shipping_address_checked': $('.shipping_address_checked').is(':checked'),
+                        'poshtomat_address_checked': $('.poshtomat_address_checked').is(':checked'),
+					},
+					type: 'post',
+					dataType: 'json',
+					success: function (json) {
+                        $('#error_validate_checkout .alert-danger').remove();
+                        $('.ch-block-2 select').removeClass('is-invalid');
+                        $('.ch-block-2 input').removeClass('is-invalid');
+						if (json['error']){
+							$.each(json['error'], function(item) {
+								$(item).addClass('is-invalid');
+							});
+                            $('#error_validate_checkout').prepend('<div class="alert alert-danger" role="alert"><div class="text-center">Перевірте форму на помилки</div></div>');
+						}
+							if(!json['error']){
+                                                var name_delivery_checked = $("#ukrposhtaCheckbox input[name='delivery']:checked").val();
+
+                                                $.ajax({
+                                                url: 'index.php?route=checkout/confirm',
+                                                type: 'post',
+                                                data: {
+                                                                    'ch_del_input_1': $('#ch-del-input-1').is(':checked'), // Добавить новий Самовывоз из нашего магазина
+                                                                    'ch_del_input_2': $('#ch-del-input-2').is(':checked'), // Добавить новий Службой доставки
+                                                                    'ch_del_input_4': $('#ch-del-input-4').is(':checked'), //Вибрать существующий
+                                                                    'ch_del_input_5': $('#ch-del-input-5').is(':checked'), // Добавить 
+                                                                    'name_delivery_checked': name_delivery_checked,
+                                                                    'checkbox_input_mod': $('#checkbox-input-mod').is(':checked'),
+                                                                    'payment_method': $('.payment_method').is(':checked'),
+                                                                    'is_invalid_select': $('.ch-block-2 select').hasClass('is-invalid'),
+                                                                    'is_invalid_input': $('.ch-block-2 input').hasClass('is-invalid'),
+                                                                    'shipping_address_checked': $('.shipping_address_checked').is(':checked'),
+                                                                    'poshtomat_address_checked': $('.poshtomat_address_checked').is(':checked'),
+                                                                    'delivery_service_samov_val': $("select[name='delivery_service_samov']").find('option:selected').val(),
+
+                                                },
+                                                dataType: 'json',
+                                                beforeSend: function() {
+                                                },
+                                                success: function(json) {
+                                                    $('#error_validate_checkout .alert-danger').remove();
+                                                    if(json['error']){
+                                                        let error = '';
+                                                        $.each(json['error'], function(item,value) {
+                                                            error += '<div class="alert alert-danger" role="alert"><div class="text-center">' + value + '</div></div>';
+                                                        });
+                                                        $('#error_validate_checkout').prepend(error);
+                                                    }else if(json['order_id']){
+                                                        $('.ch-products-block').html(json['success']);
+                                                         $.ajax({
+                                                                url: 'index.php?route=checkout/cart/clear',
+                                                                type: 'post',
+                                                                data: {},
+                                                                dataType: 'json',
+                                                                beforeSend: function() {
+                                                                },
+                                                                success: function(json) {
+                                                                    //loadingAjax(false);
+                                                                    $('.ch-products').html('');
+                                                                }
+                                                            });
+                                                        setTimeout(function () {
+                                                        if(json['redirect_page_success']){
+                                                                        window.location = json['redirect_page_success'];
+                                                        }
+                                                        },2000);
+                                                    }
+                                                }
+                                            });   
+							}
+					}
+				});
+			}
+		}
+	});
+                });
+            }
+        });
+    }else{
+       // $("#order-confirmed").attr('disabled','disabled');
+    }
+}
+
+
+$(document).ready(function() {
+        $.ajax({
+            url: 'index.php?route=checkout/component/edit_order',
+            dataType: 'html',
+            success: function(html) {
+                $('#edit-order').html(html);
+            }
+        });
+        $.ajax({
+            url: 'index.php?route=checkout/component/list_product_right_position',
+            data:{},
+            type:'post',
+            dataType: 'json',
+            success: function(json) {
+                $('#list-product-right-position .ch-products').html(json['products']);
+                $('#list-product-right-position .ch-products-footer-info').html(json['ch-products-footer-info']);
+                $('#list-product-right-position .ch-products-footer-total').html(json['ch-products-footer-total']);
+                $('#list-product-right-position .ch-products-order-edit-wrap').html(json['ch-products-order-edit-wrap']);
+                if ($('#checkbox-input-mod').is(':checked')){
+                    //$('#order-confirmed').removeAttr('disabled');
+                }
+            }
+        });
+
+    var auth = {{ auth }};
+    var url = 'index.php?route=checkout/component/login';
+    if(auth) url = 'index.php?route=checkout/component/login_auth';
+    $.ajax({
+        url: url,
+        dataType: 'html',
+        success: function(html) {
+           $('#form_login').html(html);
+        }
+    });
+    $.ajax({
+        url: 'index.php?route=checkout/component/delivery_method_form',
+        dataType: 'html',
+        success: function(html) {
+            $('#delivery_method_form').html(html);
+            if($('#ch-del-4').html()){
+            }else{
+            $('#ch-del-input-5').trigger('click');
+            $('#ch-del-input-1').trigger('click');
+            }
+
+        }
+    });
+
+    $.ajax({
+        url: 'index.php?route=checkout/component/payment_method_form',
+        dataType: 'html',
+        success: function(html) {
+            $('#payment_method_form').html(html);
+        }
+    });
+
+    $('#checkbox-input-mod').on('change',function (e) {
+        paymentFormShow($(this));
+    })
+
+
+    $('.ch-block-2 .ch-del-pay-label').click(function() {
+        $('.ch-block-2 .ch-del-pay-item').removeClass('active');
+        var wrapper = $(this).closest('.ch-del-pay-item');
+        wrapper.siblings().find('.checkbox-input-mod').prop('checked', false);
+
+        if ($(this).find('input').is(':checked')) {
+            wrapper.addClass('active');
+        } else {
+            wrapper.removeClass('active');
+        }
+    });
+
+    $('.ch-block-3 .ch-del-pay-label').click(function() {
+
+        $('.ch-block-3 .ch-del-pay-item').removeClass('active');
+        var wrapper = $(this).closest('.ch-del-pay-item');
+        wrapper.siblings().find('.checkbox-input-mod').prop('checked', false);
+
+        if ($(this).find('input').is(':checked')) {
+            wrapper.addClass('active');
+        } else {
+            wrapper.removeClass('active');
+        }
+    });
+
+    });
+
+    function delivery_type_select_change(e) {
+        var select = $(e);
+        var id = select.find('option:selected').attr('data-type');
+        $('.ch-del-item-main-wrap').removeClass('active');
+        $('#'+id).addClass('active');
+        $('#'+id+' select.delivery_type_select_change option[data-type="'+id+'"]').prop('selected', true);
+    }
+</script>
+{{ footer }}

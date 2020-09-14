@@ -1,0 +1,303 @@
+<div class="modal fade modal-custom" id="text-login-register">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+				<div class="modal-title">{{ text_login_register }}</div>
+			</div>
+			<div class="modal-body">
+					<div class="login-wrap">
+						<div class="l-r-sms-email-btn-wrap">
+							<button type="button" class="btn btn-default" id="btel">Авторизація по СМС</button>
+							<button type="button" class="btn btn-default" id="bemail">Авторизація по EMAIL</button>
+						</div>
+						<div class="wrcocbutbig-or-block">
+							<div class="wrcocbutbig-or-block-line-1"></div>
+							<div class="wrcocbutbig-or-block-inner">или</div>
+						</div>
+
+						<span class="titlesoc">Войти через соцсети</span>
+
+						<div class="wrcocbutbig">
+							{{ SOCNETAUTH2_DATA.code }}
+						</div>
+					</div>
+						{#__________________________________вход через смс________________________________________#}
+						<div id="gofromphone" style="display: none;">
+							<span class="titlesoc">Введите свой номер телефона</span>
+							<form id="gofromphone_form">
+								<input type="hidden"  class="customer_id" name="customer_id">
+								<input type="hidden"  class="customer_register_id" name="customer_register_id">
+								<div class="form-group">
+									<input type="tel" name="telephone" class="form-control auth_tel" id="phone"  placeholder="+380XXXXXXX" autocomplete="off" onchange="$(this).css('border','1px solid #e3e3e3');">
+								</div>
+								<div class="form-group access-code" style="display: none">
+									<label for="access-code" class="access_code_label"></label>
+									<input type="number" class="form-control"  name="access-code" disabled="disabled" placeholder="XXXXXXX">
+								</div>
+								<div style="display: none" class="register_w">
+								<div class="form-group required">
+									<input type="text" name="firstname"   disabled="disabled" placeholder="{{ entry_firstname }}"  class="form-control" />
+								</div>
+								<div class="form-group required">
+									<input type="text" name="lastname"    disabled="disabled" placeholder="{{ entry_lastname }}"  class="form-control" />
+								</div>
+								<div class="form-group required">
+									<input type="email" name="email"   disabled="disabled"  placeholder="{{ entry_email }}"  class="form-control" />
+								</div>
+								<div class="form-group required">
+									<input type="password" name="password"    disabled="disabled" placeholder="{{ entry_password }}"  class="form-control" />
+								</div>
+								<div class="form-group required">
+									<input type="password" name="confirm"   disabled="disabled"  placeholder="{{ entry_confirm }}"  class="form-control" />
+								</div>
+								</div>
+								<span class="ahtung">Внимание!</span> Если у Вас еще нет профиля - система автоматически<br>
+								его создаст и предложит заполнить свою анкету.
+								<div class="allbut-wrap">
+									<input type="button" id="gofromphone_button" class="allbut btn btn-default" value="Увійти">
+								</div>
+							</form>
+							<!--<script>
+								$('.auth_tel').mask("(999)999-99-99");
+								$('.auth_code').mask("9999");
+							</script>-->
+						</div>
+						{#__________________________________вход через смс________________________________________#}
+
+						{#__________________________________вход через мило________________________________________#}
+						<div id="gofromemail">
+							<span class="titlesoc">через  електронну почту</span>
+							<form id="gofromemail-form">
+								<input type="hidden"  class="customer_register_id" name="customer_register_id">
+								<div class="form-group access-code" style="display: none">
+									<label for="access-code" class="access_code_label"></label>
+									<input type="number" class="form-control"  name="access-code" disabled="disabled" placeholder="XXXXXXX">
+								</div>
+								<div class="form-group email">
+									<input type="email" name="email" class="form-control auth_email" id="email"  placeholder="ПОЧТА" autocomplete="off">
+								</div>
+								<div class="form-group password">
+									<input type="password" name="password" class="form-control auth_password" id="password"  placeholder="ПАРОЛЬ" autocomplete="off">
+									<p class="warning" id="input-password-warning"></p>
+								</div>
+								<div class="form-group empty_repeat_password" style="display: none" id="empty_repeat_password_wrap">
+									<input type="password" name="password_empty" class="form-control auth_password" id="empty_repeat_password" disabled="disabled" placeholder="ПАРОЛЬ ПОВТОРНО" autocomplete="off">
+									<p class="warning" id="input-password-empty-warning"></p>
+									<p class="warning" id="input-password-not-match"></p>
+								</div>
+								<div style="display: none" class="register_w">
+									<div class="form-group required">
+										<input type="text" name="firstname"   disabled="disabled" placeholder="{{ entry_firstname }}"  class="form-control" />
+									</div>
+									<div class="form-group required">
+										<input type="text" name="lastname"    disabled="disabled" placeholder="{{ entry_lastname }}"  class="form-control" />
+									</div>
+									<div class="form-group required">
+										<input type="email" name="email"   disabled="disabled"  placeholder="{{ entry_email }}"  class="form-control" />
+									</div>
+									<div class="form-group required">
+										<input type="tel" name="telephone"   disabled="disabled"  placeholder="{{ entry_telephone }}"  class="form-control" />
+									</div>
+									<div class="form-group required">
+										<input type="password" name="password"    disabled="disabled" placeholder="{{ entry_password }}"  class="form-control" />
+									</div>
+									<div class="form-group required">
+										<input type="password" name="confirm"   disabled="disabled"  placeholder="{{ entry_confirm }}"  class="form-control" />
+									</div>
+								</div>
+								<span class="ahtung">Увага!</span> Якщо у Вас ще немає профілю - система автоматично<br>його створить і запропонує заповнити свою анкету.
+								<div class="allbut-wrap">
+									<input type="button" id="gofromemail_button" class="allbut btn btn-default" value="Увійти">
+								</div>
+							</form>
+							<!--<script>
+								$('.auth_tel').mask("(999)999-99-99");
+								$('.auth_code').mask("9999");
+							</script>-->
+						</div>
+						{#__________________________________вход через мило________________________________________#}
+
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	$(document).ready(function () {
+
+	});
+
+	$('#bemail').click(function () {
+		$('#gofromphone').css('display','none');
+		$('#gofromemail').css('display','block');
+	});
+	$('#btel').click(function () {
+		$('#gofromemail').css('display','none');
+		$('#gofromphone').css('display','block');
+	});
+	$('#gofromemail_button').click(function () { // авторизація по емейл
+		$.ajax({
+			url: 'index.php?route=extension/module/sirius_auth_register_popup/login-register-email',
+			type: 'post',
+			data: $('#gofromemail-form').serialize(),
+			dataType: 'json',
+			success: function(json) {
+				console.log(json);
+				if (json['warning']) {
+					$('#gofromemail-form').find('.warning').text('');
+					for (warning in json['warning']['warning']) {
+						console.log(warning);
+						$('#gofromemail-form').find('#input-' + warning + '-warning').text(json['warning']['warning'][warning]);
+					}
+					if (json['empty_password'])  $('#input-password-empty-warning').text(json['warning']['warning']['empty_password']);
+
+					if (json['error_passwords_not_match'])  $('#input-password-not-match').text(json['warning']['error_passwords_not_match']);
+				}
+					if (json['reload']) {
+						location = window.location.href;
+					}
+					if (json['redirect']) {
+						location = json['redirect'];
+					}
+					if (json['empty_password']) {
+						$("#empty_repeat_password_wrap").css('display', 'block');
+						$('#empty_repeat_password').removeAttr('disabled');
+					}
+					if (json['success']) {
+						if (json['register']) {
+							$('#gofromemail_button').val(json['continue']);
+							$('#gofromemail').find('.titlesoc').text(json['success']);
+							$('#gofromemail').find('.register_w').css('display', 'block');
+							$('#gofromemail').find('.register_w input').removeAttr('disabled');
+							$('#gofromemail').find('#email').removeAttr('disabled');
+							$('#gofromemail').find('#password').removeAttr('disabled');
+							$('#gofromemail').find('#email').css('display', 'none');
+							$('#gofromemail').find('#password').css('display', 'none');
+							$('#gofromemail').find('input[name="email"]').val(json['email']);
+							$('#gofromemail').find('input[name="email"]').attr("placeholder", json['email']);
+							$('.login-wrap').css('display', 'none');
+						} else if (json['customer_register_id']) {
+							$('#gofromemail').find('.customer_register_id').val(json['customer_register_id']);
+							$('#gofromemail').find('.titlesoc').text(json['success']);
+							$('#gofromemail').find('.register_w').css('display', 'none');
+							$('#gofromemail').find('#email').attr('disabled', 'disabled');
+							$('#gofromemail').find('#password').attr('disabled', 'disabled');
+							$('#gofromemail').find('.register_w input').attr('disabled', 'disabled');
+							$('#gofromemail-form').find('input[name="access-code"]').removeAttr('disabled');
+							$('#gofromemail-form').find('input[name="access-code"]').css('display', 'block');
+							$('#gofromemail').find(".access-code").css('display', 'block');
+							$('#access-code').removeAttr('disabled');
+							$('#access-code').css('display', 'block');
+						}
+					}
+			}
+		});
+	});
+	$('#gofromphone_button').click(function () {
+		$.ajax({
+			url: 'index.php?route=extension/module/sirius_auth_register_popup/login-register',
+			type: 'post',
+			data: $('#gofromphone_form').serialize(),
+			dataType: 'json',
+			success: function(json) {
+				console.log(json);
+
+				if(json['success']){
+					if(json['login']){ //показуєм поле для вводу пароля відісланого на телефон і пробуєм авторизуватись
+						$('#gofromphone_button').val(json['login']);
+						$('#gofromphone').find('.titlesoc').css('display','block');
+						$('#gofromphone_form').find('.access-code').css('display','block');
+						$('#gofromphone_form').find('input[name="access-code"]').removeAttr('disabled');
+						$('#gofromphone_form').find('input[name="access-code"]').css('display','block');
+						$('#gofromphone').find('input[name="telephone"]').css('display','none');
+						$('#text-login-register').find('.access_code_label').text(json['success']);
+						$('#gofromphone').find('input[name="telephone"]').attr('disabled','disabled');
+						$('.login-wrap').css('display','none');
+						$('#gofromphone').find('.customer_register_id').val('');
+						$('#gofromphone').find('.customer_id').val(json['customer_id']);
+					}else if(json['continue']){
+						$('#gofromphone_button').val(json['continue']);
+						 $('#gofromphone').find('.titlesoc').text(json['success']);
+						 $('#gofromphone').find('.register_w').css('display','block');
+						 $('#gofromphone').find('.register_w input').removeAttr('disabled');
+						 $('#gofromphone').find('input[name="telephone"]').css('display','none');
+						$('.login-wrap').css('display','none');
+					}else if(json['customer_register_id']){
+  						$('#gofromphone').find('.customer_register_id').val(json['customer_register_id']);
+						$('#gofromphone').find('.customer_id').val('');
+						 $('#gofromphone').find('.titlesoc').text(json['success']);
+						 $('#gofromphone').find('.register_w').css('display','none');
+						 $('#gofromphone').find('.register_w input').attr('disabled','disabled');
+						 $('#gofromphone_form').find('input[name="access-code"]').removeAttr('disabled');
+						 $('#gofromphone_form').find('input[name="access-code"]').css('display','block');
+						 $('#gofromphone').find(".access-code").css('display','block');
+						$('#access-code').removeAttr('disabled');
+						$('#access-code').css('display','block');
+					}
+				}
+				if (json['reload']) {
+					location = window.location.href;
+				}
+				if (json['redirect']) {
+					location = json['redirect'];
+				}
+				if(json['error']){
+					$('#text-login-register').find('.access-code').after(json['error']);
+				}
+				if(json['error_register']){
+					$('#text-login-register').find('.error').text('');
+					for (error in json['error_register']) {
+						$('#text-login-register').find('#input-'+error+'-error').text(json['error_register'][error]);
+					}
+				}
+				if(json['success_register']){
+					$('#text-login-register').find('#customer_register_id').val(json['customer_register_id']);
+					$('#text-login-register').find('#customer_register_id').removeAttr('disabled');
+					$('#text-login-register').find('#register-block').css('display','none');
+					$('#text-login-register').find('.info').text(json['success_register']);
+					$('#text-login-register').find('.access-code').css('display','block');
+					$('#text-login-register').find('#access-code').removeAttr('disabled');
+				}
+				console.log(json);
+			},
+		});
+	});
+</script>
+
+<style>
+	.ahtung {
+		font-family: opensansbold;
+		color: #9e0b0f;
+	}
+	.gotoyourroom {
+		width: 585px;
+		margin: 0 auto;
+		background: #fff;
+		padding-top: 35px;
+		text-align: center;
+		padding-bottom: 40px;
+	}
+	.modal-body{
+		text-align: center !important;
+	}
+	#btel .part1,#bemail .part1 {
+		background: url(image/vtel.png)center center no-repeat #9DD81E;
+	}
+	#gofromphone {
+		display: none;
+	}
+
+	html[lang="ru"] .account_socnetauth2_bline_links table .socnetauth2_buttons:before  {
+		content: "Ваш Facebook аккаунт";
+	}
+	html[lang="ru"] .account_socnetauth2_bline_links table td:nth-of-type(2) .socnetauth2_buttons:before  {
+		content: "Ваш Google аккаунт";
+	}
+	html[lang="ua"] .account_socnetauth2_bline_links table .socnetauth2_buttons:before  {
+		content: "Ваш Facebook акаунт";
+	}
+	html[lang="ua"] .account_socnetauth2_bline_links table td:nth-of-type(2) .socnetauth2_buttons:before  {
+		content: "Ваш Google акаунт";
+	}
+</style>

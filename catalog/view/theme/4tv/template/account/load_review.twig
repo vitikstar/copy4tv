@@ -1,0 +1,121 @@
+
+            {% for review in reviews %}
+            <div class="ac-review ac-review-item">
+                <div class="ac-review-product">
+                    <div class="ac-review-product-img">
+                        <a href="{{ review['href'] }}"><img src="{{ review['image'] }}" alt="" class="img-responsive"></a>
+                    </div>
+                    <div class="ac-review-product-name-wrap">
+                        <a href="{{ review['href'] }}" class="ac-review-product-name">{{ review['name'] }}</a>
+                    </div>
+                    <div class="ac-review-product-show" onclick="ac_review_toggle(this)">
+                        <span>Развернуть</span>
+                        <i class="fa fa-angle-down"></i>
+                    </div>
+                </div>
+                <div class="ac-review-main">
+
+                    <!-------------------------- вот это я скопировал с отзывов со странички товара -->
+                    <div class="pr-reviews">
+                        {% for coment in review['coments'] %}
+                        <div class="pr-review">
+                            <div class="pr-review-title">
+                                <div class="pr-review-title-icon"><span>СА</span></div>
+                                <div class="pr-review-title-name-rating">
+                                    <div class="pr-review-title-name">{{ coment['author'] }}</div>
+                                    <div class="pr-review-title-rating">
+                                        {% if coment['rating'] %}
+                                <span class="rating">
+                                    {% for rating in coment['rating']%}
+                                    <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span>
+                                    {% endfor %}
+                                </span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="pr-review-title-buy"><span>Купил этот товар</span></div>
+                                <div class="pr-review-title-date">09 ноябрь 2019</div>
+                            </div>
+                            <div class="pr-review-comment-wrap">
+                                <div class="pr-review-comment">{{ coment['text_review'] }}</div>
+                            </div>
+                            <div class="pr-review-reply-like">
+                                <div class="pr-review-reply-like-wrapper">
+                                    <div class="pr-review-reply-wrap">
+                                        <span class="review-see-reply-black" style="display: none;"></span>
+                                    </div>
+                                    <div class="pr-review-like-wrap">
+                                        <div class="pr-review-like"><span class="pr-review-like-icon" onclick="writeRattingRewiews({{ coment['review_id'] }},'like')"></span><span class="pr-review-like-text like-text" id="like-{{ coment['review_id'] }}">{{ coment['like_review'] }}</span></div>
+                                        <div class="pr-review-like pr-review-dislike"><span class="pr-review-like-icon" onclick="writeRattingRewiews({{ coment['review_id'] }},'dislike')"></span><span class="pr-review-like-text dislike-text" id="dislike-{{ coment['review_id'] }}">{{ coment['dislike_review'] }}</span></div>
+                                    </div>
+                                </div>
+                                <div class="review_reply"></div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <!-------------------------- end вот это я скопировал с отзывов со странички товара -->
+                </div>
+            </div>
+
+            {% endfor %}
+
+<script>
+    function writeRattingRewiews(p_review_id,like_or_dislike) {
+        $.ajax({
+            url: 'index.php?route=extension/module/p_review/writeRattingReviews',
+            type: 'post',
+            dataType: 'json',
+            data: {
+                'like_or_dislike':like_or_dislike,
+                'p_review_id':p_review_id
+            },
+            success: function(json) {
+
+                if (json['error']) {
+
+                }
+
+                if (json['like'] || json['dislike']) {
+                    if(json['like']){
+                        if($('#like-'+p_review_id).text()=='') $('#like-'+p_review_id).text(1);
+                        else                                   $('#like-'+p_review_id).text(parseInt($('#like-'+p_review_id).text())+1);
+
+                        if($('#dislike-'+p_review_id).text()!=''){
+                            var dislike_num = parseInt($('#dislike-'+p_review_id).text());
+                            if(dislike_num) $('#dislike-'+p_review_id).text(dislike_num-1);
+                        }
+
+                    }else if(json['dislike']){
+                        if($('#dislike-'+p_review_id).text()=='')  $('#dislike-'+p_review_id).text(1);
+                       else  $('#dislike-'+p_review_id).text(parseInt($('#dislike-'+p_review_id).text())+1);
+
+                        if($('#like-'+p_review_id).text()!=''){
+                            var like_num = parseInt($('#like-'+p_review_id).text());
+                            if(like_num) $('#like-'+p_review_id).text(like_num-1);
+                        }
+                    }
+
+                }
+            }
+        });
+    }
+$(document).ready(function() {
+        $.ajax({
+            url: 'index.php?route=account/review/countShowItemReview',
+            dataType: 'json',
+            type: 'post',
+            data: {
+                    'show_item_display': $('.ac-review-item').length
+            },
+            success: function(json) {
+                if(json['text_show_limit_review']!=0){
+                    $('.product-more-button-text').html(json['text_show_limit_review']);
+                    $('.ac-order-item-show-more').css('display','flex');
+                }else{
+                    $('.ac-order-item-show-more').css('display','none');
+                }
+            }
+        });
+    });
+</script>

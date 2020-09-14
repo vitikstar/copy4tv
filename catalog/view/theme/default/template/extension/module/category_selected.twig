@@ -1,0 +1,10 @@
+<div class="container">
+  <div class="row">
+    {% for category in categories %}
+        <div class="col-md-3">
+            <img src="{{ category.thumb }}" alt="{{ category.name }}">
+            <p><a href="{{ category.href }}">{{ category.name }}</a></p>
+        </div>
+    {% endfor %}
+  </div>
+</div>

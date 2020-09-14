@@ -1,0 +1,42 @@
+
+<div class="ac-nav-module-nav-wrap hidden-lg">
+  <div class="ac-nav-module-nav" data-toggle="collapse" data-target="#ac-nav-module">
+    <span>{{ text_nav }}</span>
+    <i class="fa fa-angle-down"></i>
+  </div>
+</div>
+
+<div id="ac-nav-module" class="collapse">
+  <div class="ac-nav-module">
+    <div class="ac-nav-module-item-wrap">
+      <div class="ac-nav-module-title">{{ text_info_company }}</div>
+      <ul>
+        <li><a href="{{ about }}" class="ac-nav-module-item">{{ text_about }}</a></li>
+        <li><a href="{{ news_shop }}" class="ac-nav-module-item">{{ text_news_shop }}</a></li>
+        <li><a href="{{ contact }}" class="ac-nav-module-item">{{ text_contact }}</a></li>
+      </ul>
+    </div>
+    <div class="ac-nav-module-item-wrap">
+      <div class="ac-nav-module-title">{{ text_help }}</div>
+      <ul>
+        <li><a href="{{ delivery_and_payment }}" class="ac-nav-module-item">{{ text_delivery_and_payment }}</a></li>
+        <li><a href="{{ garantie }}" class="ac-nav-module-item">{{ text_garantie }}</a></li>
+        <li><a href="{{ opt_pay }}" class="ac-nav-module-item">{{ text_opt_pay }}</a></li>
+        <li><a href="{{ dropshiping }}" class="ac-nav-module-item">{{ text_dropshiping }}</a></li>
+        <li><a href="{{ answer }}" class="ac-nav-module-item">{{ text_answer }}</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+<script>
+    $(document).ready(function() {
+        var catLinkDone = '{{ catLinkDone }}';
+        $('.ac-nav-module a').each(function() {
+            var menuLink = $(this).attr('href').toLowerCase();
+              if (menuLink && catLinkDone.indexOf(menuLink) !== -1) {
+                  $(this).addClass('account-active');
+                  $(this).attr('href','javascript:void(0)');
+              }
+        });
+    });
+</script>

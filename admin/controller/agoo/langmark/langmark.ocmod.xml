@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>{NAME}</name>
+    <id>{NAME}</id>
+    <version>{VERSION}</version>
+    <vqmver required="true">2.4.0</vqmver>
+    <author>admin@opencartadmin.com</author>
+    <code>{MOD}</code>
+    <link>http://opencartadmin.com</link>
+
+<file path="catalog/controller/common/home.php" error="skip">
+    <operation error="skip">
+        <search position="replace"><![CDATA[$this->document->addLink(HTTP_SERVER]]></search>
+        <add position="replace"><![CDATA[
+       $this->document->addLink($this->url->link('common/home')
+    ]]></add>
+    </operation>
+    <operation error="skip">
+        <search position="replace"><![CDATA[$this->document->addLink($this->config->get('config_url')]]></search>
+        <add position="replace"><![CDATA[
+       $this->document->addLink($this->url->link('common/home')
+    ]]></add>
+    </operation>
+</file>
+
+<file path="system/library/response.php" error="skip">
+    <operation error="skip">
+        <search position="before"><![CDATA[if ($this->output)]]></search>
+        <add position="before"><![CDATA[
+		if (function_exists('agoo_cont') && is_callable(array($this->sc_registry, 'get')) && $this->output) {
+            if (!defined('DIR_CATALOG')) {
+            	$ascp_settings = $this->sc_registry->get('config')->get('ascp_settings');
+				if (isset($ascp_settings) && $ascp_settings && $ascp_settings['langmark_widget_status']) {
+		           	agoo_cont('record/langmark', $this->sc_registry);
+					$this->output = $this->sc_registry->get('controller_record_langmark')->set_agoo_hreflang($this->output);
+					$this->output = $this->sc_registry->get('controller_record_langmark')->shortcodes($this->output);
+					unset($this->controller_record_langmark);
+            	}
+            }
+		}
+    ]]></add>
+    </operation>
+</file>
+
+<file path="system/library/url.php" error="skip">
+    <operation error="skip">
+        <search regex="true" position="replace"><![CDATA[~(.*?)function __construct[(](.*?)\{~]]></search>
+        <add position="replace"><![CDATA[
+$1function __construct($2{
+		// SEO langmark code
+		if (is_callable(array($this->langmark_registry, 'get')) && $this->langmark_registry->get('controller_record_langmark')) {
+			$url = $this->langmark_registry->get('controller_record_langmark')->after($url);
+		}
+		// End SEO langmark code
+]]></add>
+    </operation>
+</file>
+
+
+<file path="system/library/url.php" error="skip">
+    <operation error="skip">
+        <search position="before"><![CDATA[return $url;]]></search>
+        <add position="before"><![CDATA[
+		// SEO langmark code
+		if (is_callable(array($this->langmark_registry, 'get')) && $this->langmark_registry->get('controller_record_langmark')) {
+			$url = $this->langmark_registry->get('controller_record_langmark')->after($url);
+		}
+		//End of SEO langmark code
+    ]]></add>
+    </operation>
+</file>
+
+<file path="system/library/url.php" error="skip">
+    <operation error="skip">
+        <search position="after"><![CDATA[private $ssl;]]></search>
+        <add position="after"><![CDATA[
+	// SEO langmark vars
+	private $langmark_registry = Array();
+	// End of SEO langmark vars
+    ]]></add>
+    </operation>
+</file>
+
+<file path="system/library/url.php" error="skip">
+    <operation error="skip">
+        <search position="before"><![CDATA[public function addRewrite]]></search>
+        <add position="before"><![CDATA[
+ 	// SEO langmark function
+ 	public function langmark_setRegistry($registry) {
+		$this->langmark_registry = $registry;
+	}
+	// End of SEO langmark function
+    ]]></add>
+    </operation>
+</file>
+
+<file path="system/library/seopro.php" error="skip">
+    <operation error="skip">
+        <search position="replace"><![CDATA[, 301]]></search>
+        <add position="replace"><![CDATA[, $lm_redirect]]></add>
+    </operation>
+</file>
+
+<file path="system/library/seopro.php" error="skip">
+    <operation error="skip">
+        <search position="before"><![CDATA[$this->response->redirect]]></search>
+        <add position="before"><![CDATA[
+	        if (isset($this->request->get['route']) && $this->request->get['route'] == 'product/search') {
+	        	$lm_redirect = 302;
+	        } else {
+	        	$lm_redirect = 301;
+	        }
+]]></add>
+    </operation>
+</file>
+
+<file path="system/library/seopro.php" error="skip">
+    <operation error="skip">
+        <search position="replace"><![CDATA[$this->detectLanguage]]></search>
+        <add position="replace"><![CDATA[//$this->detectLanguage]]></add>
+    </operation>
+</file>
+
+<file path="catalog/controller/startup/seo_url.php" error="skip">
+    <operation error="skip">
+        <search position="before"><![CDATA[$this->response->redirect]]></search>
+        <add position="before"><![CDATA[
+		        if (isset($this->request->get['route']) && $this->request->get['route'] == 'product/search') {
+		        	$lm_redirect = 302;
+		        } else {
+		        	$lm_redirect = 301;
+		        }
+]]></add>
+    </operation>
+</file>
+
+<file path="catalog/controller/startup/seo_url.php" error="skip">
+    <operation error="skip">
+        <search position="replace"><![CDATA[, 301]]></search>
+        <add position="replace"><![CDATA[, $lm_redirect]]></add>
+    </operation>
+</file>
+
+<file path="catalog/controller/startup/seo_url.php" error="skip">
+    <operation error="skip">
+        <search position="replace"><![CDATA[$this->response->redirect(HTTP_SERVER]]></search>
+        <add position="replace"><![CDATA[// WTF ?! HTTP_SERVER?! Seriously? F... // $this->response->redirect(HTTP_SERVER]]></add>
+    </operation>
+</file>
+
+</modification>

@@ -1,0 +1,346 @@
+{{ header }}{{ column_left }}
+<div id="content">
+    <div class="page-header">
+        <div class="container-fluid">
+            <div class="pull-right">
+                <a href="{{ csv }}" data-toggle="tooltip" title="{{ button_csv }}" class="btn btn-default"><i class="fa fa-file-text-o"></i></a>
+                <button type="submit" form="mainform" data-toggle="tooltip" title="{{ button_delete }}" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
+            </div>
+            <h1>{{ heading_title }}</h1>
+        </div>
+    </div>
+    <div class="container-fluid">
+        {% if (error_warning) %}
+            <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+        {% endif %}
+        {% if (success) %}
+            <div class="alert alert-success"><i class="fa fa-check-circle"></i> {{ success }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+        {% endif %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-users"></i> {{ text_marketing_subscribers }}</h3>
+            </div>
+            <div class="panel-body">
+                <form action="{{ action }} " method="post" enctype="multipart/form-data" id="form" class="form-horizontal">
+                    <fieldset>
+                        <legend>{{ text_add_info }}</legend>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="input-store">{{ entry_store }}</label>
+                            <div class="col-sm-10">
+                                <select name="store_id" id="input-store" class="form-control">
+                                    {% for store in stores %}
+                                        <option value="{{ store['store_id'] }}">{{ store['name'] }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="input-emails"><span data-toggle="tooltip" title="{{ help_subscribers }}">{{ entry_subscribers }}</span></label>
+                            <div class="col-sm-10">
+                                <textarea name="emails" id="input-emails" placeholder="" rows="5" class="form-control"></textarea>
+                            </div>
+                        </div>
+                        {% for store in stores %}
+                            {% if (list_data[store['store_id']] is defined and list_data[store['store_id']]) %}
+                                <div class="form-group list-display" id="list-{{ store['store_id'] }}">
+                                    <div class="col-sm-offset-2 col-sm-10">
+                                        {% for key,list in list_data[store['store_id']] %}
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input name="list[{{ store['store_id'] }}][]" type="checkbox" value="{{ key }}" />
+                                                    {{ list[config_language_id] }}
+                                                </label>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        <button type="submit" form="form" data-toggle="tooltip" title="{{ button_insert }}" class="btn btn-primary pull-right"><i class="fa fa-plus"></i></button>
+                    </fieldset>
+                </form>
+                <fieldset>
+                    <legend>{{ text_marketing_subscribers_list }}</legend>
+                    <div class="well">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="control-label" for="input-name">{{ column_name }}</label>
+                                    <input type="text" name="filter_name" value="{{ filter_name }}" placeholder="{{ column_name }}" id="input-name" class="form-control" />
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label" for="input-email">{{ column_email }}</label>
+                                    <input type="text" name="filter_email" value="{{ filter_email }}" placeholder="{{ column_email }}" id="input-email" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="control-label" for="input-subscribed">{{ column_subscribed }}</label>
+                                    <select name="filter_subscribed" id="input-subscribed" class="form-control">
+                                        <option value=""></option>
+                                        {% if (filter_subscribed == '1') %}
+                                            <option value="1" selected="selected">{{ entry_yes }}</option>
+                                        {% else %}
+                                            <option value="1">{{ entry_yes }}</option>
+                                        {% endif %}
+                                        {% if (filter_subscribed == '0') %}
+                                            <option value="0" selected="selected">{{ entry_no }}</option>
+                                        {% else %}
+                                            <option value="0">{{ entry_no }}</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label" for="input-store">{{ column_store }}</label>
+                                    <select name="filter_store" id="input-store" class="form-control">
+                                        <option value=""></option>
+                                        {% for store in stores %}
+                                            {% if (filter_store == store['store_id'] and filter_store != '') %}
+                                                <option value="{{ store['store_id'] }}" selected="selected">{{ store['name'] }}</option>
+                                            {% else %}
+                                                <option value="{{ store['store_id'] }}">{{ store['name'] }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="control-label" for="input-language">{{ column_language }}</label>
+                                    <select name="filter_language" id="input-language" class="form-control">
+                                        <option value="*"></option>
+                                        {% if (filter_language == '') %}
+                                            <option value="" selected="selected">{{ text_default }}</option>
+                                        {% else %}
+                                            <option value="">{{ text_default }}</option>
+                                        {% endif %}
+                                        {% for language in languages %}
+                                            {% if (filter_language == language['code'] and filter_language != '') %}
+                                                <option value="{{ language['code'] }}" selected="selected">{{ language['name'] }}</option>
+                                            {% else %}
+                                                <option value="{{ language['code'] }}">{{ language['name'] }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                {% if (list_data) %}
+                                {% for store in stores %}
+                                <div class="form-group list-store-display" id="list-store-{{ store['store_id'] }}">
+                                    <label class="control-label">{{ column_list }}</label>
+                                    <div class="well well-sm" style="max-height: 150px; overflow: auto; background: #ffffff;">
+                                        <h4>{{ store['name'] }}</h4>
+                                        {% if (list_data[store['store_id']] is defined)  %}
+                                            {% for key,list in list_data[store['store_id']] %}
+                                        <div class="checkbox">
+                                            <label>
+                                                {% if (filter_list and filter_list.count()>1 and store['store_id'] ~ '_' ~ key in filter_list) %}
+                                                <input type="checkbox" name="filter_list[]" value="{{ store['store_id'] }}_{{ key }}" checked="checked" />
+                                                {% else %}
+                                                <input type="checkbox" name="filter_list[]" value="{{ store['store_id'] }}_{{ key }}" />
+                                                {% endif %}
+                                                 {{ list[config_language_id] }}
+                                             </label>
+                                         </div>
+                                         {% endfor %}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                             {% endfor %}
+{% endif %}
+
+
+                                <button type="button" id="button-filter" class="btn btn-primary pull-right"><i class="fa fa-search"></i> {{ button_filter }}</button>
+                            </div>
+                        </div>
+                    </div>
+                    <form action="{{ delete }}" method="post" enctype="multipart/form-data" id="mainform" class="form-horizontal">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <td style="width: 1px;" class="text-center"><input type="checkbox" onclick="$('input[name*=\'selected\']').prop('checked', this.checked);" /></td>
+                                                <td class="text-left">
+                                                    {% if (sort == 'name') %}
+                                                    <a href="{{ sort_name }}" class="{{ order|lower }}">{{ column_name }}</a>
+                                                    {% else %}
+                                                        <a href="{{ sort_name }}">{{ column_name }}</a>
+                                                    {% endif %}
+                                                </td>
+                                                <td class="text-left">
+                                                    {% if (sort == 'email') %}
+                                                        <a href="{{ sort_email }}" class="{{ order|lower }}">{{ column_email }}</a>
+                                                    {% else %}
+                                                        <a href="{{ sort_email }}">{{ column_email }}</a>
+                                                    {% endif %}
+                                                </td>
+                                                {% if (list_data) %}
+                                                    <td class="text-left">{{ column_list }}</td>
+                                                {% endif %}
+                                                <td class="text-right">
+                                                    {% if (sort == 'subscribed') %}
+                                                        <a href="{{ sort_subscribed }}" class="{{ order|lower }}">{{ column_subscribed }}</a>
+                                                    {% else %}
+                                                        <a href="{{ sort_subscribed }}">{{ column_subscribed }}</a>
+                                                    {% endif %}
+                                                </td>
+                                                <td class="text-right">
+                                                    {% if (sort == 'store_id') %}
+                                                        <a href="{{ sort_store }}" class="{{ order|lower }}
+                                                        <a href="{{ sort_store }}">{{ column_store }}</a>
+                                                    {% endif %}
+                                                </td>
+                                                <td class="text-right">
+                                                    {% if (sort == 'language_code') %}
+                                                        <a href="{{ sort_language }}" class="{{ order|lower }}">{{ column_language }}</a>
+                                                    {% else %}
+                                                        <a href="{{ sort_language }}">{{ column_language }}</a>
+                                                    {% endif %}
+                                                </td>
+                                                <td class="text-right">{{ column_actions }}</td>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {% if (marketings) %}
+                                                    {% for marketing in marketings %}
+                                                        <tr>
+                                                        <td class="text-center">
+                                                            {% if (marketing['marketing_id'] in selected) %}
+                                                                <input type="checkbox" name="selected[]" value="{{ marketing['marketing_id'] }}" checked="checked" />
+                                                            {% else %}
+                                                                <input type="checkbox" name="selected[]" value="{{ marketing['marketing_id'] }}" />
+                                                            {% endif %}
+                                                        </td>
+                                                        <td class="text-left">{{ marketing['name'] }}</td>
+                                                        <td class="text-left">{{ marketing['email'] }}</td>
+                                                        {% if (list_data) %}
+                                                            <td class="text-left">
+                                                                {% set list_out = [] %} {% for list_key in marketing['list'] %}
+                                                                    {% if (list_data[marketing['store_id']][list_key] is defined) %}
+                                                                        {% set list_out = list_data[marketing['store_id']][list_key][config_language_id] %}
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                                {% if (list_out) %}
+                                                                    {{  list_out|join(', ') }}
+                                                                {% endif %}
+
+                                                            </td>
+                                                        {% endif %}
+                                                        <td class="text-right">
+                                                            {% if (marketing['subscribed'] == '1') %}
+                                                                {{ entry_yes }}
+                                                            {% else %}
+                                                                {{ entry_no }}
+                                                            {% endif %}
+                                                        </td>
+                                                        <td class="text-right">
+                                                            {% for store in stores %}
+                                                                {% if (marketing['store_id'] == store['store_id']) %}
+                                                                    {{ store['name'] }}
+
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        </td>
+                                                        <td class="text-right">
+                                                        {% if (not marketing['language_code']) %}
+                                                            {{ text_default }}
+                                                        {% else %} {% for language in languages %}
+                                                            {% if (marketing['language_code'] == language['code']) %}
+                                                                {{ language['name'] }}
+
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                            </td>
+                                                            <td class="text-right">
+                                                                {% if (marketing['subscribed']) %}
+                                                                    <a href="{{ unsubscribe ~ marketing['marketing_id'] }}" data-toggle="tooltip" title="{{ button_unsubscribe }}" class="btn btn-danger"><i class="fa fa-minus"></i></a>
+                                                                {% else %}
+                                                                    <a href="{{ subscribe ~ marketing['marketing_id'] }}" data-toggle="tooltip" title="{{ button_subscribe }}" class="btn btn-primary"><i class="fa fa-plus"></i></a>
+                                                                {% endif %}
+                                                            </td>
+                                                            </tr>
+                                                        {% endif %}
+                                                    {% endfor %} {% else %}
+                                                    <tr>
+                                                        <td class="text-center" colspan="{{ list_data ? 8 : 7 }}">{{ text_no_results }}</td>
+                                                    </tr>
+                                                {% endif %}
+                                                </tbody>
+                                                </table>
+                                        </div>
+                                        </form>
+                                        <div class="row">
+                                            <div class="col-sm-6 text-left">{{ pagination }}</div>
+                                            <div class="col-sm-6 text-right">{{ results }}</div>
+                                        </div>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript"><!--
+        $('#button-filter').on('click', function() {
+            var url = 'index.php?route=ne/marketing&user_token={{ user_token }}';
+
+            var filter_name = $('input[name=\'filter_name\']').val();
+
+            if (filter_name) {
+                url += '&filter_name=' + encodeURIComponent(filter_name);
+            }
+
+            var filter_email = $('input[name=\'filter_email\']').val();
+
+            if (filter_email) {
+                url += '&filter_email=' + encodeURIComponent(filter_email);
+            }
+
+            var filter_subscribed = $('select[name=\'filter_subscribed\']').val();
+
+            if (filter_subscribed) {
+                url += '&filter_subscribed=' + encodeURIComponent(filter_subscribed);
+            }
+
+            var filter_list = [];
+
+            $.each($('input[name=\'filter_list[]\']:checked'), function() {
+                filter_list.push($(this).val());
+            });
+
+            if (filter_list.length) {
+                url += '&filter_list=' + encodeURIComponent(filter_list.join());
+            }
+
+            var filter_store = $('select[name=\'filter_store\']').val();
+
+            if (filter_store) {
+                url += '&filter_store=' + encodeURIComponent(filter_store);
+            }
+
+            var filter_language = $('select[name=\'filter_language\']').val();
+
+            if (filter_language != "*") {
+                url += '&filter_language=' + encodeURIComponent(filter_language);
+            }
+
+            location = url;
+        });
+        //--></script>
+    <script type="text/javascript"><!--
+        $('select[name=\'store_id\']').change(function(){
+            $('.list-display').hide();
+            $('#list-' + $(this).val()).show();
+        }).trigger('change');
+
+        $('select[name=\'filter_store\']').change(function(){
+            $('.list-store-display').hide();
+            if ($(this).val() != '') {
+                $('#list-store' + $(this).attr('value')).show();
+            } else {
+                $('.list-store-display').show();
+            }
+        }).trigger('change');
+        //--></script>
+</div>
+{{ footer }}

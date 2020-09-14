@@ -1,0 +1,163 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        <button type="submit" form="form-module" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+        <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if error_warning %}
+    <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% elseif success %}
+    <div class="alert alert-success"><i class="fa fa-check-circle"></i>  {{ success }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
+      </div>
+      <div class="panel-body">
+        <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-affiliate" class="form-horizontal">
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-sendpulse_id">{{ entry_sendpulse_id }}</label>
+            <div class="col-sm-10">
+              <input type="text" name="module_sendpulse_id" value="{{ module_sendpulse_id }}" placeholder="{{ entry_sendpulse_id }}" id="input-sendpulse_id" class="form-control" />
+              {% if error_sendpulse_id %}
+              <div class="text-danger">{{ error_sendpulse_id }}</div>
+              {% endif %}
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-sendpulse_secret">{{ entry_sendpulse_secret }}</label>
+            <div class="col-sm-10">
+              <input type="text" name="module_sendpulse_secret" value="{{ module_sendpulse_secret }}" placeholder="{{ entry_sendpulse_secret }}" id="input-sendpulse_secret" class="form-control" />
+              {% if error_sendpulse_secret %}
+              <div class="text-danger">{{ error_sendpulse_secret }}</div>
+              {% endif %}
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-status-add">{{ entry_status_add }}</label>
+            <div class="col-sm-10">
+              <select name="module_sendpulse_auto_add" id="input-status-add" class="form-control">
+                {% if module_sendpulse_auto_add %}
+                <option value="1" selected="selected">{{ text_enabled }}</option>
+                <option value="0">{{ text_disabled }}</option>
+                {% else %}
+                <option value="1">{{ text_enabled }}</option>
+                <option value="0" selected="selected">{{ text_disabled }}</option>
+                {% endif %}
+              </select>
+            </div>
+          </div>
+    		  {% if books %}
+    		  <div class="form-group">
+    			<label class="col-sm-2 control-label" for="input-books-default">{{ entry_book_default }}</label>
+      			<div class="col-sm-10">
+      			  <select name="module_sendpulse_book_default" id="input-book-default" class="form-control">
+      				<option value="">{{ text_select }}</option>
+              {% for book in books %}
+      				<option value="{{ book.id }}" {% if book.id == module_sendpulse_book_default %} selected {% endif %}>{{ book.name }}</option>
+      				{% endfor %}
+      			  </select>
+      			</div>
+    		  </div>
+    		{% endif %}
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
+            <div class="col-sm-10">
+              <select name="module_sendpulse_status" id="input-status" class="form-control">
+                {% if module_sendpulse_status %}
+                <option value="1" selected="selected">{{ text_enabled }}</option>
+                <option value="0">{{ text_disabled }}</option>
+                {% else %}
+                <option value="1">{{ text_enabled }}</option>
+                <option value="0" selected="selected">{{ text_disabled }}</option>
+                {% endif %}
+              </select>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  {% if books %}
+  <div class = "container-fluid">
+    <div class = "pull-right">
+       <button class = "btn btn-primary"  type="button" id="button_export">{{ button_export }}</button>
+    </div>
+  </div>
+  <div class="container-fluid" id='container-fluid-export'>
+    <div class = "panel panel-default">
+      <div class = "panel-heading">
+        <h3 class = "panel-title">{{ entry_export }}</h3>
+      </div>
+      <div class = "panel-body">
+          <div class="form-group">
+          <label class="col-sm-2 control-label" for="input-books">{{ entry_book }}</label>
+          <div class="col-sm-10">
+            <select name="book" id="input-book" class="form-control">
+              <option value="">{{ text_select }}</option>
+              {% for book in books %}
+              <option value="{{ book.id }}">{{ book.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+  <script type="text/javascript"><!--
+  var change_key = false;
+  $(document).delegate('#button_export', 'click', function() {
+  	$('.alert').remove();
+  	if(change_key) $('#container-fluid-export').prepend('<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_change }} <button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+  	else {
+  		var id_book = $('select[name^=\'book\']').val();
+  		if(id_book != ''){
+  			$.ajax({
+  				url: 'index.php?route=extension/module/sendpulse/export&user_token={{ user_token }}',
+  				type: 'post',
+  				data: 'book=' + id_book,
+  				dataType: 'json',
+  				beforeSend: function() {
+  					$('#button_export').button('loading');
+  				},
+  				complete: function() {
+  					$('#button_export').button('reset');
+  				},
+  				success: function(json) {
+
+  					if (json['error']) {
+  						$('#container-fluid-export').prepend('<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> ' + json['error'] + ' <button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+  					}
+
+  					if (json['success']) {
+  						$('#container-fluid-export').prepend('<div class="alert alert-success"><i class="fa fa-check-circle"></i> ' + json['success'] + ' <button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+  					}
+  				},
+  				error: function(xhr, ajaxOptions, thrownError) {
+  					alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+  				}
+  			});
+  		} else $('#container-fluid-export').prepend('<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_select_book }} <button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+  	}
+  		});
+
+  $("input[type='text']").bind("change", function() {
+  	change_key = true;
+  });
+  //--></script></div>
+{{ footer }}

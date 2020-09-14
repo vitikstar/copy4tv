@@ -1,0 +1,780 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        <button type="button" data-toggle="tooltip" title="{{ text_version }} {{ version }}" class="btn btn-default">{{ version }}</button>
+		<button type="submit" form="form-p-review" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+        <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb['href'] }}">{{ breadcrumb['text'] }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if error_warning %}
+    <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
+      </div>
+      <div class="panel-body">
+	    <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-p-review" class="form-horizontal">
+		  <ul class="nav nav-tabs">
+            <li class="active"><a href="#tab-general" data-toggle="tab">{{ tab_general }}</a></li>
+			<li><a href="#tab-data" data-toggle="tab">{{ tab_data }}</a></li>
+            <li><a href="#tab-form" data-toggle="tab">{{ tab_form }}</a></li>
+            <li><a href="#tab-image" data-toggle="tab">{{ tab_image }}</a></li>
+			<li><a href="#tab-position" data-toggle="tab">{{ tab_position }}</a></li>
+			<li><a href="#tab-seo" data-toggle="tab">{{ tab_seo }}</a></li>
+			<li><a href="#tab-contact" data-toggle="tab">{{ tab_contact }}</a></li>
+          </ul>
+		  <div class="tab-content">
+            <div class="tab-pane active" id="tab-general">
+			  <div class="form-group">
+			    <label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
+			    <div class="col-sm-10">
+				  <select name="module_p_review_status" id="input-status" class="form-control">
+				    {% if module_p_review_status %}
+				    <option value="1" selected="selected">{{ text_enabled }}</option>
+				    <option value="0">{{ text_disabled }}</option>
+				    {% else %}
+				    <option value="1">{{ text_enabled }}</option>
+				    <option value="0" selected="selected">{{ text_disabled }}</option>
+				    {% endif %}
+				  </select>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label class="col-sm-2 control-label" for="input-link">{{ entry_link }}</label>
+			    <div class="col-sm-10">
+				  <select name="module_p_review_link" id="input-link" class="form-control">
+				    {% if module_p_review_link %}
+				    <option value="1" selected="selected">{{ text_enabled }}</option>
+				    <option value="0">{{ text_disabled }}</option>
+				    {% else %}
+				    <option value="1">{{ text_enabled }}</option>
+				    <option value="0" selected="selected">{{ text_disabled }}</option>
+				    {% endif %}
+				  </select>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label class="col-sm-2 control-label" for="input-guest">{{ entry_guest }}</label>
+			    <div class="col-sm-10">
+				  <select name="module_p_review_guest" id="input-guest" class="form-control">
+				    {% if module_p_review_guest %}
+				    <option value="1" selected="selected">{{ text_enabled }}</option>
+				    <option value="0">{{ text_disabled }}</option>
+				    {% else %}
+				    <option value="1">{{ text_enabled }}</option>
+				    <option value="0" selected="selected">{{ text_disabled }}  </option>
+				    {% endif %}
+				  </select>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label class="col-sm-2 control-label" for="input-mail">{{ entry_mail }}</label>
+			    <div class="col-sm-10">
+				  <select name="module_p_review_mail" id="input-mail" class="form-control">
+				    {% if module_p_review_mail %}
+				    <option value="1" selected="selected">{{ text_enabled }}</option>
+				    <option value="0">{{ text_disabled }}</option>
+				    {% else %}
+				    <option value="1">{{ text_enabled }}</option>
+				    <option value="0" selected="selected">{{ text_disabled }}</option>
+				    {% endif %}
+				  </select>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label class="col-sm-2 control-label" for="input-moderation">{{ entry_moderation }}</label>
+			    <div class="col-sm-10">
+				  <select name="module_p_review_moderation" id="input-moderation" class="form-control">
+				    {% if module_p_review_moderation %}
+				    <option value="1" selected="selected">{{ text_enabled }}</option>
+				    <option value="0">{{ text_disabled }}</option>
+				    {% else %}
+				    <option value="1">{{ text_enabled }}</option>
+				    <option value="0" selected="selected">{{ text_disabled }}</option>
+				    {% endif %}
+				  </select>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label class="col-sm-2 control-label" for="input-language">{{ entry_language }}</label>
+			    <div class="col-sm-10">
+				  <select name="module_p_review_language" id="input-language" class="form-control">
+				    {% if module_p_review_language %}
+				    <option value="1" selected="selected">{{ text_language_all }}</option>
+				    <option value="0">{{ text_language_select }}</option>
+				    {% else %}
+				    <option value="1">{{ text_language_all }}</option>
+				    <option value="0" selected="selected">{{ text_language_select }}</option>
+				    {% endif %}
+				  </select>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label class="col-sm-2 control-label" for="input-date-added">{{ entry_date_added }}</label>
+			    <div class="col-sm-10">
+				  <select name="module_p_review_date_added" id="input-date-added" class="form-control">
+				    {% if module_p_review_date_added %}
+				    <option value="1" selected="selected">{{ text_enabled }}</option>
+				    <option value="0">{{ text_disabled }}</option>
+				    {% else %}
+				    <option value="1">{{ text_enabled }}</option>
+				    <option value="0" selected="selected">{{ text_disabled }}</option>
+				    {% endif %}
+				  </select>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label class="col-sm-2 control-label" for="input-limit">{{ entry_limit }}</label>
+			    <div class="col-sm-10">
+				  <input type="text" name="module_p_review_limit" value="{{ module_p_review_limit }}" placeholder="{{ entry_limit }}" id="input-limit" class="form-control" />
+				  {% if error_limit %}
+				  <div class="text-danger">{{ error_limit }}</div>
+				  {% endif %}
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label class="col-sm-2 control-label" for="input-field">{{ entry_field }}</label>
+			    <div class="col-sm-10">
+				  <select name="module_p_review_field" id="input-field" class="form-control">
+				    {% if module_p_review_field %}
+				    <option value="1" selected="selected">{{ text_enabled }}</option>
+				    <option value="0">{{ text_disabled }}</option>
+				    {% else %}
+				    <option value="1">{{ text_enabled }}</option>
+				    <option value="0" selected="selected">{{ text_disabled }}</option>
+				    {% endif %}
+				  </select>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label class="col-sm-2 control-label" for="input-cut">{{ entry_cut }}</label>
+			    <div class="col-sm-10">
+				  <select name="module_p_review_cut" id="input-cut" class="form-control">
+				    {% if module_p_review_cut %}
+				    <option value="1" selected="selected">{{ text_enabled }}</option>
+				    <option value="0">{{ text_disabled }}</option>
+				    {% else %}
+				    <option value="1">{{ text_enabled }}</option>
+				    <option value="0" selected="selected">{{ text_disabled }}</option>
+				    {% endif %}
+				  </select>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label class="col-sm-2 control-label" for="input-text-limit">{{ entry_text_limit }}</label>
+			    <div class="col-sm-10">
+				  <input type="text" name="module_p_review_text_limit" value="{{ module_p_review_text_limit }}" placeholder="{{ entry_text_limit }}" id="input-text-limitt" class="form-control" />
+				  {% if error_text_limit %}
+				  <div class="text-danger">{{ error_text_limit }}</div>
+				  {% endif %}
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label class="col-sm-2 control-label" for="input-filter-rating">{{ entry_filter_rating }}</label>
+			    <div class="col-sm-10">
+				  <select name="module_p_review_filter_rating" id="input-filter-rating" class="form-control">
+				    {% if module_p_review_filter_rating %}
+				    <option value="1" selected="selected">{{ text_select_rating }}</option>
+				    <option value="0">{{ text_min_rating }}</option>
+				    {% else %}
+				    <option value="1">{{ text_select_rating }}</option>
+				    <option value="0" selected="selected">{{ text_min_rating }}</option>
+				    {% endif %}
+				  </select>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label class="col-sm-2 control-label" for="input-font-awesome">{{ entry_font_awesome }}</label>
+			    <div class="col-sm-10">
+				  <select name="module_p_review_font_awesome" id="input-font-awesome" class="form-control">
+				    {% if module_p_review_font_awesome %}
+				    <option value="1" selected="selected">{{ text_enabled }}</option>
+				    <option value="0">{{ text_disabled }}</option>
+				    {% else %}
+				    <option value="1">{{ text_enabled }}</option>
+				    <option value="0" selected="selected">{{ text_disabled }}</option>
+				    {% endif %}
+				  </select>
+			    </div>
+			  </div>
+			</div>
+			<div class="tab-pane" id="tab-data">
+			  <div class="panel-body">
+			    <ul class="nav nav-tabs" id="language">
+                  {% for language in languages %}
+                  <li><a href="#language{{ language['language_id'] }}" data-toggle="tab"><img src="language/{{ language['code'] }}/{{ language['code'] }}.png" title="{{ language['name'] }}" /> {{ language['name'] }}</a></li>
+                  {% endfor %}
+                </ul>
+			    <div class="tab-content">
+                  {% for language in languages %}
+                  <div class="tab-pane" id="language{{ language['language_id'] }}">
+				    <div class="form-group">
+                      <label class="col-sm-2 control-label" for="input-title{{ language['language_id'] }}">{{ entry_title_p_review }}</label>
+                      <div class="col-sm-10">
+                        <input type="text" name="module_p_review_description[{{ language['language_id'] }}][title]" placeholder="{{ entry_title_p_review }}" id="input-title{{ language['language_id'] }}" class="form-control" value="{{ module_p_review_description[language['language_id']] ? module_p_review_description[language['language_id']]['title'] : '' }}">
+                      </div>
+                    </div>
+				    <div class="form-group">
+                      <label class="col-sm-2 control-label" for="input-description{{ language['language_id'] }}">{{ entry_description }}</label>
+                      <div class="col-sm-10">
+                        <textarea name="module_p_review_description[{{ language['language_id'] }}][description]" placeholder="{{ entry_description }}" id="input-description{{ language['language_id'] }}" class="form-control summernote">{{ module_p_review_description[language['language_id']] ? module_p_review_description[language['language_id']]['description'] : '' }}</textarea>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-2 control-label" for="input-meta-description{{ language['language_id'] }}">{{ entry_meta_description }}</label>
+                      <div class="col-sm-10">
+                        <textarea name="module_p_review_description[{{ language['language_id'] }}][meta_description]" rows="5" placeholder="{{ entry_meta_description }}" id="input-meta-description{{ language['language_id'] }}" class="form-control">{{ module_p_review_description[language['language_id']] ? module_p_review_description[language['language_id']]['meta_description'] : '' }}</textarea>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-2 control-label" for="input-meta-keyword{{ language['language_id'] }}">{{ entry_meta_keyword }}</label>
+                      <div class="col-sm-10">
+                        <textarea name="module_p_review_description[{{ language['language_id'] }}][meta_keyword]" rows="5" placeholder="{{ entry_meta_keyword }}" id="input-meta-keyword{{ language['language_id'] }}" class="form-control">{{ module_p_review_description[language['language_id']] ? module_p_review_description[language['language_id']]['meta_keyword'] : '' }}</textarea>
+                      </div>
+                    </div>
+                  </div>
+                  {% endfor %}
+			    </div>
+			  </div>
+			</div>
+			<div class="tab-pane" id="tab-form">
+			  <div class="form-group">
+			    <label class="col-sm-2 control-label" for="input-editor">{{ entry_editor }}</label>
+			    <div class="col-sm-10">
+				  <select name="module_p_review_editor" id="input-editor" class="form-control">
+				    {% if module_p_review_editor %}
+				    <option value="1" selected="selected">{{ text_wysibb }}</option>
+				    <option value="0">{{ text_no_editor }}</option>
+				    {% else %}
+				    <option value="1">{{ text_wysibb }}</option>
+				    <option value="0" selected="selected">{{ text_no_editor }}</option>
+				    {% endif %}
+				  </select>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label class="col-sm-2 control-label" for="input-smile-theme">{{ entry_smile_theme }}</label>
+			    <div class="col-sm-10">
+				  <select name="module_p_review_smile_theme" id="input-smile-theme" class="form-control">
+				    {% for smile_theme in smile_themes %}
+				    <option value="{{ smile_theme }}"{% if module_p_review_smile_theme == smile_theme %} selected="selected"{% endif %}>{{ smile_theme }}</option>
+				    {% endfor %}
+				  </select>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label class="col-sm-2 control-label" for="input-form">{{ entry_form }}</label>
+			    <div class="col-sm-10">
+				  <select name="module_p_review_form" id="input-form" class="form-control">
+				    {% if module_p_review_form %}
+				    <option value="1" selected="selected">{{ text_simple }}</option>
+				    <option value="0">{{ text_accordeon }}</option>
+				    {% else %}
+				    <option value="1">{{ text_simple }}</option>
+				    <option value="0" selected="selected">{{ text_accordeon }}</option>
+				    {% endif %}
+				  </select>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label class="col-sm-2 control-label" for="input-title">{{ entry_title }}</label>
+			    <div class="col-sm-10">
+				  <select name="module_p_review_title" id="input-title" class="form-control">
+				    {% if module_p_review_title == 2 %}
+				    <option value="2" selected="selected">{{ text_required }}</option>
+				    <option value="1">{{ text_no_required }}</option>
+				    <option value="0">{{ text_disabled }}</option>
+				    {% elseif module_p_review_title == 1 %}
+				    <option value="2">{{ text_required }}</option>
+				    <option value="1" selected="selected">{{ text_no_required }}</option>
+				    <option value="0">{{ text_disabled }}</option>
+				    {% else %}
+				    <option value="2">{{ text_required }}</option>
+				    <option value="1">{{ text_no_required }}</option>
+				    <option value="0" selected="selected">{{ text_disabled }}</option>
+				    {% endif %}
+				  </select>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label class="col-sm-2 control-label" for="input-city">{{ entry_city }}</label>
+			    <div class="col-sm-10">
+				  <select name="module_p_review_city" id="input-city" class="form-control">
+				    {% if module_p_review_city == 2 %}
+				    <option value="2" selected="selected">{{ text_required }}</option>
+				    <option value="1">{{ text_no_required }}</option>
+				    <option value="0">{{ text_disabled }}</option>
+				    {% elseif module_p_review_city == 1 %}
+				    <option value="2">{{ text_required }}</option>
+				    <option value="1" selected="selected">{{ text_no_required }}</option>
+				    <option value="0">{{ text_disabled }}</option>
+				    {% else %}
+				    <option value="2">{{ text_required }}</option>
+				    <option value="1">{{ text_no_required }}</option>
+				    <option value="0" selected="selected">{{ text_disabled }}</option>
+				    {% endif %}
+				  </select>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label class="col-sm-2 control-label" for="input-name">{{ entry_name }}</label>
+			    <div class="col-sm-10">
+				  <select name="module_p_review_name" id="input-name" class="form-control">
+				    {% if module_p_review_name == 2 %}
+				    <option value="2" selected="selected">{{ text_required }}</option>
+				    <option value="1">{{ text_no_required }}</option>
+				    <option value="0">{{ text_disabled }}</option>
+				    {% elseif module_p_review_name == 1 %}
+				    <option value="2">{{ text_required }}</option>
+				    <option value="1" selected="selected">{{ text_no_required }}</option>
+				    <option value="0">{{ text_disabled }}</option>
+				    {% else %}
+				    <option value="2">{{ text_required }}</option>
+				    <option value="1">{{ text_no_required }}</option>
+				    <option value="0" selected="selected">{{ text_disabled }}</option>
+				    {% endif %}
+				  </select>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label class="col-sm-2 control-label" for="input-email">{{ entry_email }}</label>
+			    <div class="col-sm-10">
+				  <select name="module_p_review_email" id="input-email" class="form-control">
+				    {% if module_p_review_email == 2 %}
+				    <option value="2" selected="selected">{{ text_required }}</option>
+				    <option value="1">{{ text_no_required }}</option>
+				    <option value="0">{{ text_disabled }}</option>
+				    {% elseif module_p_review_email == 1 %}
+				    <option value="2">{{ text_required }}</option>
+				    <option value="1" selected="selected">{{ text_no_required }}</option>
+				    <option value="0">{{ text_disabled }}</option>
+				    {% else %}
+				    <option value="2">{{ text_required }}</option>
+				    <option value="1">{{ text_no_required }}</option>
+				    <option value="0" selected="selected">{{ text_disabled }}</option>
+				    {% endif %}
+				  </select>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label class="col-sm-2 control-label" for="input-text">{{ entry_text }}</label>
+			    <div class="col-sm-10">
+				  <select name="module_p_review_text" id="input-text" class="form-control">
+				    {% if module_p_review_text == 2 %}
+				    <option value="2" selected="selected">{{ text_required }}</option>
+				    <option value="1">{{ text_no_required }}</option>
+				    <option value="0">{{ text_disabled }}</option>
+				    {% elseif module_p_review_text == 1 %}
+				    <option value="2">{{ text_required }}</option>
+				    <option value="1" selected="selected">{{ text_no_required }}</option>
+				    <option value="0">{{ text_disabled }}</option>
+				    {% else %}
+				    <option value="2">{{ text_required }}</option>
+				    <option value="1">{{ text_no_required }}</option>
+				    <option value="0" selected="selected">{{ text_disabled }}</option>
+				    {% endif %}
+				  </select>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label class="col-sm-2 control-label" for="input-good">{{ entry_good }}</label>
+			    <div class="col-sm-10">
+				  <select name="module_p_review_good" id="input-good" class="form-control">
+				    {% if module_p_review_good == 2 %}
+				    <option value="2" selected="selected">{{ text_required }}</option>
+				    <option value="1">{{ text_no_required }}</option>
+				    <option value="0">{{ text_disabled }}</option>
+				    {% elseif module_p_review_good == 1 %}
+				    <option value="2">{{ text_required }}</option>
+				    <option value="1" selected="selected">{{ text_no_required }}</option>
+				    <option value="0">{{ text_disabled }}</option>
+				    {% else %}
+				    <option value="2">{{ text_required }}</option>
+				    <option value="1">{{ text_no_required }}</option>
+				    <option value="0" selected="selected">{{ text_disabled }}</option>
+				    {% endif %}
+				  </select>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label class="col-sm-2 control-label" for="input-bad">{{ entry_bad }}</label>
+			    <div class="col-sm-10">
+				  <select name="module_p_review_bad" id="input-bad" class="form-control">
+				    {% if module_p_review_bad == 2 %}
+				    <option value="2" selected="selected">{{ text_required }}</option>
+				    <option value="1">{{ text_no_required }}</option>
+				    <option value="0">{{ text_disabled }}</option>
+				    {% elseif module_p_review_bad == 1 %}
+				    <option value="2">{{ text_required }}</option>
+				    <option value="1" selected="selected">{{ text_no_required }}</option>
+				    <option value="0">{{ text_disabled }}</option>
+				    {% else %}
+				    <option value="2">{{ text_required }}</option>
+				    <option value="1">{{ text_no_required }}</option>
+				    <option value="0" selected="selected">{{ text_disabled }}</option>
+				    {% endif %}
+				  </select>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label class="col-sm-2 control-label" for="input-rating">{{ entry_rating }}</label>
+			    <div class="col-sm-10">
+				  <select name="module_p_review_rating" id="input-rating" class="form-control">
+				    {% if module_p_review_rating == 2 %}
+				    <option value="2" selected="selected">{{ text_required }}</option>
+				    <option value="1">{{ text_no_required }}</option>
+				    <option value="0">{{ text_disabled }}</option>
+				    {% elseif module_p_review_rating == 1 %}
+				    <option value="2">{{ text_required }}</option>
+				    <option value="1" selected="selected">{{ text_no_required }}</option>
+				    <option value="0">{{ text_disabled }}</option>
+				    {% else %}
+				    <option value="2">{{ text_required }}</option>
+				    <option value="1">{{ text_no_required }}</option>
+				    <option value="0" selected="selected">{{ text_disabled }}</option>
+				    {% endif %}
+				  </select>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label class="col-sm-2 control-label" for="input-avatar">{{ entry_avatar }}</label>
+			    <div class="col-sm-10">
+				  <select name="module_p_review_avatar" id="input-avatar" class="form-control">
+				    {% if module_p_review_avatar == 3 %}
+				    <option value="3" selected="selected">{{ text_required }}</option>
+				    <option value="2">{{ text_no_required }}</option>
+					<option value="1">{{ text_enabled_dashboard }}</option>
+				    <option value="0">{{ text_disabled }}</option>
+				    {% elseif module_p_review_avatar == 2 %}
+					<option value="3">{{ text_required }}</option>
+				    <option value="2" selected="selected">{{ text_no_required }}</option>
+					<option value="1">{{ text_enabled_dashboard }}</option>
+				    <option value="0">{{ text_disabled }}</option>
+				    {% elseif module_p_review_avatar == 1 %}
+					<option value="3">{{ text_required }}</option>
+				    <option value="2">{{ text_no_required }}</option>
+					<option value="1" selected="selected">{{ text_enabled_dashboard }}</option>
+				    <option value="0">{{ text_disabled }}</option>
+				    {% else %}
+					<option value="3">{{ text_required }}</option>
+				    <option value="2">{{ text_no_required }}</option>
+					<option value="1">{{ text_enabled_dashboard }}</option>
+				    <option value="0" selected="selected">{{ text_disabled }}</option>
+				    {% endif %}
+				  </select>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label class="col-sm-2 control-label" for="input-image">{{ entry_image }}</label>
+			    <div class="col-sm-10">
+				  <select name="module_p_review_image" id="input-image" class="form-control">
+				    {% if module_p_review_image == 3 %}
+				    <option value="3" selected="selected">{{ text_required }}</option>
+				    <option value="2">{{ text_no_required }}</option>
+					<option value="1">{{ text_enabled_dashboard }}</option>
+				    <option value="0">{{ text_disabled }}</option>
+				    {% elseif module_p_review_image == 2 %}
+					<option value="3">{{ text_required }}</option>
+				    <option value="2" selected="selected">{{ text_no_required }}</option>
+					<option value="1">{{ text_enabled_dashboard }}</option>
+				    <option value="0">{{ text_disabled }}</option>
+				    {% elseif module_p_review_image == 1 %}
+					<option value="3">{{ text_required }}</option>
+				    <option value="2">{{ text_no_required }}</option>
+					<option value="1" selected="selected">{{ text_enabled_dashboard }}</option>
+				    <option value="0">{{ text_disabled }}</option>
+				    {% else %}
+					<option value="3">{{ text_required }}</option>
+				    <option value="2">{{ text_no_required }}</option>
+					<option value="1">{{ text_enabled_dashboard }}</option>
+				    <option value="0" selected="selected">{{ text_disabled }}</option>
+				    {% endif %}
+				  </select>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label class="col-sm-2 control-label" for="input-image-limit">{{ entry_image_limit }}</label>
+			    <div class="col-sm-10">
+				  <input type="text" name="module_p_review_image_limit" value="{{ module_p_review_image_limit }}" placeholder="{{ entry_image_limit }}" id="input-image-limit" class="form-control" />
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label class="col-sm-2 control-label" for="input-captcha">{{ entry_captcha }}</label>
+			    <div class="col-sm-10">
+				  <select name="module_p_review_captcha" id="input-captcha" class="form-control">
+				    {% if module_p_review_captcha %}
+				    <option value="1" selected="selected">{{ text_enabled }}</option>
+				    <option value="0">{{ text_disabled }}</option>
+				    {% else %}
+				    <option value="1">{{ text_enabled }}</option>
+				    <option value="0" selected="selected">{{ text_disabled }}</option>
+				    {% endif %}
+				  </select>
+			    </div>
+			  </div>
+			</div>
+			<div class="tab-pane" id="tab-image">
+			  <div class="form-group">
+			    <label class="col-sm-2 control-label" for="input-upload-avatar-width">{{ entry_upload_avatar }}</label>
+			    <div class="col-sm-10">
+				  <div class="row">
+				    <div class="col-sm-6">
+					  <input type="text" name="module_p_review_upload_avatar_width" value="{{ module_p_review_upload_avatar_width }}" placeholder="{{ entry_width }}" id="input-upload-avatar-width" class="form-control" />
+					  {% if error_upload_avatar_width %}
+					  <div class="text-danger">{{ error_upload_avatar_width }}</div>
+					  {% endif %}
+				    </div>
+				    <div class="col-sm-6">
+					  <input type="text" name="module_p_review_upload_avatar_height" value="{{ module_p_review_upload_avatar_height }}" placeholder="{{ entry_height }}" class="form-control" />
+					  {% if error_upload_avatar_height %}
+					  <div class="text-danger">{{ error_upload_avatar_height }}</div>
+					  {% endif %}
+				    </div>
+				  </div>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label class="col-sm-2 control-label" for="input-upload-image-width">{{ entry_upload_image }}</label>
+			    <div class="col-sm-10">
+				  <div class="row">
+				    <div class="col-sm-6">
+					  <input type="text" name="module_p_review_upload_image_width" value="{{ module_p_review_upload_image_width }}" placeholder="{{ entry_width }}" id="input-upload-image-width" class="form-control" />
+					  {% if error_upload_image_width %}
+					  <div class="text-danger">{{ error_upload_image_width }}</div>
+					  {% endif %}
+				    </div>
+				    <div class="col-sm-6">
+					  <input type="text" name="module_p_review_upload_image_height" value="{{ module_p_review_upload_image_height }}" placeholder="{{ entry_height }}" class="form-control" />
+					  {% if error_upload_image_height %}
+					  <div class="text-danger">{{ error_upload_image_height }}</div>
+					  {% endif %}
+				    </div>
+				  </div>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label class="col-sm-2 control-label" for="input-avatar-width">{{ entry_avatar_size }}</label>
+			    <div class="col-sm-10">
+				  <div class="row">
+				    <div class="col-sm-6">
+					  <input type="text" name="module_p_review_avatar_width" value="{{ module_p_review_avatar_width }}" placeholder="{{ entry_width }}" id="input-avatar-width" class="form-control" />
+					  {% if error_avatar_width %}
+					  <div class="text-danger">{{ error_avatar_width }}</div>
+					  {% endif %}
+				    </div>
+				    <div class="col-sm-6">
+					  <input type="text" name="module_p_review_avatar_height" value="{{ module_p_review_avatar_height }}" placeholder="{{ entry_height }}" class="form-control" />
+					  {% if error_avatar_height %}
+					  <div class="text-danger">{{ error_avatar_height }}</div>
+					  {% endif %}
+				    </div>
+				  </div>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label class="col-sm-2 control-label" for="input-thumbnail-width">{{ entry_thumbnail }}</label>
+			    <div class="col-sm-10">
+				  <div class="row">
+				    <div class="col-sm-6">
+					  <input type="text" name="module_p_review_thumbnail_width" value="{{ module_p_review_thumbnail_width }}" placeholder="{{ entry_width }}" id="input-thumbnail-width" class="form-control" />
+					  {% if error_thumbnail_width %}
+					  <div class="text-danger">{{ error_thumbnail_width }}</div>
+					  {% endif %}
+				    </div>
+				    <div class="col-sm-6">
+					  <input type="text" name="module_p_review_thumbnail_height" value="{{ module_p_review_thumbnail_height }}" placeholder="{{ entry_height }}" class="form-control" />
+					  {% if error_thumbnail_height %}
+					  <div class="text-danger">{{ error_thumbnail_height }}</div>
+					  {% endif %}
+				    </div>
+				  </div>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label class="col-sm-2 control-label" for="input-thumb-width">{{ entry_thumb }}</label>
+			    <div class="col-sm-10">
+				  <div class="row">
+				    <div class="col-sm-6">
+					  <input type="text" name="module_p_review_thumb_width" value="{{ module_p_review_thumb_width }}" placeholder="{{ entry_width }}" id="input-thumb-width" class="form-control" />
+					  {% if error_thumb_width %}
+					  <div class="text-danger">{{ error_thumb_width }}</div>
+					  {% endif %}
+				    </div>
+				    <div class="col-sm-6">
+					  <input type="text" name="module_p_review_thumb_height" value="{{ module_p_review_thumb_height }}" placeholder="{{ entry_height }}" class="form-control" />
+					  {% if error_thumb_height %}
+					  <div class="text-danger">{{ error_thumb_height }}</div>
+					  {% endif %}
+				    </div>
+				  </div>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label class="col-sm-2 control-label" for="input-avatar-info-width">{{ entry_avatar_info }}</label>
+			    <div class="col-sm-10">
+				  <div class="row">
+				    <div class="col-sm-6">
+					  <input type="text" name="module_p_review_avatar_info_width" value="{{ module_p_review_avatar_info_width }}" placeholder="{{ entry_width }}" id="input-avatar-info-width" class="form-control" />
+					  {% if error_avatar_info_width %}
+					  <div class="text-danger">{{ error_avatar_info_width }}</div>
+					  {% endif %}
+				    </div>
+				    <div class="col-sm-6">
+					  <input type="text" name="module_p_review_avatar_info_height" value="{{ module_p_review_avatar_info_height }}" placeholder="{{ entry_height }}" class="form-control" />
+					  {% if error_avatar_info_height %}
+					  <div class="text-danger">{{ error_avatar_info_height }}</div>
+					  {% endif %}
+				    </div>
+				  </div>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label class="col-sm-2 control-label" for="input-thumbnail-info-width">{{ entry_thumbnail_info }}</label>
+			    <div class="col-sm-10">
+				  <div class="row">
+				    <div class="col-sm-6">
+					  <input type="text" name="module_p_review_thumbnail_info_width" value="{{ module_p_review_thumbnail_info_width }}" placeholder="{{ entry_width }}" id="input-thumbnail-info-width" class="form-control" />
+					  {% if error_thumbnail_info_width %}
+					  <div class="text-danger">{{ error_thumbnail_info_width }}</div>
+					  {% endif %}
+				    </div>
+				    <div class="col-sm-6">
+					  <input type="text" name="module_p_review_thumbnail_info_height" value="{{ module_p_review_thumbnail_info_height }}" placeholder="{{ entry_height }}" class="form-control" />
+					  {% if error_thumbnail_info_height %}
+					  <div class="text-danger">{{ error_thumbnail_info_height }}</div>
+					  {% endif %}
+				    </div>
+				  </div>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label class="col-sm-2 control-label" for="input-product-image-width">{{ entry_product_image }}</label>
+			    <div class="col-sm-10">
+				  <div class="row">
+				    <div class="col-sm-6">
+					  <input type="text" name="module_p_review_product_image_width" value="{{ module_p_review_product_image_width }}" placeholder="{{ entry_width }}" id="input-product-image-width" class="form-control" />
+					  {% if error_product_image_width %}
+					  <div class="text-danger">{{ error_product_image_width }}</div>
+					  {% endif %}
+				    </div>
+				    <div class="col-sm-6">
+					  <input type="text" name="module_p_review_product_image_height" value="{{ module_p_review_product_image_height }}" placeholder="{{ entry_height }}" class="form-control" />
+					  {% if error_product_image_height %}
+					  <div class="text-danger">{{ error_product_image_height }}</div>
+					  {% endif %}
+				    </div>
+				  </div>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label class="col-sm-2 control-label" for="input-product-image-info-width">{{ entry_product_image_info }}</label>
+			    <div class="col-sm-10">
+				  <div class="row">
+				    <div class="col-sm-6">
+					  <input type="text" name="module_p_review_product_image_info_width" value="{{ module_p_review_product_image_info_width }}" placeholder="{{ entry_width }}" id="input-product-image-info-width" class="form-control" />
+					  {% if error_product_image_info_width %}
+					  <div class="text-danger">{{ error_product_image_info_width }}</div>
+					  {% endif %}
+				    </div>
+				    <div class="col-sm-6">
+					  <input type="text" name="module_p_review_product_image_info_height" value="{{ module_p_review_product_image_info_height }}" placeholder="{{ entry_height }}" class="form-control" />
+					  {% if error_product_image_info_height %}
+					  <div class="text-danger">{{ error_product_image_info_height }}</div>
+					  {% endif %}
+				    </div>
+				  </div>
+			    </div>
+			  </div>
+			</div>
+			<div class="tab-pane" id="tab-position">
+			  <div class="form-group">
+			    <label class="col-sm-2 control-label" for="input-position-tab">{{ entry_position_tab }}</label>
+			    <div class="col-sm-10">
+				  <input type="text" name="module_p_review_position_tab" value="{{ module_p_review_position_tab }}" placeholder="{{ entry_position_tab }}" id="input-position-tab" class="form-control" />
+				  {% if error_position_tab %}
+				  <div class="text-danger">{{ error_position_tab }}</div>
+				  {% endif %}
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label class="col-sm-2 control-label" for="input-position-content">{{ entry_position_content }}</label>
+			    <div class="col-sm-10">
+				  <input type="text" name="module_p_review_position_content" value="{{ module_p_review_position_content }}" placeholder="{{ entry_position_content }}" id="input-position-content" class="form-control" />
+				  {% if error_position_content %}
+				  <div class="text-danger">{{ error_position_content }}</div>
+				  {% endif %}
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label class="col-sm-2 control-label" for="input-position-total">{{ entry_position_total }}</label>
+			    <div class="col-sm-10">
+				  <input type="text" name="module_p_review_position_total" value="{{ module_p_review_position_total }}" placeholder="{{ entry_position_total }}" id="input-position-total" class="form-control" />
+				  {% if error_position_total %}
+				  <div class="text-danger">{{ error_position_total }}</div>
+				  {% endif %}
+			    </div>
+			  </div>
+            </div>
+			<div class="tab-pane" id="tab-seo">
+              <div class="alert alert-info"><i class="fa fa-info-circle"></i> {{ text_keyword }}</div>            
+              <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <td class="text-left">{{ entry_store }}</td>
+		              <td class="text-left">{{ entry_keyword }}</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for store in stores %}
+                    <tr>
+                      <td class="text-left">{{ store.name }}</td>
+                      <td class="text-left">{% for language in languages %}
+                        <div class="input-group"><span class="input-group-addon"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /></span>
+                          <input type="text" name="module_p_review_seo_url[{{ store.store_id }}][{{ language.language_id }}]" value="{% if module_p_review_seo_url[store.store_id][language.language_id] %}{{ module_p_review_seo_url[store.store_id][language.language_id] }}{% endif %}" placeholder="{{ entry_keyword }}" class="form-control" />
+                        </div>
+                        {% if error_keyword[store.store_id][language.language_id] %}
+                        <div class="text-danger">{{ error_keyword[store.store_id][language.language_id] }}</div>
+                        {% endif %} 
+                        {% endfor %}
+					  </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+			<div class="tab-pane" id="tab-contact">
+              {{ text_contact }}
+            </div>
+	      </div>
+		</form>
+      </div>
+    </div>
+  </div>
+  <link href="view/javascript/codemirror/lib/codemirror.css" rel="stylesheet" />
+  <link href="view/javascript/codemirror/theme/monokai.css" rel="stylesheet" />
+  <script type="text/javascript" src="view/javascript/codemirror/lib/codemirror.js"></script> 
+  <script type="text/javascript" src="view/javascript/codemirror/lib/xml.js"></script> 
+  <script type="text/javascript" src="view/javascript/codemirror/lib/formatting.js"></script> 
+  <script type="text/javascript" src="view/javascript/summernote/summernote.js"></script>
+  <link href="view/javascript/summernote/summernote.css" rel="stylesheet" />
+  <script type="text/javascript" src="view/javascript/summernote/summernote-image-attributes.js"></script> 
+  <script type="text/javascript" src="view/javascript/summernote/opencart.js"></script> 
+  <script type="text/javascript"><!--
+    $('#language a:first').tab('show');
+//--></script>
+</div>
+{{ footer }}

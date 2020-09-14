@@ -1,0 +1,1356 @@
+{{ header }}{{ column_left }}
+<div id="content">
+    <div class="page-header">
+        <div class="container-fluid">
+            <div class="pull-right">
+                <a id="button-preview" href="#" data-toggle="tooltip" title="{{ button_preview }}" class="btn btn-info"><i class="fa fa-eye"></i></a>
+                <a onclick="$('input[name=spam_check]').val('1');send('index.php?route=ne/newsletter/send&user_token={{ user_token }}');return false;" href="#" data-toggle="tooltip" title="{{ button_check }}" class="btn btn-warning"><i class="fa fa-check-square-o"></i></a>
+                <a onclick="$('#form').ajaxFormUnbind();$('#form').attr('action', '{{ save }}');$('#form').submit();return false;" href="#" data-toggle="tooltip" title="{{ back ? button_update : button_save }}" class="btn btn-success"><i class="fa fa-floppy-o"></i></a>
+                <a id="button-send" href="#" data-toggle="tooltip" title="{{ button_send }}" class="btn btn-primary"><i class="fa fa-envelope-o"></i></a>
+                <a href="{{ back ? back : reset }}" data-toggle="tooltip" title="{{ back ? button_back : button_reset }}" class="btn btn-default"><i class="fa fa-{{ back ? 'reply' : 'undo' }}"></i></a>
+            </div>
+            <h1>{{ heading_title }}</h1>
+        </div>
+    </div>
+    <div class="container-fluid">
+        {% if (error_warning) %}
+            <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+        {% endif %}
+        {% if (success) %}
+            <div class="alert alert-success"><i class="fa fa-check-circle"></i> {{ success }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+        {% endif %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-envelope"></i> {{ text_create_and_send }}</h3>
+            </div>
+            <div class="panel-body">
+                <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form" class="form-horizontal">
+                    <input type="hidden" name="id" value="{{ id }}" />
+                    <input type="hidden" name="newsletter_id" value="" />
+                    <input type="hidden" name="sent_count" value="" />
+                    <input type="hidden" name="spam_check" value="" />
+                    <input type="hidden" name="attachments_id" value="{{ attachments_id }}" />
+                    <input type="hidden" name="attachments_count" value="0" />
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-template">{{ entry_template }}</label>
+                        <div class="col-sm-10">
+                            <select name="template_id" id="input-template" class="form-control">
+                                {% for template in templates %}
+                                    {% if (template['template_id'] == template_id) %}
+                                        <option value="{{ template['template_id'] }}" selected="selected">{{ template['name'] }}</option>
+                                    {% else %}
+                                        <option value="{{ template['template_id'] }}">{{ template['name'] }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-language">{{ entry_language }}</label>
+                        <div class="col-sm-10">
+                            <select name="language_id" id="input-language" class="form-control">
+                                {% for language in languages %}
+                                    {% if (language['language_id'] == config_language_id) %}
+                                        <option value="{{ language['language_id'] }}" selected="selected">{{ language['name'] }}</option>
+                                    {% else %}
+                                        <option value="{{ language['language_id'] }}">{{ language['name'] }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                            <div class="checkbox">
+                                <label>
+                                    {% if (only_selected_language) %}
+                                        <input type="checkbox" name="only_selected_language" value="1" checked="checked" />
+                                    {% else %}
+                                        <input type="checkbox" name="only_selected_language" value="1" />
+                                    {% endif %}
+                                    {{ text_only_selected_language }}
+                                </label>
+                            </div>
+                            <p class="help-block">{{ text_only_selected_language_help }}</p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-currency">{{ entry_currency }}</label>
+                        <div class="col-sm-10">
+                            <select name="currency" id="input-currency" class="form-control">
+                                {% for cur in currencies %}
+                                    {% if (cur['code'] == currency) %}
+                                        <option value="{{ cur['code'] }}" selected="selected">{{ cur['title'] }}</option>
+                                    {% else %}
+                                        <option value="{{ cur['code'] }}">{{ cur['title'] }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-store">{{ entry_store }}</label>
+                        <div class="col-sm-10">
+                            <select name="store_id" id="input-store" class="form-control">
+                                array_unshift(stores, {('store_id' : 0, 'name' : text_default) }
+                                {% for store in stores %} )
+                                    {% if (store['store_id'] == store_id) %}
+                                        <option value="{{ store['store_id'] }}" selected="selected">{{ store['name'] }}</option>
+                                    {% else %}
+                                        <option value="{{ store['store_id'] }}">{{ store['name'] }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-10 col-sm-offset-2">
+                            <div class="alert alert-warning">
+                                <i class="fa fa-exclamation-circle"></i> {{ text_clear_warning }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-to">{{ entry_to }}</label>
+                        <div class="col-sm-10">
+                            <select name="to" id="input-to" class="form-control">
+                                {% if (to == 'newsletter') %}
+                                    <option value="newsletter" selected="selected">{{ text_newsletter }}</option>
+                                {% else %}
+                                    <option value="newsletter">{{ text_newsletter }}</option>
+                                {% endif %}
+                                {% if (to == 'customer_all') %}
+                                    <option value="customer_all" selected="selected">{{ text_customer_all }}</option>
+                                {% else %}
+                                    <option value="customer_all">{{ text_customer_all }}</option>
+                                {% endif %}
+                                {% if (to == 'customer_group') %}
+                                    <option value="customer_group" selected="selected">{{ text_customer_group }}</option>
+                                {% else %}
+                                    <option value="customer_group">{{ text_customer_group }}</option>
+                                {% endif %}
+                                {% if (to == 'customer') %}
+                                    <option value="customer" selected="selected">{{ text_customer }}</option>
+                                {% else %}
+                                    <option value="customer">{{ text_customer }}</option>
+                                {% endif %}
+                                {% if (to == 'affiliate_all') %}
+                                    <option value="affiliate_all" selected="selected">{{ text_affiliate_all }}</option>
+                                {% else %}
+                                    <option value="affiliate_all">{{ text_affiliate_all }}</option>
+                                {% endif %}
+                                {% if (to == 'affiliate') %}
+                                    <option value="affiliate" selected="selected">{{ text_affiliate }}</option>
+                                {% else %}
+                                    <option value="affiliate">{{ text_affiliate }}</option>
+                                {% endif %}
+                                {% if (to == 'product') %}
+                                    <option value="product" selected="selected">{{ text_product }}</option>
+                                {% else %}
+                                    <option value="product">{{ text_product }}</option>
+                                {% endif %}
+                                {% if (to == 'marketing') %}
+                                    <option value="marketing" selected="selected">{{ text_marketing }}</option>
+                                {% else %}
+                                    <option value="marketing">{{ text_marketing }}</option>
+                                {% endif %}
+                                {% if (to == 'marketing_all') %}
+                                    <option value="marketing_all" selected="selected">{{ text_marketing_all }}</option>
+                                {% else %}
+                                    <option value="marketing_all">{{ text_marketing_all }}</option>
+                                {% endif %}
+                                {% if (to == 'subscriber') %}
+                                    <option value="subscriber" selected="selected">{{ text_subscriber_all }}</option>
+                                {% else %}
+                                    <option value="subscriber">{{ text_subscriber_all }}</option>
+                                {% endif %}
+                                {% if (to == 'all') %}
+                                    <option value="all" selected="selected">{{ text_all }}</option>
+                                {% else %}
+                                    <option value="all">{{ text_all }}</option>
+                                {% endif %}
+                                {% if (to == 'rewards') %}
+                                    <option value="rewards" selected="selected">{{ text_rewards }}</option>
+                                {% else %}
+                                    <option value="rewards">{{ text_rewards }}</option>
+                                {% endif %}
+                                {% if (to == 'rewards_all') %}
+                                    <option value="rewards_all" selected="selected">{{ text_rewards_all }}</option>
+                                {% else %}
+                                    <option value="rewards_all">{{ text_rewards_all }}</option>
+                                {% endif %}
+                            </select>
+                        </div>
+                    </div>
+                    {% if (list_data) %}
+                    <div class="form-group to to-marketing">
+                        <label class="col-sm-2 control-label">{{ entry_marketing }}</label>
+                        <div class="col-sm-10">
+                            {% for store in stores %}
+                            <div class="well well-sm list-display marketing-list-{{ store['store_id'] }}" style="height: 150px; overflow: auto;">
+                                {% if (list_data[store['store_id']] is defined and list_data[store['store_id']]) %}
+                                {% for key,list in list_data[store['store_id']] %}
+                                <div class="checkbox">
+                                    <label>
+                                        {% if (marketing_list and marketing_list.count>1 and store['store_id']~'_'~key in marketing_list) %}
+                                        <input type="checkbox" name="marketing_list[]" value="{{ store['store_id'] }}_{{ key }}" checked="checked" />
+                                        {% else %}
+                                         <input type="checkbox" name="marketing_list[]" value="{{ store['store_id'] }}_{{ key }}" />
+                                        {% endif %}
+                                        {{ list[config_language_id] }}
+                                    </label>
+                                            </div>
+                                {% endfor %}
+                                 {% endif %}
+                                    </div>
+
+                            </div>
+                        {% endfor %}
+                        </div>
+
+                    <div class="form-group to to-customer-group">
+                        <label class="col-sm-2 control-label" for="input-customer-group">{{ entry_customer_group }}</label>
+                        <div class="col-sm-10">
+                            <select name="customer_group_id" id="input-customer-group" class="form-control">
+                                {% for customer_group in customer_groups %}
+                                    {% if (customer_group['customer_group_id'] == customer_group_id and to == 'customer_group') %}
+                                        <option value="{{ customer_group['customer_group_id'] }}" selected="selected">{{ customer_group['name'] }}</option>
+                                    {% else %}
+                                        <option value="{{ customer_group['customer_group_id'] }}">{{ customer_group['name'] }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                            <div class="checkbox">
+                                <label>
+                                    {% if (customer_group_only_subscribers) %}
+                                        <input type="checkbox" name="customer_group_only_subscribers" value="1" checked="checked" />
+                                    {% else %}
+                                        <input type="checkbox" name="customer_group_only_subscribers" value="1" />
+                                    {% endif %}
+                                    {{ text_only_subscribers }}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group to to-customer">
+                        <label class="col-sm-2 control-label" for="input-customer">{{ entry_customer }}</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="customers" value="" placeholder="{{ entry_customer }}" id="input-customer" class="form-control" autocomplete="off">
+                            <div id="ne-customer" class="well well-sm" style="height: 150px; overflow: auto;">
+                                        {% for customer in customers %}
+                                        <div id="ne-customer-{{ customer['customer_id'] }}"><i class="fa fa-minus-circle"></i> {{ customer['name'] }}
+                                            <input type="hidden" name="customer[]" value="{{ customer['customer_id'] }}" />
+                                        </div>
+                                        {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group to to-affiliate">
+                            <label class="col-sm-2 control-label" for="input-affiliate">{{ entry_affiliate }}</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="affiliates" value="" placeholder="{{ entry_affiliate }}" id="input-affiliate" class="form-control" autocomplete="off">
+                                <div id="affiliate" class="well well-sm" style="height: 150px; overflow: auto;">
+                                    {% for affiliate in affiliates %}
+                                        <div id="affiliate-{{ affiliate['affiliate_id'] }}"><i class="fa fa-minus-circle"></i> {{ affiliate['name'] }}
+                                            <input type="hidden" name="affiliate[]" value="{{ affiliate['affiliate_id'] }}" />
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group to to-product">
+                            <label class="col-sm-2 control-label" for="input-product">{{ entry_product }}</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="products" value="" placeholder="{{ entry_product }}" id="input-product" class="form-control" autocomplete="off">
+                                <div id="product" class="well well-sm" style="height: 150px; overflow: auto;">
+                                    {% for product in products %}
+                                        <div id="product-{{ product['product_id'] }}"><i class="fa fa-minus-circle"></i> {{ product['name'] }}
+                                            <input type="hidden" name="product[]" value="{{ product['product_id'] }}" />
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">{{ entry_defined }}</label>
+                            <div class="col-sm-10">
+                                <label class="radio-inline">
+                                    {% if (defined) %}
+                                        <input type="radio" name="defined" value="1" checked="checked" />
+                                        {{ entry_yes }}
+                                    {% else %}
+                                        <input type="radio" name="defined" value="1" />
+                                        {{ entry_yes }}
+                                    {% endif %}
+                                </label>
+                                <label class="radio-inline">
+                                    {% if (not defined) %}
+                                        <input type="radio" name="defined" value="0" checked="checked" />
+                                        {{ entry_no }}
+                                    {% else %}
+                                        <input type="radio" name="defined" value="0" />
+                                        {{ entry_no }}
+                                    {% endif %}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group defined-product">
+                            <label class="col-sm-2 control-label" for="input-section-name">{{ entry_section_name }}</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="defined_product_text" value="" placeholder="{{ entry_section_name }}" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group defined-product">
+                            <label class="col-sm-2 control-label" for="input-defined-products">{{ entry_product }}</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="defined_products" value="" placeholder="{{ entry_product }}" id="input-defined-products" class="form-control" autocomplete="off">
+                                <div id="defined-product" class="well well-sm" style="height: 150px; overflow: auto;">
+                                    {% for product in defined_products %}
+                                        <div id="defined-product-{{ product['product_id'] }}"><i class="fa fa-minus-circle"></i> {{ product['name'] }}
+                                            <input type="hidden" name="defined_product[]" value="{{ product['product_id'] }}" />
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        {% for index,dpm in defined_products_more %}
+                            <div class="form-group defined-product">
+                                <label class="col-sm-2 control-label" for="input-section-name-{{ index }}">{{ entry_section_name }}</label>
+                                <div class="col-sm-10">
+                                    <div class="input-group">
+                                        <input type="text" name="defined_product_more[{{ index }}][text]" value="{{ dpm['text'] }}" id="input-section-name-{{ index }}" placeholder="{{ entry_section_name }}" class="form-control" />
+                                        <span class="input-group-btn">
+                                        <button onclick="removeSection(this);" class="btn btn-default" type="button">
+                                            <i class="fa fa-minus-circle"></i> {{ button_remove }}
+                                        </button>
+                                    </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group defined-product">
+                                <label class="col-sm-2 control-label" for="input-defined-products-{{ index }}">{{ entry_product }}</label>
+                                <div class="col-sm-10">
+                                    <input type="text" name="defined_products_{{ index }}" value="" placeholder="{{ entry_product }}" id="input-defined-products-{{ index }}" data-id="{{ index }}" class="form-control" autocomplete="off">
+                                    <div id="defined-product-{{ index }}" class="well well-sm" style="height: 150px; overflow: auto;">
+                                        {% for product in dpm['products'] %}
+                                            <div id="defined-product-entry-{{ index }}-{{ product['product_id'] }}"><i class="fa fa-minus"></i> {{ product['name'] }}
+                                                <input type="hidden" name="defined_product_more[{{ index }}][products][]" value="{{ product['product_id'] }}" />
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        <div class="form-group defined-product">
+                            <div class="col-sm-10 col-sm-offset-2">
+                                <button id="button-add-defined-section" class="btn btn-primary" type="button">
+                                    <i class="fa fa-plus"></i> {{ button_add_defined_section }}
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">{{ entry_special }}</label>
+                            <div class="col-sm-10">
+                                <label class="radio-inline">
+                                    {% if (special) %}
+                                        <input type="radio" name="special" value="1" checked="checked" />
+                                        {{ entry_yes }}
+                                    {% else %}
+                                        <input type="radio" name="special" value="1" />
+                                        {{ entry_yes }}
+                                    {% endif %}
+                                </label>
+                                <label class="radio-inline">
+                                    {% if (not special) %}
+                                        <input type="radio" name="special" value="0" checked="checked" />
+                                        {{ entry_no }}
+                                    {% else %}
+                                        <input type="radio" name="special" value="0" />
+                                        {{ entry_no }}
+                                    {% endif %}
+                                </label>
+                                <div class="checkbox checkbox-special">
+                                    <label>
+                                        {% if (skip_out_of_stock["special"] is not empty) %}
+                                            <input type="checkbox" name="skip_out_of_stock[special]" value="1" checked="checked" />
+                                        {% else %}
+                                            <input type="checkbox" name="skip_out_of_stock[special]" value="1" />
+                                        {% endif %}
+                                        {{ text_skip_out_of_stock }}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">{{ entry_latest }}</label>
+                            <div class="col-sm-10">
+                                <label class="radio-inline">
+                                    {% if (latest) %}
+                                        <input type="radio" name="latest" value="1" checked="checked" />
+                                        {{ entry_yes }}
+                                    {% else %}
+                                        <input type="radio" name="latest" value="1" />
+                                        {{ entry_yes }}
+                                    {% endif %}
+                                </label>
+                                <label class="radio-inline">
+                                    {% if (not latest) %}
+                                        <input type="radio" name="latest" value="0" checked="checked" />
+                                        {{ entry_no }}
+                                    {% else %}
+                                        <input type="radio" name="latest" value="0" />
+                                        {{ entry_no }}
+                                    {% endif %}
+                                </label>
+                                <div class="checkbox checkbox-latest">
+                                    <label>
+                                        {% if (skip_out_of_stock["latest"] is not empty) %}
+                                            <input type="checkbox" name="skip_out_of_stock[latest]" value="1" checked="checked" />
+                                        {% else %}
+                                            <input type="checkbox" name="skip_out_of_stock[latest]" value="1" />
+                                        {% endif %}
+                                        {{ text_skip_out_of_stock }}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">{{ entry_popular }}</label>
+                            <div class="col-sm-10">
+                                <label class="radio-inline">
+                                    {% if (popular) %}
+                                        <input type="radio" name="popular" value="1" checked="checked" />
+                                        {{ entry_yes }}
+                                    {% else %}
+                                        <input type="radio" name="popular" value="1" />
+                                        {{ entry_yes }}
+                                    {% endif %}
+                                </label>
+                                <label class="radio-inline">
+                                    {% if (not popular) %}
+                                        <input type="radio" name="popular" value="0" checked="checked" />
+                                        {{ entry_no }}
+                                    {% else %}
+                                        <input type="radio" name="popular" value="0" />
+                                        {{ entry_no }}
+                                    {% endif %}
+                                </label>
+                                <div class="checkbox checkbox-popular">
+                                    <label>
+                                        {% if (skip_out_of_stock["popular"] is not empty) %}
+                                            <input type="checkbox" name="skip_out_of_stock[popular]" value="1" checked="checked" />
+                                        {% else %}
+                                            <input type="checkbox" name="skip_out_of_stock[popular]" value="1" />
+                                        {% endif %}
+                                        {{ text_skip_out_of_stock }}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">{{ entry_defined_categories }}</label>
+                            <div class="col-sm-10">
+                                <label class="radio-inline">
+                                    {% if (defined_categories) %}
+                                        <input type="radio" name="defined_categories" value="1" checked="checked" />
+                                        {{ entry_yes }}
+                                    {% else %}
+                                        <input type="radio" name="defined_categories" value="1" />
+                                        {{ entry_yes }}
+                                    {% endif %}
+                                </label>
+                                <label class="radio-inline">
+                                    {% if (not defined_categories) %}
+                                        <input type="radio" name="defined_categories" value="0" checked="checked" />
+                                        {{ entry_no }}
+                                    {% else %}
+                                        <input type="radio" name="defined_categories" value="0" />
+                                        {{ entry_no }}
+                                    {% endif %}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group defined-categories">
+                            <div class="col-sm-10 col-sm-offset-2">
+                                <div class="well well-sm" style="height: 150px; overflow: auto;">
+                                    {% for category in categories %}
+                                        <div class="checkbox">
+                                            <label>
+                                                {% if (defined_category and defined_category.count()>1 and category['category_id'] in defined_category) %}
+                                                    <input type="checkbox" name="defined_category[]" value="{{ category['category_id'] }}" checked="checked" />
+                                                {% else %}
+                                                    <input type="checkbox" name="defined_category[]" value="{{ category['category_id'] }}" />
+                                                {% endif %}
+                                                {{ category['name'] }}
+                                            </label>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                <div class="form-inline">
+                                    <div class="form-group" style="margin-left:0; margin-right:15px;">
+                                        <label for="input-defined-categories-limit">{{ entry_limit }}</label>
+                                        <input type="text" name="defined_category_limit" value="{{ defined_category_limit }}" class="form-control" id="input-defined-categories-limit" size="2">
+                                    </div>
+                                    <div class="form-group" style="margin-left:0; margin-right:15px;">
+                                        <label>{{ entry_sort_by }}</label>
+                                        <select name="defined_category_sort" class="form-control">
+                                            {% if (defined_category_sort == 'date_added') %}
+                                                <option value="date_added" selected="selected">{{ text_date_added }}</option>
+                                            {% else %}
+                                                <option value="date_added">{{ text_date_added }}</option>
+                                            {% endif %}
+                                            {% if (defined_category_sort == 'sort_order') %}
+                                                <option value="sort_order" selected="selected">{{ text_sort_order }}</option>
+                                            {% else %}
+                                                <option value="sort_order">{{ text_sort_order }}</option>
+                                            {% endif %}
+                                        </select>
+                                    </div>
+                                    <div class="form-group" style="margin-left:0; margin-right:15px;">
+                                        <label>{{ entry_order }}</label>
+                                        <select name="defined_category_order" class="form-control">
+                                            {% if (not defined_category_order) %}
+                                                <option value="0" selected="selected">{{ text_ascending }}</option>
+                                            {% else %}
+                                                <option value="0">{{ text_ascending }}</option>
+                                            {% endif %}
+                                            {% if (defined_category_order) %}
+                                                <option value="1" selected="selected">{{ text_descending }}</option>
+                                            {% else %}
+                                                <option value="1">{{ text_descending }}</option>
+                                            {% endif %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group attachments">
+                            <label class="col-sm-2 control-label">{{ entry_attachments }}</label>
+                            <div class="col-sm-10">
+                                <button onclick="addFile(this);" class="btn btn-primary" type="button">
+                                    <i class="fa fa-plus"></i> {{ button_add_file }}
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group required">
+                            <label class="col-sm-2 control-label" for="input-subject">{{ entry_subject }}</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="subject" value="{{ subject }}" id="input-subject" placeholder="{{ entry_subject }}" class="form-control" />
+                                {% if (error_subject) %}
+                                    <div class="text-danger">{{ error_subject }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="form-group required">
+                            <label class="col-sm-2 control-label">{{ entry_message }}</label>
+                            <div class="col-sm-10">
+                                <textarea name="message" class="form-control">{{ message }}</textarea>
+                                {% if (error_message) %}
+                                    <div class="text-danger">{{ error_message }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" dor="input-text-message">{{ entry_text_message }}</label>
+                            <div class="col-sm-10">
+                                <textarea name="text_message" id="input-text-message" rows="10" class="form-control">{{ text_message }}</textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">{{ entry_text_message_products }}</label>
+                            <div class="col-sm-10">
+                                <label class="radio-inline">
+                                    {% if (text_message_products) %}
+                                        <input type="radio" name="text_message_products" value="1" checked="checked" />
+                                        {{ entry_yes }}
+                                    {% else %}
+                                        <input type="radio" name="text_message_products" value="1" />
+                                        {{ entry_yes }}
+                                    {% endif %}
+                                </label>
+                                <label class="radio-inline">
+                                    {% if (not text_message_products) %}
+                                        <input type="radio" name="text_message_products" value="0" checked="checked" />
+                                        {{ entry_no }}
+                                    {% else %}
+                                        <input type="radio" name="text_message_products" value="0" />
+                                        {{ entry_no }}
+                                    {% endif %}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-10 col-sm-offset-2">
+                                <div class="alert alert-info">
+                                    {{ text_message_info }}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="preview-modal" tabindex="-1" role="dialog" aria-labelledby="preview-modal-label" aria-hidden="true">
+        <div class="modal-dialog" style="min-width:800px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body"></div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="view/javascript/ne/jquery/jquery.form.js"></script>
+    <script type="text/javascript" src="view/javascript/ne/ckeditor/ckeditor.js"></script>
+    <script type="text/javascript">
+        CKEDITOR.replace('message', {
+            height:'500'
+        });
+        </script>
+    <script type="text/javascript">
+        var defined_section_row = {{ max(defined_products_more.count(), 0) }};
+        var attachment_row = 0;
+
+        $(document).ready(function() {
+            $('select[name=\'to\']').bind('change', function() {
+                $('.to').hide();
+                $('.to-' + $(this).val().replace('_', '-')).show();
+
+                var to = $(this).val();
+
+                if (to == 'marketing' || to == 'marketing_all' || to == 'subscriber' || to == 'all') {
+                    if ($('.marketing-list-' + $('select[name=\'store_id\']').val() + ' input:checkbox').size() == 0) {
+                        $('.to-marketing').hide();
+                    } else {
+                        $('.to-marketing').show();
+                    }
+                }
+
+                getTemplate();
+            }).trigger('change');
+
+            $('#button-send').bind('click', function() {
+                $(this).attr('disabled', true).find('i').removeClass('fa-envelope-o').addClass('fa-refresh fa-spin');
+
+                $('#form').ajaxFormUnbind();
+
+                $('#form').ajaxForm({
+                    success: function() {
+                        $('#button-send').attr('disabled', false).find('i').removeClass('fa-refresh fa-spin').addClass('fa-envelope-o');
+                        send('index.php?route=ne/newsletter/send&user_token={{ user_token }}');
+                    }
+                });
+
+                $('#form').submit();
+
+                return false;
+            });
+
+            $('select').each(function(){
+                if ($(this).children().length <= 1) {
+                    $(this).parent().parent().hide();
+                }
+            });
+
+            $('input[name=\'defined\']').bind('click', function() {
+                if ($('input[name=\'defined\']:checked').val() == 1)
+                {
+                    $('.defined-product').show();
+                }
+                else
+                {
+                    $('.defined-product').hide();
+                }
+                getTemplate();
+            });
+
+            $('input[name=\'defined_categories\']').bind('click', function() {
+                if ($('input[name=\'defined_categories\']:checked').val() == 1)
+                {
+                    $('.defined-categories').show();
+                }
+                else
+                {
+                    $('.defined-categories').hide();
+                }
+                getTemplate();
+            });
+
+            $('input[name="skip_out_of_stock[special]"], input[name="skip_out_of_stock[latest]"], input[name="skip_out_of_stock[popular]"]').bind('click', function() {
+                getTemplate();
+            });
+
+            $('input[name=\'special\'], input[name=\'latest\'], input[name=\'popular\']').bind('click', function() {
+
+                if ($('input[name=\'special\']:checked').val() == 1)
+                {
+                    $('.checkbox-special').show();
+                }
+                else
+                {
+                    $('.checkbox-special').hide();
+                }
+
+                if ($('input[name=\'latest\']:checked').val() == 1)
+                {
+                    $('.checkbox-latest').show();
+                }
+                else
+                {
+                    $('.checkbox-latest').hide();
+                }
+
+                if ($('input[name=\'popular\']:checked').val() == 1)
+                {
+                    $('.checkbox-popular').show();
+                }
+                else
+                {
+                    $('.checkbox-popular').hide();
+                }
+
+                getTemplate();
+            });
+
+
+            $('select[name=\'currency\']').bind('change', function() {
+                getTemplate();
+            });
+
+            $('select[name=\'language_id\'], select[name=\'template_id\']').bind('change', function(){
+                getDefinedText();
+                getTemplate(true);
+            });
+
+            $('select[name=\'customer_group_id\']').bind('change', function(){
+                getTemplate();
+            });
+
+            $('input[name="defined_category[]"]').bind('click', function(){
+                getTemplate();
+            });
+
+            $('input[name=\'defined_category_limit\']').bind('change', function(){
+                getTemplate();
+            });
+
+            $('select[name=\'defined_category_sort\']').bind('change', function(){
+                getTemplate();
+            });
+
+            $('select[name=\'defined_category_order\']').bind('change', function(){
+                getTemplate();
+            });
+
+            $('.list-display').hide();
+            $('.marketing-list-' + $('select[name=\'store_id\']').val()).show();
+
+            $('select[name=\'store_id\']').bind('change', function(){
+                $('.list-display').hide();
+                $('.list-display input:checkbox').removeAttr('checked');
+
+                var to = $('select[name=\'to\']').val();
+
+                if (to == 'marketing' || to == 'marketing_all' || to == 'subscriber' || to == 'all') {
+                    if ($('.marketing-list-' + $(this).val() + ' input:checkbox').size() == 0) {
+                        $('.to-marketing').hide();
+                    } else {
+                        $('.to-marketing').show();
+                    }
+                }
+
+                $('.marketing-list-' + $(this).val()).show();
+
+                getTemplate(true);
+            });
+
+            if ($('input[name=\'defined\']:checked').val() == 1)
+            {
+                $('.defined-product').show();
+            }
+            else
+            {
+                $('.defined-product').hide();
+            }
+
+            if ($('input[name=\'special\']:checked').val() == 1)
+            {
+                $('.checkbox-special').show();
+            }
+            else
+            {
+                $('.checkbox-special').hide();
+            }
+
+            if ($('input[name=\'latest\']:checked').val() == 1)
+            {
+                $('.checkbox-latest').show();
+            }
+            else
+            {
+                $('.checkbox-latest').hide();
+            }
+
+            if ($('input[name=\'popular\']:checked').val() == 1)
+            {
+                $('.checkbox-popular').show();
+            }
+            else
+            {
+                $('.checkbox-popular').hide();
+            }
+
+            if ($('input[name=\'defined_categories\']:checked').val() == 1)
+            {
+                $('.defined-categories').show();
+            }
+            else
+            {
+                $('.defined-categories').hide();
+            }
+
+            $('input[name=\'defined_products\']').autocomplete({
+                'source': function(request, response) {
+                    $.ajax({
+                        url: 'index.php?route=catalog/product/autocomplete&user_token={{ user_token }}&filter_name=' +  encodeURIComponent(request),
+                        dataType: 'json',
+                        data: {
+                            user_token: '{{ user_token }}',
+                            filter_name: encodeURIComponent(request)
+                        },
+                        type: 'post',
+                        success: function(json) {
+                            response($.map(json, function(item) {
+                                return {
+                                    label: item['name'],
+                                    value: item['product_id']
+                                }
+                            }));
+                        }
+                    });
+                },
+                'select': function(item) {
+                    $(this).val('');
+
+                    $('#defined-product-' + item['value']).remove();
+                    $('#defined-product').append('<div id="defined-product-' + item['value'] + '"><i class="fa fa-minus-circle"></i> ' + item['label'] + '<input type="hidden" name="defined_product[]" value="' + item['value'] + '" /></div>');
+
+                    getTemplate();
+                }
+            });
+
+            $('input[name^=\'defined_products_\']').autocomplete({
+                'source': function(request, response) {
+                    $.ajax({
+                        url: 'index.php?route=catalog/product/autocomplete&user_token={{ user_token }}&filter_name=' +  encodeURIComponent(request),
+                        dataType: 'json',
+                        data: {
+                            user_token: '{{ user_token }}',
+                            filter_name: encodeURIComponent(request)
+                        },
+                        type: 'post',
+                        success: function(json) {
+                            response($.map(json, function(item) {
+                                return {
+                                    label: item['name'],
+                                    value: item['product_id']
+                                }
+                            }));
+                        }
+                    });
+                },
+                'select': function(item) {
+                    $(this).val('');
+
+                    var id = $(this).attr('data-id');
+
+                    $('#defined-product-entry-' + id + '-' + item['value']).remove();
+                    $('#defined-product-' + id).append('<div id="defined-product-entry-' + id + '-' + item['value'] + '"><i class="fa fa-minus-circle"></i> ' + item['label'] + '<input type="hidden" name="defined_product_more[' + id + '][products][]" value="' + item['value'] + '" /></div>');
+
+                    getTemplate();
+                }
+            });
+
+            $('#defined-product').delegate('.fa-minus-circle', 'click', function() {
+                $(this).parent().remove();
+
+                getTemplate();
+            });
+
+            $("[id^='defined-product-']").delegate('.fa-minus-circle', 'click', function() {
+                $(this).parent().remove();
+
+                getTemplate();
+            });
+
+            $('input[name=\'customers\']').autocomplete({
+                'source': function(request, response) {
+                    $.ajax({
+                        url: 'index.php?route=customer/customer/autocomplete&user_token={{ user_token }}&filter_name=' +  encodeURIComponent(request),
+                        dataType: 'json',
+                        data: {
+                            user_token: '{{ user_token }}',
+                            filter_name: encodeURIComponent(request)
+                        },
+                        type: 'post',
+                        success: function(json) {
+                            response($.map(json, function(item) {
+                                return {
+                                    label: item['name'],
+                                    value: item['customer_id']
+                                }
+                            }));
+                        }
+                    });
+                },
+                'select': function(item) {
+                    $(this).val('');
+                    $('#ne-customer-' + item['value']).remove();
+                    $('#ne-customer').append('<div id="ne-customer-' + item['value'] + '"><i class="fa fa-minus-circle"></i> ' + item['label'] + '<input type="hidden" name="customer[]" value="' + item['value'] + '" /></div>');
+                }
+            });
+
+            $('#ne-customer').delegate('.fa-minus-circle', 'click', function() {
+                $(this).parent().remove();
+            });
+
+            $('input[name=\'affiliates\']').autocomplete({
+                'source': function(request, response) {
+                    $.ajax({
+                        url: 'index.php?route=marketing/affiliate/autocomplete&user_token={{ user_token }}&filter_name=' +  encodeURIComponent(request),
+                        dataType: 'json',
+                        data: {
+                            user_token: '{{ user_token }}',
+                            filter_name: encodeURIComponent(request)
+                        },
+                        type: 'post',
+                        success: function(json) {
+                            response($.map(json, function(item) {
+                                return {
+                                    label: item['name'],
+                                    value: item['affiliate_id']
+                                }
+                            }));
+                        }
+                    });
+                },
+                'select': function(item) {
+                    $(this).val('');
+                    $('#affiliate-' + item['value']).remove();
+                    $('#affiliate').append('<div id="affiliate-' + item['value'] + '"><i class="fa fa-minus-circle"></i> ' + item['label'] + '<input type="hidden" name="affiliate[]" value="' + item['value'] + '" /></div>');
+                }
+            });
+
+            $('#affiliate').delegate('.fa-minus-circle', 'click', function() {
+                $(this).parent().remove();
+            });
+
+            $('input[name=\'products\']').autocomplete({
+                'source': function(request, response) {
+                    $.ajax({
+                        url: 'index.php?route=catalog/product/autocomplete&user_token={{ user_token }}&filter_name=' +  encodeURIComponent(request),
+                        dataType: 'json',
+                        data: {
+                            user_token: '{{ user_token }}',
+                            filter_name: encodeURIComponent(request)
+                        },
+                        type: 'post',
+                        success: function(json) {
+                            response($.map(json, function(item) {
+                                return {
+                                    label: item['name'],
+                                    value: item['product_id']
+                                }
+                            }));
+                        }
+                    });
+                },
+                'select': function(item) {
+                    $(this).val('');
+                    $('#product-' + item['value']).remove();
+                    $('#product').append('<div id="product-' + item['value'] + '"><i class="fa fa-minus-circle"></i> ' + item['label'] + '<input type="hidden" name="product[]" value="' + item['value'] + '" /></div>');
+                }
+            });
+
+            $('#product').delegate('.fa-minus-circle', 'click', function() {
+                $(this).parent().remove();
+            });
+
+            if (!$('textarea[name=message]').val()) {
+                getTemplate();
+            }
+
+            $('.attachments').delegate('.fa-minus-circle', 'click', function() {
+                $(this).parent().remove();
+                attachment_row--;
+                $('input[name=attachments_count]').val(attachment_row);
+            });
+
+            getDefinedText();
+
+            $('#button-preview').bind('click', function() {
+                $(this).attr('disabled', true).find('i').removeClass('fa-eye').addClass('fa-refresh fa-spin');
+
+                var defined_products = [];
+
+                if ($('input[name=defined]:checked').val() == 1) {
+                    $('#defined-product input').each(function(id) {
+                        var item = $('#defined-product input').get(id);
+                        defined_products.push(item.value);
+                    });
+                }
+
+                var defined_products_more = [];
+
+                if ($('input[name=defined]:checked').val() == 1) {
+                    for (var i = 0; i < defined_section_row; i++) {
+                        defined_products_more[i] = {
+                            'text' : $('input[name="defined_product_more[' + i + '][text]"]').val(),
+                            'products' : []
+                        };
+                        $('#defined-product-' + i + ' input').each(function(id) {
+                            var item = $('#defined-product-' + i + ' input').get(id);
+                            defined_products_more[i]['products'].push(item.value);
+                        });
+                    }
+                }
+
+                var defined_categories = [];
+
+                if ($('input[name=defined_categories]:checked').val() == 1) {
+                    $('input[name="defined_category[]"]:checked').each(function(){
+                        defined_categories.push($(this).val());
+                    });
+                }
+
+                var skip_out_of_stock = [];
+
+                if ($('input[name="skip_out_of_stock[special]"]').is(':checked')) {
+                    skip_out_of_stock['special'] = 1;
+                } else {
+                    skip_out_of_stock['special'] = 0;
+                }
+
+                if ($('input[name="skip_out_of_stock[latest]"]').is(':checked')) {
+                    skip_out_of_stock['latest'] = 1;
+                } else {
+                    skip_out_of_stock['latest'] = 0;
+                }
+
+                if ($('input[name="skip_out_of_stock[popular]"]').is(':checked')) {
+                    skip_out_of_stock['popular'] = 1;
+                } else {
+                    skip_out_of_stock['popular'] = 0;
+                }
+
+                var message;
+
+                for (var instance in CKEDITOR.instances) {
+                    message = CKEDITOR.instances[instance].getData();
+                }
+
+                $.ajax({
+                    type: 'post',
+                    url: 'index.php?route=ne/newsletter/preview&user_token={{ user_token }}',
+                    data: {
+                        special: $('input[name=special]:checked').val(),
+                        latest: $('input[name=latest]:checked').val(),
+                        popular: $('input[name=popular]:checked').val(),
+                        defined: defined_products,
+                        defined_text: $('input[name=defined_product_text]').val(),
+                        defined_more: defined_products_more,
+                        defined_categories: defined_categories,
+                        defined_category_limit: $('input[name=defined_category_limit]').val(),
+                        defined_category_order: $('select[name=defined_category_order]').val(),
+                        defined_category_sort: $('select[name=defined_category_sort]').val(),
+                        skip_out_of_stock: $.extend({}, skip_out_of_stock),
+                        template_id: $('select[name=template_id]').val(),
+                        language_id: $('select[name=language_id]').val(),
+                        currency: $('select[name=currency]').val(),
+                        customer_group_id: ($('select[name=customer_group_id]').length ? $('select[name=customer_group_id]').val() : ''),
+                        store_id: $('select[name=store_id]').val(),
+                        message: message,
+                        subject: $('input[name=subject]').val()
+                    },
+                    dataType: 'json',
+                    success: function(data) {
+                        $('#preview-modal .modal-title').text(data.subject);
+                        $('#preview-modal .modal-body').html(data.body);
+                        $('#preview-modal').modal('show');
+                        $('#button-preview').attr('disabled', false).find('i').removeClass('fa-refresh fa-spin').addClass('fa-eye');
+                    }
+                });
+
+                return false;
+            });
+
+            $('#button-add-defined-section').bind('click', function() {
+                var html;
+                html  = '<div class="form-group defined-product">';
+                html += '   <label class="col-sm-2 control-label" for="input-section-name-' + defined_section_row + '">{{ entry_section_name }}</label>';
+                html += '   <div class="col-sm-10">';
+                html += '       <div class="input-group">';
+                html += '           <input type="text" name="defined_product_more[' + defined_section_row + '][text]" value="" id="input-section-name-' + defined_section_row + '" placeholder="{{ entry_section_name }}" class="form-control" />';
+                html += '           <span class="input-group-btn">';
+                html += '               <button onclick="removeSection(this);" class="btn btn-default" type="button">';
+                html += '                   <i class="fa fa-minus-circle"></i> {{ button_remove }}';
+                html += '               </button>';
+                html += '           </span>';
+                html += '       </div>';
+                html += '   </div>';
+                html += '</div>';
+                html += '<div class="form-group defined-product">';
+                html += '   <label class="col-sm-2 control-label" for="input-defined-products-' + defined_section_row + '">{{ entry_product }}</label>';
+                html += '   <div class="col-sm-10">';
+                html += '       <input type="text" name="defined_products_' + defined_section_row + '" value="" placeholder="{{ entry_product }}" id="input-defined-products-' + defined_section_row + '" data-id="' + defined_section_row + '" class="form-control" autocomplete="off">';
+                html += '       <div id="defined-product-' + defined_section_row + '" class="well well-sm" style="height: 150px; overflow: auto;"></div>';
+                html += '   </div>';
+                html += '</div>';
+
+                $(this).parent().parent().before(html);
+
+                $('input[name=\'defined_products_' + defined_section_row + '\']').autocomplete({
+                    'source': function(request, response) {
+                        $.ajax({
+                            url: 'index.php?route=catalog/product/autocomplete&user_token={{ user_token }}&filter_name=' +  encodeURIComponent(request),
+                            dataType: 'json',
+                            data: {
+                                user_token: '{{ user_token }}',
+                                filter_name: encodeURIComponent(request)
+                            },
+                            type: 'post',
+                            success: function(json) {
+                                response($.map(json, function(item) {
+                                    return {
+                                        label: item['name'],
+                                        value: item['product_id']
+                                    }
+                                }));
+                            }
+                        });
+                    },
+                    'select': function(item) {
+                        $(this).val('');
+
+                        var id = $(this).attr('data-id');
+
+                        $('#defined-product-entry-' + id + '-' + item['value']).remove();
+                        $('#defined-product-' + id).append('<div id="defined-product-entry-' + id + '-' + item['value'] + '"><i class="fa fa-minus-circle"></i> ' + item['label'] + '<input type="hidden" name="defined_product_more[' + id + '][products][]" value="' + item['value'] + '" /></div>');
+
+                        getTemplate();
+                    }
+                });
+
+                defined_section_row++;
+            });
+
+        });
+
+
+        function getDefinedText() {
+            $.ajax({
+                type: 'post',
+                url: 'index.php?route=ne/newsletter/get_defined_text&user_token={{ user_token }}',
+                data: {
+                    template_id: $('select[name=template_id]').val(),
+                    language_id: $('select[name=language_id]').val()
+                },
+                dataType: 'json',
+                success: function(json) {
+                    $('input[name=defined_product_text]').val(json.text);
+                }
+            });
+        }
+
+        function getTemplate(clear) {
+            var defined_products = [];
+
+            if ($('input[name=defined]:checked').val() == 1) {
+                $('#defined-product input').each(function(id) {
+                    var item = $('#defined-product input').get(id);
+                    defined_products.push(item.value);
+                });
+            }
+
+            var defined_products_more = [];
+
+            if ($('input[name=defined]:checked').val() == 1) {
+                for (var i = 0; i < defined_section_row; i++) {
+                    defined_products_more[i] = {
+                        'text' : $('input[name="defined_product_more[' + i + '][text]"]').val(),
+                        'products' : []
+                    };
+                    $('#defined-product-' + i + ' input').each(function(id) {
+                        var item = $('#defined-product-' + i + ' input').get(id);
+                        defined_products_more[i]['products'].push(item.value);
+                    });
+                }
+            }
+
+            var defined_categories = [];
+
+            if ($('input[name=defined_categories]:checked').val() == 1) {
+                $('input[name="defined_category[]"]:checked').each(function(){
+                    defined_categories.push($(this).val());
+                });
+            }
+
+            var skip_out_of_stock = [];
+
+            if ($('input[name="skip_out_of_stock[special]"]').is(':checked')) {
+                skip_out_of_stock['special'] = 1;
+            } else {
+                skip_out_of_stock['special'] = 0;
+            }
+
+            if ($('input[name="skip_out_of_stock[latest]"]').is(':checked')) {
+                skip_out_of_stock['latest'] = 1;
+            } else {
+                skip_out_of_stock['latest'] = 0;
+            }
+
+            if ($('input[name="skip_out_of_stock[popular]"]').is(':checked')) {
+                skip_out_of_stock['popular'] = 1;
+            } else {
+                skip_out_of_stock['popular'] = 0;
+            }
+
+            var message;
+
+            for (var instance in CKEDITOR.instances) {
+                message = CKEDITOR.instances[instance].getData();
+            }
+
+            $.ajax({
+                type: 'post',
+                url: 'index.php?route=ne/newsletter/template&user_token={{ user_token }}',
+                data: {
+                    special: $('input[name=special]:checked').val(),
+                    latest: $('input[name=latest]:checked').val(),
+                    popular: $('input[name=popular]:checked').val(),
+                    defined: defined_products,
+                    defined_text: $('input[name=defined_product_text]').val(),
+                    defined_more: defined_products_more,
+                    defined_categories: defined_categories,
+                    defined_category_limit: $('input[name=defined_category_limit]').val(),
+                    defined_category_order: $('select[name=defined_category_order]').val(),
+                    defined_category_sort: $('select[name=defined_category_sort]').val(),
+                    skip_out_of_stock: $.extend({
+
+                    }, skip_out_of_stock),
+                    to: $('select[name=to]').val(),
+                    template_id: $('select[name=template_id]').val(),
+                    language_id: $('select[name=language_id]').val(),
+                    currency: $('select[name=currency]').val(),
+                    customer_group_id: ($('select[name=customer_group_id]').length ? $('select[name=customer_group_id]').val() : ''),
+                    store_id: $('select[name=store_id]').val(),
+                    attachments_id: $('input[name=attachments_id]').val(),
+                    message: message,
+                    subject: $('input[name=subject]').val(),
+                    text_message: $('textarea[name=text_message]').val(),
+                    clear: clear
+                },
+                dataType: 'json',
+                success: function(json) {
+                    $('input[name=subject]').val(json.subject);
+                    $('textarea[name=text_message]').val(json.text_message);
+                    for (instance in CKEDITOR.instances) {
+                        CKEDITOR.instances[instance].setData(json.body);
+                    }
+                }
+            });
+        }
+
+        function removeSection(el) {
+            $(el).closest('.defined-product').next().remove();
+            $(el).closest('.defined-product').remove();
+
+            defined_section_row--;
+
+            getTemplate();
+        }
+
+        function addFile(el) {
+            var html;
+            html  = '<div id="attachment_' + attachment_row + '" style="margin-bottom: 10px;">';
+            html += '   <i class="fa fa-minus-circle pull-left"></i>';
+            html += '   <input type="file" name="attachment_' + attachment_row + '" value="" style="display:inline-block;" />';
+            html += '</div>';
+
+            $(el).before(html);
+
+            attachment_row++;
+
+            $('input[name=attachments_count]').val(attachment_row);
+        }
+
+        function send(url) {
+            var message;
+
+            for (var instance in CKEDITOR.instances) {
+                message = CKEDITOR.instances[instance].getData();
+            }
+
+            $('textarea[name=\'message\']').html(message);
+
+            $.ajax({
+                url: url,
+                type: 'post',
+                data: $("#form").serialize(),
+                dataType: 'json',
+                beforeSend: function() {
+                    $('#button-send').attr('disabled', true).find('i').removeClass('fa-envelope-o').addClass('fa-refresh fa-spin');
+                },
+                complete: function() {
+                    $('#button-send').attr('disabled', false).find('i').removeClass('fa-refresh fa-spin').addClass('fa-envelope-o');
+                },
+                success: function(json) {
+                    $('#content > .container-fluid > .alert').remove();
+                    $('.has-error .text-danger').remove();
+                    $('.has-error').removeClass('has-error');
+
+                    if (json['error']) {
+                        if (json['error']['warning']) {
+                            $('#content > .container-fluid').prepend('<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> ' + json['error']['warning'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                        }
+                        if (json['error']['subject']) {
+                            $('input[name=\'subject\']').closest('.form-group').addClass('has-error');
+                            $('input[name=\'subject\']').after('<div class="text-danger">' + json['error']['subject'] + '</div>');
+                        }
+                        if (json['error']['message']) {
+                            $('textarea[name=\'message\']').closest('.form-group').addClass('has-error');
+                            $('textarea[name=\'message\']').parent().append('<div class="text-danger">' + json['error']['message'] + '</div>');
+                        }
+                    }
+
+                    if (json['next']) {
+                        if (json['newsletter_id']) {
+                            $('input[name=\'newsletter_id\']').val(json['newsletter_id']);
+                        }
+                        if (json['sent_count']) {
+                            $('input[name=\'sent_count\']').val(json['sent_count']);
+                        }
+                        if (json['success']) {
+                            $('#content > .container-fluid').prepend('<div class="alert alert-success"><i class="fa fa-check-circle"></i> ' + json['success'] + '</div>');
+                            send(json['next']);
+                        }
+                    } else {
+                        if (json['success']) {
+                            $('#content > .container-fluid').prepend('<div class="alert alert-success"><i class="fa fa-check-circle"></i> ' + json['success'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                        }
+
+                        $('input[name=\'sent_count\']').val('');
+                        $('input[name=\'newsletter_id\']').val('');
+                        $('input[name=\'spam_check\']').val('');
+                    }
+                }
+            });
+
+            $('input[name=spam_check]').val('0');
+        }
+        </script>
+</div>{{ footer }}

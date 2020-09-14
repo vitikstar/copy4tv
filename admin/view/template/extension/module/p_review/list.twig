@@ -1,0 +1,206 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right"><a href="{{ add }}" data-toggle="tooltip" title="{{ button_add }}" class="btn btn-primary"><i class="fa fa-plus"></i></a>
+        <button type="button" data-toggle="tooltip" title="{{ button_delete }}" class="btn btn-danger" onclick="confirm('{{ text_confirm }}') ? $('#form-p-review').submit() : false;"><i class="fa fa-trash-o"></i></button>
+      </div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb['href'] }}">{{ breadcrumb['text'] }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if error_warning %}
+    <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    {% if success %}
+    <div class="alert alert-success"><i class="fa fa-check-circle"></i> {{ success }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-list"></i> {{ text_list }}</h3>
+      </div>
+      <div class="panel-body">
+        <form action="{{ delete }}" method="post" enctype="multipart/form-data" id="form-p-review">
+          <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+			  <thead>
+                <tr>
+				  <td width="1" class="text-center"><input type="checkbox" onclick="$('input[name*=\'selected\']').attr('checked', this.checked);" /></td>
+				  <td class="text-left">{% if sort == 'pd.name' %}
+                    <a href="{{ sort_product }}" class="{{ order|lower }}">{{ column_product }}</a>
+                    {% else %}
+                    <a href="{{ sort_product }}">{{ column_product }}</a>
+                    {% endif %}</td>	
+				  {% if field_title %}
+				  <td class="text-left">{% if sort == 'tp.title' %}
+                    <a href="{{ sort_title }}" class="{{ order|lower }}">{{ column_title }}</a>
+                    {% else %}
+                    <a href="{{ sort_title }}">{{ column_title }}</a>
+                    {% endif %}</td>		
+				  {% endif %}
+				  {% if field_city %}
+				  <td class="text-left">{% if sort == 'tp.city' %}
+                    <a href="{{ sort_city }}" class="{{ order|lower }}">{{ column_city }}</a>
+                    {% else %}
+                    <a href="{{ sort_city }}">{{ column_city }}</a>
+                    {% endif %}</td>		
+				  {% endif %}
+				  {% if field_name %}
+				  <td class="text-left">{% if sort == 'tp.name' %}
+                    <a href="{{ sort_name }}" class="{{ order|lower }}">{{ column_name }}</a>
+                    {% else %}
+                    <a href="{{ sort_name }}">{{ column_name }}</a>
+                    {% endif %}</td>
+				  {% endif %}
+				  {% if field_email %}
+				  <td class="text-left">{% if sort == 'tp.email' %}
+                    <a href="{{ sort_email }}" class="{{ order|lower }}">{{ column_email }}</a>
+                    {% else %}
+                    <a href="{{ sort_email }}">{{ column_email }}</a>
+                    {% endif %}</td>
+				  {% endif %}
+				  {% if field_text %}
+				  <td class="text-left">{% if sort == 'tp.text' %}
+                    <a href="{{ sort_text }}" class="{{ order|lower }}">{{ column_text }}</a>
+                    {% else %}
+                    <a href="{{ sort_text }}">{{ column_text }}</a>
+                    {% endif %}</td>
+				  {% endif %}
+				  {% if field_good %}
+				  <td class="text-left">{% if sort == 'tp.good' %}
+                    <a href="{{ sort_good }}" class="{{ order|lower }}">{{ column_good }}</a>
+                    {% else %}
+                    <a href="{{ sort_good }}">{{ column_good }}</a>
+                    {% endif %}</td>
+				  {% endif %}
+				  {% if field_bad %}
+				  <td class="text-left">{% if sort == 'tp.bad' %}
+                    <a href="{{ sort_bad }}" class="{{ order|lower }}">{{ column_bad }}</a>
+                    {% else %}
+                    <a href="{{ sort_bad }}">{{ column_bad }}</a>
+                    {% endif %}</td>
+				  {% endif %}
+				  {% if field_rating %}
+				  <td class="text-left">{% if sort == 'tp.rating' %}
+                    <a href="{{ sort_rating }}" class="{{ order|lower }}">{{ column_rating }}</a>
+                    {% else %}
+                    <a href="{{ sort_rating }}">{{ column_rating }}</a>
+                    {% endif %}</td>
+				  {% endif %}
+				  {% if field_avatar %}
+				  <td class="text-center">{{ column_avatar }}</td>
+				  {% endif %}
+				  {% if field_image %}
+				  <td class="text-center">{{ column_image }}</td>
+				  {% endif %}
+				  <td class="text-left">{% if sort == 'tp.language_id' %}
+                    <a href="{{ sort_language_id }}" class="{{ order|lower }}">{{ column_language }}</a>
+                    {% else %}
+                    <a href="{{ sort_language_id }}">{{ column_language }}</a>
+                    {% endif %}</td>
+                  <td class="text-left">{% if sort == 'tp.date_added' %}
+                    <a href="{{ sort_date_added }}" class="{{ order|lower }}">{{ column_date_added }}</a>
+                    {% else %}
+                    <a href="{{ sort_date_added }}">{{ column_date_added }}</a>
+                    {% endif %}</td>
+                  <td class="text-left">{% if sort == 'tp.status' %}
+                    <a href="{{ sort_status }}" class="{{ order|lower }}">{{ column_status }}</a>
+                    {% else %}
+                    <a href="{{ sort_status }}">{{ column_status }}</a>
+                    {% endif %}</td>
+                  <td class="text-right">{{ column_action }}</td>
+                </tr>
+              </thead>
+              <tbody>
+                {% if p_reviews %}
+                {% for p_review in p_reviews %}
+                <tr>
+                  <td class="text-center">
+				  {% if p_review.p_review_id in selected %}
+                    <input type="checkbox" name="selected[]" value="{{ p_review['p_review_id'] }}" checked="checked" />
+                    {% else %}
+                    <input type="checkbox" name="selected[]" value="{{ p_review['p_review_id'] }}" />
+                  {% endif %}
+				  </td>
+				  <td class="text-left">{{ p_review['product'] }}</td>
+				  {% if field_title %}
+				  <td class="text-left">{{ p_review['title'] }}</td>
+				  {% endif %}
+				  {% if field_city %}
+				  <td class="text-left">{{ p_review['city'] }}</td>
+				  {% endif %}
+				  {% if field_name %}
+				  <td class="text-left">{{ p_review['name'] }}</td>
+				  {% endif %}
+				  {% if field_email %}
+				  <td class="text-left">{{ p_review['email'] }}</td>
+				  {% endif %}
+				  {% if field_text %}
+				  <td class="text-left">{{ p_review['text'] }}</td>
+				  {% endif %}
+				  {% if field_good %}
+				  <td class="text-left">{{ p_review['good'] }}</td>
+				  {% endif %}
+				  {% if field_bad %}
+				  <td class="text-left">{{ p_review['bad'] }}</td>
+				  {% endif %}
+				  {% if field_rating %}
+				  <td class="text-center">{{ p_review['rating'] }}</td>
+				  {% endif %}
+				  {% if field_avatar %}
+				  <td class="text-center"><img src="{{ p_review['avatar'] }}" class="img-thumbnail"></td>
+				  {% endif %}
+				  {% if field_image %}
+				  <td class="text-center">
+				    {% if p_review['image'] %}
+			        {% for value in p_review.image %}
+			        <img src="{{ value }}" alt="" class="img-thumbnail">
+			        {% endfor %}
+			        {% endif %}
+				  </td>
+				  {% endif %}
+				  <td class="text-left">
+				  {% for language in languages %}
+                  {% if language['language_id'] == p_review['language_id'] %}{{ language['name'] }}
+                  {% endif %}
+                  {% endfor %}
+				  </td>
+				  <td class="text-left">{{ p_review['date_added'] }}</td>
+				  <td class="text-center">
+				    {% if p_review['status'] %}
+				    <span data-toggle="tooltip" title="{{ text_enabled }}" class="fa-2 fa fa-toggle-on text-success"></span>
+				    {% else %}
+				    <span data-toggle="tooltip" title="{{ text_disabled }}" class="fa-2 fa fa-toggle-off text-danger"></span>
+				    {% endif %}
+				  </td>
+				  <td class="text-right"><a href="{{ p_review['edit'] }}" data-toggle="tooltip" title="{{ button_edit }}" class="btn btn-primary"><i class="fa fa-pencil"></i></a></td>
+                </tr>
+                {% endfor %}
+                {% endif %}
+              </tbody>
+            </table>
+	      </div>
+		</form>
+		{% if not p_reviews %}
+		<div class="row">
+          <div class="text-center">{{ text_no_results }}</div>
+        </div>
+		{% endif %}
+		<div class="row">
+          <div class="col-sm-6 text-left">{{ pagination }}</div>
+          <div class="col-sm-6 text-right">{{ results }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{{ footer }}

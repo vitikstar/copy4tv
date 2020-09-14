@@ -1,0 +1,835 @@
+{{ header }}
+<div id="account-account" class="container">
+	<div class="breadcrumb-product-wrap">
+		{{ column_megamenu }}
+		<ul class="breadcrumb">
+			{% set total = breadcrumbs|length %}
+			{% set counter = 0 %}
+			{% for breadcrumb in breadcrumbs %}
+				{{ breadcrumb['separator'] }}
+				{% set counter = counter + 1 %}
+				{% if (counter == total) %}
+					<li>{{ breadcrumb['text'] }}</li>
+				{% else %}
+					<li>
+						<a href="{{ breadcrumb['href'] }}">{{ breadcrumb['text'] }}</a>
+					</li>
+				{% endif %}
+			{% endfor %}
+		</ul>
+	</div>
+	{% if success %}
+		<div class="alert alert-success alert-dismissible">
+			<i class="fa fa-check-circle"></i>
+			{{ success }}</div>
+	{% endif %}
+	<div class="ac-row row">
+
+		<div class="ac-col-left">
+			{{ column_left }}
+		</div>
+
+
+		{% if column_left and column_right %}
+			{% set class = 'col-sm-6' %}
+		{% elseif column_left or column_right %}
+			{% set class = 'col-sm-9' %}
+		{% else %}
+			{% set class = 'col-sm-12' %}
+		{% endif %}
+
+
+		<div id="content" class="{{ class }}">{{ content_top }}
+
+
+			<div class="ac-personal-data">
+				<div class="ac-personal-title">{{ text_persodal_data }}</div>
+
+				<div
+					class="ac-personal-data-1-wrapper">
+					{##################### Личные данные #}
+					<div class="ac-personal-data-1 ac-personal-data-1-main active">
+						<div class="ac-personal-data-left">
+							<div class="ac-personal-img-wrap">
+								<div class="ac-personal-img image-preview" style="position: relative">
+									{% if img_avatar %}
+										<img src="{{ img_avatar }}" alt="" id="preview" class="img-responsive">
+									{% else %}
+										<div class="ac-personal-img-icon">
+											<span>СК</span>
+										</div>
+									{% endif %}
+									<!-- <div class="loading-avatar"></div>-->
+								</div>
+								<div class="ac-personal-edit-img-wrap">
+									<form class="upload-image" enctype="multipart/form-data" style="display: none">
+										<div class="form-group">
+											<input type="file" name="avatar" class="image-change" accept="image/*">
+										</div>
+										<input type="submit" class="btn btn-default">
+									</form>
+									<div id="result"></div>
+									<span class="ac-personal-edit-img">{{ text_download_foto }}</span>
+								</div>
+							</div>
+						</div>
+						<div class="ac-personal-data-right-1">
+							<div class="ac-personal-data-right-1-block">
+								<div class="ac-personal-data-right-1-title">{{ text_firstname_lastname }}</div>
+								<div class="ac-personal-data-right-1-text">{{ firstname_login }}
+									{{ lastname_login }}</div>
+							</div>
+							<div class="ac-personal-data-right-1-block">
+								<div class="ac-personal-data-right-1-title">{{ text_address }}</div>
+								<div class="ac-personal-data-right-1-text">
+									{% if customer_address_full %}
+										{{ customer_address_full }}
+									{% else %}
+										<p style="font-size: 13px; color: red">{{ text_fill_in_please }}</p>
+									{% endif %}
+								</div>
+							</div>
+							<div class="ac-personal-data-right-1-block">
+								<div class="ac-personal-data-right-1-title">{{ text_email }}</div>
+								<div class="ac-personal-data-right-1-text">{{ email_login }}</div>
+							</div>
+							<div class="ac-personal-data-right-1-block">
+								<div class="ac-personal-data-right-1-title">{{ text_telephone }}</div>
+								<div class="ac-personal-data-right-1-text">
+									{% if telephone_login %}
+									{% for telephone in telephone_login %}
+										{{ telephone }}
+										<br>
+									{% endfor %}
+									{% else %}
+										<p style="font-size: 13px; color: red">{{ text_fill_in_please }}</p>
+									{% endif %}
+								</div>
+							</div>
+						</div>
+						<div class="ac-personal-data-right-2">
+							<div class="ac-btn-edit-wrap">
+								<span class="ac-btn-edit" onclick="ac_personal_data_1('.ac-personal-data-1-edit');">{{ text_edit_data }}</span>
+							</div>
+							<div class="ac-block-btn-wrap">
+								<input type="button" value="{{ text_password_change }}" class="btn btn-default ac-btn-default" onclick="ac_personal_data_1('.ac-personal-data-1-change-password')">
+								{% if curent_password_sheck %}
+									<p style="font-size: 13px; color: red">{{ text_password_empty }}</p>
+								{% endif %}
+							</div>
+							{#              <div class="ac-btn-exit-wrap">#}
+						{#                <span class="ac-btn-exit" onclick="logout()">{{ text_loqout }}</span>#}
+							{#              </div>#}
+						</div>
+					</div>
+					{##################### end Личные данные #}
+
+
+					{##################### Редактировать Личные данные #}
+					<div class="ac-personal-data-1 ac-personal-data-1-edit">
+						<div class="ac-personal-data-left">
+							<div class="ac-personal-img-wrap">
+								<div class="ac-personal-img image-preview" style="position: relative">
+									{% if img_avatar %}
+										<img src="{{ img_avatar }}" alt="" id="preview" class="img-responsive">
+									{% else %}
+										<div class="ac-personal-img-icon">
+											<span>СК</span>
+										</div>
+									{% endif %}
+									<div class="loading-avatar"></div>
+								</div>
+								<div class="ac-personal-edit-img-wrap">
+									<form class="upload-image" enctype="multipart/form-data" style="display: none">
+										<div class="form-group">
+											<input type="file" name="avatar" class="image-change" accept="image/*">
+										</div>
+										<input type="submit" class="btn btn-default">
+									</form>
+									<div id="result"></div>
+									<span class="ac-personal-edit-img">{{ text_download_foto }}</span>
+								</div>
+								<div class="ac-personal-delete-img-wrap">
+									<span class="ac-personal-delete-img">{{ text_delete }}</span>
+								</div>
+							</div>
+						</div>
+						<div class="ac-personal-data-right">
+
+							<div class="ac-personal-data-right-title">{{ text_edit_data_title }}</div>
+							<div class="row ch-block">
+								<div class="col-xs-12 col-sm-3">
+									<div class="form-group">
+										<label>{{ text_firstname }}</label>
+										<input type="text" name="firstname_login" value="{{ firstname_login }}" class="form-control" placeholder="">
+									</div>
+								</div>
+								<div class="col-xs-12 col-sm-3">
+									<div class="form-group">
+										<label>{{ text_lastname }}</label>
+										<input type="text" name="lastname_login" value="{{ lastname_login }}" class="form-control" placeholder="">
+									</div>
+								</div>
+								<div class="col-sm-3 col-xs-12">
+									<div class="form-group">
+										<label>{{ text_region }}</label>
+										<select class="form-control" name="region_login" id="inputRegionLogin">
+											<option>{{ form_option_select }}</option>
+											{% for key, name_item in regions %}
+												<option value="{{ key }}" {% if(customer_country_name['country_id']==key) %} selected {% endif %} region="{{ region }}">{{name_item}}</option>
+											{% endfor %}
+										</select>
+									</div>
+								</div>
+								<div class="col-sm-3 col-xs-12">
+									<div class="form-group">
+										<label>{{ text_zone }}</label>
+										<select class="form-control" name="zone_login" id="inputCityLogin">
+											{% for key, name_item in zones %}
+												<option value="{{ key }}" {% if(customer_zone_name['zone_id']==key) %} selected {% endif %}>{{name_item}}</option>
+											{% endfor %}
+										</select>
+									</div>
+								</div>
+								<input type="hidden" name="address_id_login" value="{{ customer_zone_name['address_id'] }}">
+								<div class="col-sm-3 col-xs-12">
+									<div class="form-group">
+										<label>{{ text_city }}</label>
+										<input type="text" name="city_login" class="form-control" placeholder="" value="{{ customer_city_name }}">
+									</div>
+								</div>
+								<div class="col-sm-9 col-xs-12">
+									<div class="form-group">
+										<label>{{ text_address }}</label>
+										<input type="text" name="address_login" class="form-control" placeholder="" value="{{ customer_address_name }}">
+									</div>
+								</div>
+								<div class="col-xs-12 col-sm-5">
+									<div class="form-group">
+										<label>{{ text_telephone_edit }}</label>
+										<input type="tel" name="telephone_login" class="form-control" placeholder="+38 (ХХХ) ХХХ - ХХ - ХХ" value="{{ telephone_login_value }}">
+										<div class="ch-input-description" style="display:none">{{ text_send_code }}</div>
+									</div>
+								</div>
+								<div class="col-xs-12 col-sm-7">
+									<div class="form-group">
+										<label>{{ text_email_edit }}</label>
+										<input type="email" name="email_login" class="form-control" placeholder="" value="{{ email_login }}">
+									</div>
+								</div>
+							</div>
+							<div class="row ch-block ac-personal-edit-code" style="display:none">
+								<div class="ac-personal-edit-code-line"></div>
+								<div class="col-xs-12 col-sm-5">
+									<div class="form-group">
+										<label>{{ text_verification_code }}</label>
+										<input type="text" name="" class="form-control" placeholder="" value="">
+									</div>
+								</div>
+								<div class="col-xs-12 col-sm-7">
+									<div class="form-group">
+										<label></label>
+										<div class="ac-personal-edit-code-detail">{{ text_verification_code_no_send }}</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="ac-block-btn-wrap">
+								<input type="button" value="{{ text_save_data }}" class="btn btn-default ac-btn-default" id="saveButtonDataUser">
+								<div class="ac-btn-cancel-wrap">
+									<span class="ac-btn-cancel" onclick="ac_personal_data_1('.ac-personal-data-1-main');">{{ text_cancel }}</span>
+								</div>
+							</div>
+
+						</div>
+					</div>
+					{##################### end Редактировать Личные данные #}
+
+
+					{##################### Изменить пароль #}
+					<div class="ac-personal-data-1 ac-personal-data-1-change-password">
+						<div class="ac-personal-data-left">
+							<div class="ac-personal-img-wrap">
+								<div class="ac-personal-img image-preview" style="position: relative">
+									{% if img_avatar %}
+										<img src="{{ img_avatar }}" alt="" id="preview" class="img-responsive">
+									{% else %}
+										<div class="ac-personal-img-icon">
+											<span>СК</span>
+										</div>
+									{% endif %}
+									<div class="loading-avatar"></div>
+								</div>
+								<div class="ac-personal-edit-img-wrap">
+									<form class="upload-image" enctype="multipart/form-data" style="display: none">
+										<div class="form-group">
+											<input type="file" name="avatar" id="image" accept="image/*">
+										</div>
+										<input type="submit" class="btn btn-default">
+									</form>
+									<div id="result"></div>
+									<span class="ac-personal-edit-img">{{ text_download_foto }}</span>
+								</div>
+								<div class="ac-personal-delete-img-wrap">
+									<span class="ac-personal-delete-img">{{ text_delete }}</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="ac-personal-data-right-1">
+							<div class="ac-personal-data-right-1-block">
+								<div class="ac-personal-data-right-1-title">{{ text_firstname_lastname }}</div>
+								<div class="ac-personal-data-right-1-text">{{ firstname_login }}
+									{{ lastname_login }}</div>
+							</div>
+							<div class="ac-personal-data-right-1-block">
+								<div class="ac-personal-data-right-1-title">{{ text_address }}</div>
+								<div class="ac-personal-data-right-1-text">
+									{% if customer_address_full %}
+										{{ customer_address_full }}
+									{% else %}
+										<p style="font-size: 13px; color: red">{{ text_fill_in_please }}</p>
+									{% endif %}
+								</div>
+							</div>
+							<div class="ac-personal-data-right-1-block">
+								<div class="ac-personal-data-right-1-title">{{ text_email }}</div>
+								<div class="ac-personal-data-right-1-text">{{ email_login }}</div>
+							</div>
+							<div class="ac-personal-data-right-1-block">
+								<div class="ac-personal-data-right-1-title">{{ text_telephone }}</div>
+								<div class="ac-personal-data-right-1-text">
+									{% if telephone_login %}
+											{% for telephone in telephone_login %}
+												{{ telephone }}
+												<br>
+											{% endfor %}
+									{% else %}
+											<p style="font-size: 13px; color: red">{{ text_fill_in_please }}</p>
+									{% endif %}
+								</div>
+							</div>
+						</div>
+
+						<div class="ac-personal-data-right-2">
+							<div class="ac-personal-data-right-title">{{ text_change_password }}</div>
+							<div class="row ch-block">
+								<div class="col-xs-12 col-sm-12">
+
+									{% if not curent_password_sheck %}
+										<div class="ac-password-wrap active">
+											<div class="form-group">
+												<label for="input-password">{{ text_password_label }}</label>
+												<input type="password" name="curent_password" class="form-control input-password-icon">
+											</div>
+											<div class="regular-customer-remember-forgot">
+												<div class="regular-customer-forgot">
+													<a href="javascript:void(0)" onclick="ac_personal_data_1_change_password('.ac-password-wrap', '.ac-password-forgot-wrap')">{{ text_forgot_password }}</a>
+												</div>
+											</div>
+										</div>
+									{% endif %}
+
+									<div class="ac-password-forgot-wrap">
+										<div class="form-group">
+											<label for="input-password">{{ text_verification_code }}</label>
+											<div id="confirmation_code_div"></div>
+											<div class="ch-input-description">{{ text_verification_code_no_send }}</div>
+										</div>
+									</div>
+
+
+									<div class="form-group">
+										<label for="input-password">{{ text_new_password_label }}</label>
+										<input type="password" name="new_password" value="" placeholder="" id="" class="form-control">
+									</div>
+
+									<div class="form-group">
+										<label for="input-password">{{ text_new_password_repeat_label }}</label>
+										<input type="password" name="repeat_new_password" value="" placeholder="" id="" class="form-control">
+									</div>
+								</div>
+							</div>
+
+							<div class="ac-block-btn-wrap">
+								<input type="button" value="{{ text_save }}" class="btn btn-default ac-btn-default" id="change_password">
+								<div class="ac-btn-cancel-wrap">
+									<span class="ac-btn-cancel" onclick="ac_personal_data_1('.ac-personal-data-1-main');">{{ text_cancel }}</span>
+								</div>
+							</div>
+
+						</div>
+
+					</div>
+					{##################### end Изменить пароль #}
+				</div>
+				<div class="ac-personal-data-2">
+					<div class="ac-personal-data-left">
+						<div class="ac-personal-data-left-title">{{ text_delivery_address }}</div>
+					</div>
+
+					<div class="ac-personal-data-2-items-wrap">
+						<div class="ac-personal-data-2-items">
+							{% if(address_delivery) %}
+								{% for row in address_delivery %}
+									<div id="ch-block-personal-data_{{ row['customer_address_delivery_id'] }}" class="ac-personal-data-2-item">
+
+										<div class="ac-personal-data-2-item-inner active">
+											<div class="ac-personal-data-right-1">
+												{% if row['shape_delivery_id']==1 %}
+													<div class="ac-personal-data-right-1-block">
+														<div class="ac-personal-data-right-1-title">{{ text_delivery_service }}</div>
+														<div class="ac-personal-data-right-1-text">{{ row['service_delivery_name'] }}</div>
+													</div>
+													<div class="ac-personal-data-right-1-block">
+														<div class="ac-personal-data-right-1-title">{{ row['text_delivery_branch'] }}</div>
+														<div class="ac-personal-data-right-1-text">{{ row['address'] }}</div>
+													</div>
+												{% else %}
+													<div class="ac-personal-data-right-1-block">
+														<div class="ac-personal-data-right-1-title">{{ text_delivery_pickup_store }}</div>
+														<div class="ac-personal-data-right-1-text">{{ row['address_shop_name'] }}</div>
+													</div>
+												{% endif %}
+												<div class="ac-personal-address-wrap">
+													{% if(row['default_address']) %}
+														<span class="ac-personal-address ac-personal-address-default" data-default-address="{{ row['customer_address_delivery_id'] }}">{{ text_personal_address_default }}</span>
+													{% else %}
+														<span class="ac-personal-address ac-personal-address-set" data-default-address="{{ row['customer_address_delivery_id'] }}">{{ text_personal_address_set }}</span>
+													{% endif %}
+												</div>
+
+											</div>
+											<div class="ac-personal-data-right-2">
+												<div class="ac-btn-edit-wrap">
+													<span class="ac-btn-edit btn-update-address-delivery" customer_address_delivery_id="{{ row['customer_address_delivery_id'] }}" shape_delivery_id="{{ row['shape_delivery_id'] }}">{{ text_edit_label }}</span>
+												</div>
+												<div class="ac-btn-exit-wrap">
+													<span class="ac-btn-exit delete-delivery-adrress" data-delete="{{ row['customer_address_delivery_id'] }}">{{ text_delete }}</span>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div id="ch-block-append-template_{{ row['customer_address_delivery_id'] }}" class="ch-block-append-template"></div>
+								{% endfor %}
+							{% endif %}
+						</div>
+						<div class="ac-personal-address-add-wrap">
+							<span class="ac-personal-address-add btn btn-default ac-btn-default" type-data="insert">{{ text_add_delivery_address }}</span>
+						</div>
+					</div>
+				</div>
+
+
+				<div class="ac-personal-data-3">
+					<div class="ac-personal-data-left">
+						<div class="ac-personal-data-left-title">{{ text_account_soclist }}</div>
+					</div>
+					<div class="ac-personal-data-right">
+						<div class="ac-personal-data-3-soc-items">
+							<a class='socnetauth2_buttons' data-href='{{ relation_fb['link'] }}' data-view='checkout' style="margin-right: 20px;">
+								<div class="ac-personal-data-3-soc-item">
+									<div class="ac-personal-data-3-soc-item-img">
+										<img src="{{ img_fb_avatar }}" alt="" class="img-responsive">
+									</div>
+									<div class="ac-personal-data-3-soc-item-text">
+										<div class="ac-personal-data-3-soc-item-title">{{ relation_fb['name'] }}</div>
+										<div class="ac-personal-data-3-soc-item-text-1">{{ relation_fb['text'] }}</div>
+									</div>
+								</div>
+							</a>
+							<a class='socnetauth2_buttons' data-href='{{ relation_gmail['link'] }}' data-view='checkout'>
+								<div class="ac-personal-data-3-soc-item">
+									<div class="ac-personal-data-3-soc-item-img">
+										<img src="/image/catalog/4tv/ac-soc-2.png" alt="" class="img-responsive">
+									</div>
+									<div class="ac-personal-data-3-soc-item-text">
+										<div class="ac-personal-data-3-soc-item-title ac-personal-data-3-soc-item-title-blue">{{ relation_gmail['text'] }}</div>
+										<div class="ac-personal-data-3-soc-item-text-1">google</div>
+									</div>
+								</div>
+							</a>
+						</div>
+					</div>
+				</div>
+
+
+			</div>
+
+			<script>
+				function ac_personal_data_1(active_class) {
+$('.ac-personal-data-1').removeClass('active');
+$(active_class).addClass('active')
+}
+function ac_personal_data_1_change_password(remove_class, add_class) {
+$("#confirmation_code_div").html('<input type="text" name="confirmation_code" class="form-control">');
+$(remove_class).removeClass('active');
+$(add_class).addClass('active');
+
+}
+			</script>
+
+
+			{#      <h2>{{ text_my_account }}</h2>#}
+			{#      <ul class="list-unstyled">#}
+			{#        <li><a href="{{ edit }}">{{ text_edit }}</a></li>#}
+			{#        <li><a href="{{ password }}">{{ text_password }}</a></li>#}
+			{#        <li><a href="{{ address }}">{{ text_address }}</a></li>#}
+			{#        <li><a href="{{ wishlist }}">{{ text_account_wishlist }}</a></li>#}
+			{#      </ul>#}
+			{#      {% if credit_cards %}#}
+			{#      <h2>{{ text_credit_card }}</h2>#}
+			{#      <ul class="list-unstyled">#}
+			{#        {% for credit_card in credit_cards %}#}
+			{#        <li><a href="{{ credit_card.href }}">{{ credit_card.name }}</a></li>#}
+			{#        {% endfor %}#}
+			{#      </ul>#}
+			{#      {% endif %}#}
+			{#      <h2>{{ text_my_orders }}</h2>#}
+			{#      <ul class="list-unstyled">#}
+			{#        <li><a href="{{ order }}">{{ text_order }}</a></li>#}
+			{#        <li><a href="{{ download }}">{{ text_download }}</a></li>#}
+			{#        {% if reward %}#}
+			{#        <li><a href="{{ reward }}">{{ text_reward }}</a></li>#}
+			{#        {% endif %}#}
+			{#        <li><a href="{{ return }}">{{ text_return }}</a></li>#}
+			{#        <li><a href="{{ transaction }}">{{ text_transaction }}</a></li>#}
+			{#        <li><a href="{{ recurring }}">{{ text_recurring }}</a></li>#}
+			{#      </ul>#}
+			{#      <h2>{{ text_my_affiliate }}</h2>#}
+			{#      <ul class="list-unstyled">#}
+			{#        {% if not tracking %}#}
+			{#        <li><a href="{{ affiliate }}">{{ text_affiliate_add }}</a></li>#}
+			{#        {% else %}#}
+			{#        <li><a href="{{ affiliate }}">{{ text_affiliate_edit }}</a></li>#}
+			{#        <li><a href="{{ tracking }}">{{ text_tracking }}</a></li>#}
+			{#        {% endif %}#}
+			{#      </ul>#}
+			{#      <h2>{{ text_my_newsletter }}</h2>#}
+			{#      <ul class="list-unstyled">#}
+			{#        <li><a href="{{ newsletter }}">{{ text_newsletter }}</a></li>#}
+			{#      </ul>#}
+			{#      {{ content_bottom }}</div>#}
+
+			{#    <div class="ac-col-right">#}
+			{#      <div class="ac-banner">#}
+			{#        {{ column_right }}#}
+			{#      </div>#}
+			{#    </div>#}
+			{#    </div>#}
+			{#</div>#}
+				<script>
+$('#inputRegionLogin').on('change', function () {
+$('#inputCityLogin').html('<option>Loading....</option>');
+$('#inputCityLogin').attr('disabled', 'disabled');
+$.ajax({
+url: 'index.php?route=account/account/getListSities',
+data: 'region_id=' + $(this).val() + '&city_selected= {{ customer_zone_name['zone_id'] }}',
+type: 'post',
+dataType: 'html',
+success: function (html) {
+if (html) {
+$('#inputCityLogin').html(html);
+$('#inputCityLogin').removeAttr('disabled');{% if(customer_zone_name['zone_id']) %}
+$('#inputCityLogin').trigger("change");{% endif %}
+}
+}
+});});$('#saveButtonDataUser').on('click', function () {
+$.ajax({
+url: 'index.php?route=account/account/saveDataUser',
+data: {
+'firstname': $("input[name='firstname_login']").val(),
+'lastname': $("input[name='lastname_login']").val(),
+'city': $("input[name='city_login']").val(),
+'address': $("input[name='address_login']").val(),
+'telephone': $("input[name='telephone_login']").val(),
+'email': $("input[name='email_login']").val(),
+'address_id': $("input[name='address_id_login']").val(),
+'region': $("select[name='region_login']").find('option:selected').val(),
+'zone': $("select[name='zone_login']").find('option:selected').val()
+},
+type: 'post',
+dataType: 'json',
+success: function (json) {
+location.reload();
+}
+});})
+			</script>
+				<script>
+$(document).ready(function () {
+$('.ch-block-3 .ch-del-pay-label').click(function () {
+
+$('.ch-block-3 .ch-del-pay-item').removeClass('active');
+var wrapper = $(this).closest('.ch-del-pay-item');
+wrapper.siblings().find('.checkbox-input-mod').prop('checked', false);
+
+if ($(this).find('input').is(':checked')) {
+wrapper.addClass('active');
+} else {
+wrapper.removeClass('active');
+}
+});
+
+
+});
+function delivery_type_select_change(e) {
+var select = $(e);
+var id = select.find('option:selected').attr('data-type');
+type_select_del(id);
+}
+
+function type_select_del(id) {
+$('.ch-del-item-main-wrap').removeClass('active');
+$('#' + id).addClass('active');
+$('#' + id + ' select.delivery_type_select_change option[data-type="' + id + '"]').prop('selected', true);
+}
+
+
+function getCityByRegionAdres(region_id) {
+$('#inputCityAdres').html('<option>Loading....</option>');
+$('#inputCityAdres').attr('disabled', 'disabled');
+$.ajax({
+url: 'index.php?route=checkout/checkout/getListSities',
+data: 'region_id=' + region_id + '&city_selected=',
+type: 'post',
+dataType: 'html',
+success: function (html) {
+if (html) {
+$('#inputCityAdres').html(html);
+$('#inputCityAdres').removeAttr('disabled');
+
+}
+}
+});
+}
+function getListNewPost(region_id, city) {
+$('#inputNovaPoshta').html('<option>Loading....</option>');
+$('#inputNovaPoshta').attr('disabled', 'disabled');
+$.ajax({
+url: 'index.php?route=account/account/getListServiceAddress',
+data: 'city=' + city + '&region_id=' + region_id + '&delivery_selected=',
+type: 'post',
+dataType: 'html',
+success: function (html) {
+$('#inputNovaPoshta').html(html);
+$('#inputNovaPoshta').removeAttr('disabled');
+}
+});
+}
+
+$('#inputCitySamov').on('change', function () {
+getListNewPost($('#inputRegionSamov').val(), $('#inputCitySamov option:selected').attr('value'));
+});
+$('.ac-personal-address-add').on('click', function () {
+$.ajax({
+url: 'index.php?route=account/account/addressDeliveryEditAddForm',
+type: 'post',
+dataType: 'html',
+success: function (html) {
+if ($('.ac-personal-data-2-items').is('.ch-block-append-template')) 
+$(".ch-block-append-template:last").html(html);
+ else 
+$('.ac-personal-data-2-items').html(html);
+
+
+$('#ch-del-input-1').trigger('click');
+}
+});
+})
+$('.btn-update-address-delivery').on('click', function () {
+var customer_address_delivery_id = $(this).attr('customer_address_delivery_id');
+console.log(customer_address_delivery_id);
+var shape_delivery_id = $(this).attr('shape_delivery_id');
+console.log(shape_delivery_id);
+$(".ac-personal-data-2-item").css('display', 'flex');
+$("#ch-block-personal-data_" + customer_address_delivery_id).css('display', 'none');
+$(".ch-block-append-template").html('');
+$.ajax({
+url: 'index.php?route=account/account/addressDeliveryEditAddForm',
+type: 'post',
+data: {
+'customer_address_delivery_id': customer_address_delivery_id
+},
+dataType: 'html',
+success: function (html) {
+if (html) {
+$('#ch-block-append-template_' + customer_address_delivery_id).html(html);
+$('#ch-del-input-' + shape_delivery_id).trigger('click');
+}
+}
+});
+})
+$('.delete-delivery-adrress').on('click', function () {
+var customer_address_delivery_id = $(this).attr('data-delete');
+$.ajax({
+url: 'index.php?route=account/account/addressDeliveryDelete',
+type: 'post',
+data: {
+'customer_address_delivery_id': customer_address_delivery_id
+},
+dataType: 'json',
+success: function (json) {
+location.reload();
+}
+});
+})
+$('.ac-personal-address-set').on('click', function () {
+var obj = $(this);
+let customer_address_delivery_id = obj.attr('data-default-address');
+
+$.ajax({
+url: 'index.php?route=account/account/addressDeliverySetDefault',
+data: {
+'customer_address_delivery_id': customer_address_delivery_id
+},
+type: 'post',
+dataType: 'json',
+success: function (json) {
+location.reload();
+}
+});
+})
+$('.ac-personal-edit-img').on('click', function () {
+$('.ac-personal-edit-img').css('display', 'none');
+$('.upload-image').css('display', 'block');
+$('.ac-personal-delete-img-wrap').css('display', 'none');
+})
+$('#change_password').on('click', function () {
+$("input[name='curent_password']").removeClass('is-invalid');
+$("input[name='new_password']").removeClass('is-invalid');
+$("input[name='repeat_new_password']").removeClass('is-invalid');
+$("input[name='confirmation_code']").removeClass('is-invalid');
+
+if (typeof $("input[name='confirmation_code']").val() === "undefined") {
+var data = {
+'curent_password': $("input[name='curent_password']").val(),
+'new_password': $("input[name='new_password']").val(),
+'repeat_new_password': $("input[name='repeat_new_password']").val()
+
+}
+} else {
+var data = {
+'curent_password': $("input[name='curent_password']").val(),
+'new_password': $("input[name='new_password']").val(),
+'repeat_new_password': $("input[name='repeat_new_password']").val(),
+'confirmation_code': $("input[name='confirmation_code']").val()
+}
+}
+$.ajax({
+url: 'index.php?route=account/account/changePasword',
+data: data,
+type: 'post',
+dataType: 'json',
+success: function (json) {
+if (! json['error']) 
+location.reload();
+ else 
+console.log(json['error']);
+
+if (json['error']['curent_password']) 
+$("input[name='curent_password']").addClass('is-invalid');
+
+if (json['error']['new_password']) 
+$("input[name='new_password']").addClass('is-invalid');
+
+if (json['error']['repeat_new_password']) 
+$("input[name='repeat_new_password']").addClass('is-invalid');
+
+if (json['error']['confirmation_code']) 
+$("input[name='confirmation_code']").addClass('is-invalid');
+
+}
+});
+})
+$('input[name="telephone_login"]').mask("+38 (099) 999-99-99");
+			</script>
+				<script>
+$(document).ready(function () {
+
+function readImage(input) {
+if (input.files && input.files[0]) {
+var reader = new FileReader();
+
+reader.onload = function (e) {
+$('#preview').attr('src', e.target.result);
+}
+
+reader.readAsDataURL(input.files[0]);
+}
+}
+
+function printMessage(destination, msg) {
+
+$(destination).removeClass();
+
+if (msg == 'success') {
+$(destination).addClass('alert alert-success').text('{{ success_upload_avatar }}');
+}
+
+if (msg == 'error') {
+$(destination).addClass('alert alert-danger').text('{{ error_upload_avatar }}');
+}
+if (msg == 'error_mime') {
+$(destination).addClass('alert alert-danger').text('{{ mime_bad_upload_avatar }}');
+}
+setTimeout(function () {
+$(destination).html('');
+$(destination).removeClass();
+}, 1000)
+}
+
+$('.image-change').change(function () {
+readImage(this);
+});
+
+$('.upload-image').on('submit', (function (e) {
+loadingAjax(true);
+e.preventDefault();
+$('.loading-avatar').css('display', 'block');
+var formData = new FormData(this);
+
+$.ajax({
+type: 'POST', // Тип запроса
+url: 'index.php?route=account/account/saveAvatar', // Скрипт обработчика
+data: formData, // Данные которые мы передаем
+cache: false, // В запросах POST отключено по умолчанию, но перестрахуемся
+contentType: false, // Тип кодирования данных мы задали в форме, это отключим
+processData: false, // Отключаем, так как передаем файл
+success: function (data) {
+$('.ac-personal-edit-img').css('display', 'block');
+$('.ac-personal-delete-img-wrap').css('display', 'block');
+$('.upload-image').css('display', 'none');
+loadingAjax(false);
+printMessage('#result', data);
+},
+error: function (data) {
+console.log(data);
+}
+});
+}));
+});
+			</script>
+
+				<style>
+.upload-image {
+	padding-top: 10px;
+}
+.loading-avatar {
+	background: url('catalog/image/loading_avatar.gif') center center no-repeat;
+	opacity: 0.4;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	z-index: 5000;
+	display: none;
+}
+.image-preview {
+	position: relative;
+}
+		</style>
+	</div>
+	</div>
+{{ content_bottom }}
+</div>
+
+{{ footer }}

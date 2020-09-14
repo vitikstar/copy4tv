@@ -1,0 +1,390 @@
+<footer>
+    {% for style in styles %}
+        <link href="{{ style.href }}" type="text/css" rel="{{ style.rel }}" media="{{ style.media }}" />
+    {% endfor %}
+    {% for script in scriptsh %}
+        <script src="{{ script }}" type="text/javascript"></script>
+    {% endfor %}
+    <script src="catalog/view/javascript/common.js" type="text/javascript"></script>
+
+    <div class="container">
+        <div class="footer-wrap">
+            <div class="footer-column-1 footer-column">
+                {{ sections_sirius[1] }}
+            </div>
+            <div class="footer-column-2 footer-column">
+                <div class="footer-column-title">{{ column_sirius[1]['name'] }}</div>
+                <ul class="footer-column-text">
+                    {% if column_sirius[1]['menu'] is defined %}
+                        {% for menu in column_sirius[1]['menu'] %}
+                            <li><a href="{{ menu['url'] }}">{{ menu['title'] }}</a></li>
+                        {% endfor %}
+                    {% endif %}
+                </ul>
+            </div>
+            <div class="footer-column-3 footer-column">
+                <div class="footer-column-title">{{ column_sirius[2]['name'] }}</div>
+                <ul class="footer-column-text">
+                    {% if column_sirius[2]['menu'] is defined %}
+                        {% for menu in column_sirius[2]['menu'] %}
+                            <li><a href="{{ menu['url'] }}">{{ menu['title'] }}</a></li>
+                        {% endfor %}
+                    {% endif %}
+                </ul>
+            </div>
+            <div class="footer-column-4 footer-column">
+                <div class="footer-column-title">{{ column_sirius[3]['name'] }}</div>
+                <ul class="footer-column-text">
+                    {% if column_sirius[3]['menu'] is defined %}
+                        {% for menu in column_sirius[3]['menu'] %}
+                            <li><a href="{{ menu['url'] }}">{{ menu['title'] }}</a></li>
+                        {% endfor %}
+                    {% endif %}
+                </ul>
+            </div>
+            <div class="footer-column-5 footer-column">
+                {{ sections_sirius[2] }}
+            </div>
+            <div class="footer-column-6 footer-column">
+                {{ sections_sirius[3] }}
+            </div>
+        </div>
+
+        <div class="footer-copyright-wrap">
+            {{ sections_sirius[4] }}
+        </div>
+    </div>
+    {{ sirius_auth_register_popup }}
+</footer>
+
+{% for script in scripts %}
+    <script src="{{ script }}" type="text/javascript"></script>
+{% endfor %}
+
+<div class="button-to-top" style="display: none;"><i class="fa fa-long-arrow-up"></i></div>
+<script>
+
+    function popupCenter({url, title, w, h}) {
+        // Fixes dual-screen position                             Most browsers      Firefox
+        const dualScreenLeft = window.screenLeft !==  undefined ? window.screenLeft : window.screenX;
+        const dualScreenTop = window.screenTop !==  undefined   ? window.screenTop  : window.screenY;
+
+        const width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
+        const height = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
+
+        const systemZoom = width / window.screen.availWidth;
+        const left = (width - w) / 2 / systemZoom + dualScreenLeft
+        const top = (height - h) / 2 / systemZoom + dualScreenTop
+        const newWindow = window.open(url, title,
+            `
+      scrollbars=yes,
+      width=${w / systemZoom},
+      height=${h / systemZoom},
+      top=${top},
+      left=${left}
+      `
+        )
+
+        if (window.focus) newWindow.focus();
+    }
+
+    $(document).ready(
+        function () {
+            $('.account_socnetauth2_bline_links .socnetauth2_buttons').on('click',function () {
+                popupCenter({url: $(this).attr('data-href'), title: 'xtf', w: 900, h: 500});
+            })
+        }
+    );
+
+    $(document).ready(function() {
+        $('.button-to-top').click(function() {
+            $('body,html').animate({scrollTop:0},300);
+        });
+    });
+
+    $(window).on('scroll', function() {
+        var scroll = $(this).scrollTop();
+        if (scroll > 800) {
+            $('.button-to-top').fadeIn();
+        } else {
+            $('.button-to-top').fadeOut();
+        }
+    });
+</script>
+
+
+<script>
+    $(window).ready(function() {
+
+
+
+
+//         if(width){
+//             $('.latest-block-wrap').width(764);
+//             console.log($('.latest-block-wrap').width());
+//         }
+
+
+        $('.latest-block-wrap, .special-block-wrap, :not(#product-category).bestseller-block-wrap, .sirius-wishlist-block-wrap, .featured-block-wrap, .buy-width-product-block-wrap').each(function() {
+
+            var wrapper = $(this);
+            var length = wrapper.find('.swiper-slide').length;
+
+            if (window.innerWidth > 1800) {
+                if (length <= 6) {
+                    wrapper.find('.swiper-pager').hide();
+                    wrapper.find('.swiper-pagination').hide();
+                }
+            }
+            if (window.innerWidth <= 1800 && window.innerWidth > 1200) {
+                if (length <= 4) {
+                    wrapper.find('.swiper-pager').hide();
+                    wrapper.find('.swiper-pagination').hide();
+                }
+            }
+            if (window.innerWidth <= 1200 && window.innerWidth > 768) {
+                if (length <= 3) {
+                    wrapper.find('.swiper-pager').hide();
+                    wrapper.find('.swiper-pagination').hide();
+                }
+            }
+            if (window.innerWidth <= 767 && window.innerWidth > 500) {
+                if (length <= 2) {
+                    wrapper.find('.swiper-pager').hide();
+                    wrapper.find('.swiper-pagination').hide();
+                }
+            }
+            if (window.innerWidth <= 500) {
+                if (length <= 1) {
+                    wrapper.find('.swiper-pager').hide();
+                    wrapper.find('.swiper-pagination').hide();
+                }
+            }
+
+            wrapper.find('.products-slider').swiper({
+                slidesPerView: 6,
+//            pagination: '.bestseller-slider-wrapper .swiper-pagination',
+//            paginationClickable: true,
+                nextButton: wrapper.find('.swiper-button-next'),
+                prevButton: wrapper.find('.swiper-button-prev'),
+                pagination: wrapper.find('.swiper-pagination'),
+                paginationClickable: true,
+                breakpoints:{
+                    1800:{
+                        slidesPerView: 4
+                    },
+                    1200:{
+                        slidesPerView: 3
+                    },
+                    768:{
+                        slidesPerView: 2
+                    },
+                    500:{
+                        slidesPerView: 'auto'
+                    }
+                }
+//              loop: true
+            });
+        });
+
+        $('#product-category .bestseller-block-wrap, #product-category .viewed-block-wrap').each(function() {
+            var wrapper = $(this);
+            var length = wrapper.find('.swiper-slide').length;
+            if (window.innerWidth > 1800) {
+                if (length <= 5) {
+                    wrapper.find('.swiper-pager').hide();
+                    wrapper.find('.swiper-pagination').hide();
+                }
+            }
+            if (window.innerWidth <= 1800 && window.innerWidth > 1200) {
+                if (length <= 4) {
+                    wrapper.find('.swiper-pager').hide();
+                    wrapper.find('.swiper-pagination').hide();
+                }
+            }
+            if (window.innerWidth <= 1200 && window.innerWidth > 768) {
+                if (length <= 2) {
+                    wrapper.find('.swiper-pager').hide();
+                    wrapper.find('.swiper-pagination').hide();
+                }
+            }
+            if (window.innerWidth <= 767 && window.innerWidth > 500) {
+                if (length <= 2) {
+                    wrapper.find('.swiper-pager').hide();
+                    wrapper.find('.swiper-pagination').hide();
+                }
+            }
+            if (window.innerWidth <= 500) {
+                if (length <= 1) {
+                    wrapper.find('.swiper-pager').hide();
+                    wrapper.find('.swiper-pagination').hide();
+                }
+            }
+            wrapper.find('.products-slider').swiper({
+                slidesPerView: 5,
+                pagination:  wrapper.find('.swiper-pagination'),
+                paginationClickable: true,
+                nextButton: wrapper.find('.swiper-button-next'),
+                prevButton: wrapper.find('.swiper-button-prev'),
+                breakpoints:{
+                    1800:{
+                        slidesPerView: 4
+                    },
+                    1200:{
+                        slidesPerView: 2
+                    },
+                    768:{
+                        slidesPerView: 2
+                    },
+                    500:{
+//                        slidesPerView: 2,
+                        slidesPerView: 'auto'
+//                        spaceBetween: 30
+                    }
+                }
+            });
+        });
+
+
+        var wrapper = $('.manufacturer-block-wrap');
+        var length = wrapper.find('.swiper-slide').length;
+        if (window.innerWidth > 1800) {
+            if (length <= 7) {
+                wrapper.find('.swiper-pager').hide();
+                wrapper.find('.swiper-pagination').hide();
+            }
+        }
+        if (window.innerWidth <= 1800 && window.innerWidth > 1200) {
+            if (length <= 5) {
+                wrapper.find('.swiper-pager').hide();
+                wrapper.find('.swiper-pagination').hide();
+            }
+        }
+        if (window.innerWidth <= 1200 && window.innerWidth > 768) {
+            if (length <= 5) {
+                wrapper.find('.swiper-pager').hide();
+                wrapper.find('.swiper-pagination').hide();
+            }
+        }
+        if (window.innerWidth <= 767 && window.innerWidth > 500) {
+            if (length <= 3) {
+                wrapper.find('.swiper-pager').hide();
+                wrapper.find('.swiper-pagination').hide();
+            }
+        }
+        if (window.innerWidth <= 500) {
+            if (length <= 2) {
+                wrapper.find('.swiper-pager').hide();
+                wrapper.find('.swiper-pagination').hide();
+            }
+        }
+        wrapper.find('.products-slider').swiper({
+            slidesPerView: 7,
+            slidesPerGroup: 7,
+            pagination:  wrapper.find('.swiper-pagination'),
+            paginationClickable: true,
+            nextButton: wrapper.find('.swiper-button-next'),
+            prevButton: wrapper.find('.swiper-button-prev'),
+            breakpoints:{
+                1800:{
+                    slidesPerView: 5,
+                    slidesPerGroup: 5
+                },
+                1200:{
+                    slidesPerView: 5,
+                    slidesPerGroup: 5
+                },
+                768:{
+                    slidesPerView: 3,
+                    slidesPerGroup: 3
+                },
+                500:{
+//                    slidesPerView: 2,
+//                    slidesPerGroup: 2
+                    slidesPerView: 'auto'
+                }
+            }
+//            loop: true
+        });
+
+        var wrapper = $('.blog-latest-slider-wrapper');
+        var length = wrapper.find('.swiper-slide').length;
+        if (window.innerWidth > 1800) {
+            if (length <= 4) {
+                wrapper.find('.swiper-pager').hide();
+                wrapper.find('.swiper-pagination').hide();
+            }
+        }
+        if (window.innerWidth <= 1800 && window.innerWidth > 1200) {
+            if (length <= 4) {
+                wrapper.find('.swiper-pager').hide();
+                wrapper.find('.swiper-pagination').hide();
+            }
+        }
+        if (window.innerWidth <= 1200 && window.innerWidth > 768) {
+            if (length <= 3) {
+                wrapper.find('.swiper-pager').hide();
+                wrapper.find('.swiper-pagination').hide();
+            }
+        }
+        if (window.innerWidth <= 767 && window.innerWidth > 500) {
+            if (length <= 2) {
+                wrapper.find('.swiper-pager').hide();
+                wrapper.find('.swiper-pagination').hide();
+            }
+        }
+        if (window.innerWidth <= 500) {
+            if (length <= 1) {
+                wrapper.find('.swiper-pager').hide();
+                wrapper.find('.swiper-pagination').hide();
+            }
+        }
+
+        wrapper.find('.products-slider').swiper({
+            slidesPerView: 4,
+            pagination:  wrapper.find('.swiper-pagination'),
+            paginationClickable: true,
+            nextButton: wrapper.find('.swiper-button-next'),
+            prevButton: wrapper.find('.swiper-button-prev'),
+            breakpoints:{
+                1800:{
+                    slidesPerView: 4
+                },
+                1200:{
+                    slidesPerView: 3
+                },
+                768:{
+                    slidesPerView: 2
+                },
+                500:{
+                    slidesPerView: 'auto'
+                }
+            }
+//              loop: true
+        });
+
+        $('input[name="telephone"]').mask("+38 (099) 999-99-99");
+
+    });
+</script>
+
+
+<div class="modal fade modal-custom" id="compare-modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-title">Сравнение</div>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-result" style="display:none"></div>
+        </div>
+    </div>
+</div>
+
+<div class="mobile-menu-blocker-bg"></div>
+
+
+</body></html>

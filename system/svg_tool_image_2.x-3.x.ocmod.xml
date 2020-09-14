@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<name>SVG Tool Image</name>
+	<author>Bilalov ilsur</author>
+	<link>http://ocdesign.ru</link>
+	<code>install_svg_tool_image</code>
+	<file path="admin/controller/common/filemanager.php">	
+		<operation>
+			<search trim="true"><![CDATA[jpg,jpeg,png,gif,JPG,JPEG,PNG,GIF]]></search>
+			<add trim="true" position="replace">
+			<![CDATA[jpg,jpeg,png,gif,svg,JPG,JPEG,PNG,GIF,SVG]]>
+			</add>
+		</operation>
+		<operation>
+			<search trim="true"><![CDATA['gif',]]></search>
+			<add trim="true" position="replace">
+			<![CDATA['gif','svg',]]>
+			</add>
+		</operation>	
+		<operation>
+			<search trim="true"><![CDATA['image/x-png',]]></search>
+			<add trim="true" position="replace">
+			<![CDATA['image/x-png','image/svg+xml',]]>
+			</add>
+		</operation>
+	</file>
+	<file path="admin/model/tool/image.php">
+		<operation error="skip">
+			<search trim="true"><![CDATA[$new_image]]></search>
+			<add trim="true" position="replace">
+			<![CDATA[$image_new]]>
+			</add>
+		</operation>
+		<operation error="skip">
+			<search trim="true"><![CDATA[$extension = pathinfo($filename, PATHINFO_EXTENSION);]]></search>
+			<add trim="true" position="after">
+			<![CDATA[
+			if (strtolower($extension) == 'svg') {
+				$image_new = $filename;
+			} else {
+			]]>
+			</add>
+		</operation>			
+		<operation error="skip">
+			<search trim="true"><![CDATA[$extension = $info['extension'];]]></search>
+			<add trim="true" position="after">
+			<![CDATA[
+			if (strtolower($extension) == 'svg') {
+				$image_new = $filename;
+			} else {
+			]]>
+			</add>
+		</operation>	
+		<operation error="skip">
+			<search trim="true"><![CDATA[if (isset($this->request->server['HTTPS']) && (($this->request->server['HTTPS'] == 'on') || ($this->request->server['HTTPS'] == '1'))) {]]></search>
+			<add trim="true" position="before">
+			<![CDATA[
+			}
+			]]>
+			</add>
+		</operation>
+		<operation error="skip">
+			<search trim="true"><![CDATA[if ($this->request->server['HTTPS']) {]]></search>
+			<add trim="true" position="before">
+			<![CDATA[
+			}
+			]]>
+			</add>
+		</operation>
+	</file>
+	<file path="catalog/model/tool/image.php">
+		<operation error="skip">
+			<search trim="true"><![CDATA[$new_image]]></search>
+			<add trim="true" position="replace">
+			<![CDATA[$image_new]]>
+			</add>
+		</operation>
+		<operation error="skip">
+			<search trim="true"><![CDATA[$extension = pathinfo($filename, PATHINFO_EXTENSION);]]></search>
+			<add trim="true" position="after">
+			<![CDATA[
+			if (strtolower($extension) == 'svg') {
+				$image_new = $filename;
+			} else {
+			]]>
+			</add>
+		</operation>			
+		<operation error="skip">
+			<search trim="true"><![CDATA[$extension = $info['extension'];]]></search>
+			<add trim="true" position="after">
+			<![CDATA[
+			if (strtolower($extension) == 'svg') {
+				$image_new = $filename;
+			} else {
+			]]>
+			</add>
+		</operation>	
+		<operation error="skip">
+			<search trim="true"><![CDATA[if (isset($this->request->server['HTTPS']) && (($this->request->server['HTTPS'] == 'on') || ($this->request->server['HTTPS'] == '1'))) {]]></search>
+			<add trim="true" position="before">
+			<![CDATA[
+			}
+			]]>
+			</add>
+		</operation>
+		<operation error="skip">
+			<search trim="true"><![CDATA[if ($this->request->server['HTTPS']) {]]></search>
+			<add trim="true" position="before">
+			<![CDATA[
+			}
+			]]>
+			</add>
+		</operation>
+	</file>
+</modification>

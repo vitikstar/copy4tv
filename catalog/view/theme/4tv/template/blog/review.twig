@@ -1,0 +1,77 @@
+{% if reviews %}
+    {% for review in reviews %}
+        <div class="pr-review">
+            <div class="pr-review-title">
+                {% if review.avatar %}
+                    <div class="pr-review-title-img">
+                        <img src="{{ review.avatar }}" alt="{{ review.author }}" class="img-responsive">
+                    </div>
+                {% else %}
+                    <div class="pr-review-title-icon"><span>СА</span></div>
+                {% endif %}
+                <div class="pr-review-title-name-rating">
+                    {% if review.author %}
+                        <div class="pr-review-title-name">{{ review.author }}</div>
+                    {% endif %}
+                    <div class="pr-review-title-rating">
+                        {% if review.rating %}
+                            <span class="rating">
+			  {% for i in 1..5 %}
+                  {% if review.rating< i %}
+                      <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-2x"></i></span>
+			  {% else %}
+                      <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i
+                                  class="fa fa-star-o fa-stack-2x"></i></span>
+                  {% endif %}
+              {% endfor %}
+			</span>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="pr-review-title-date">{{ review.date_added }}</div>
+            </div>
+            <div class="pr-review-comment-wrap">
+                {% if review.text %}
+                    <div class="pr-review-comment">{{ review.text }}</div>
+                {% endif %}
+            </div>
+            <div class="pr-review-reply-like">
+                <div class="pr-review-reply-like-wrapper">
+                    <div class="pr-review-reply-wrap">
+                        {#								<div class="pr-review-reply pr-review-reply-only" onclick="review_reply(this)"><span class="pr-review-reply-icon"></span><span class="pr-review-reply-text">Ответить</span></div>#}
+                        {% if review.comment %}
+                            <div class="pr-review-reply-see pr-review-reply" onclick="see_all_reply(this)"><span
+                                        class="pr-review-reply-icon"></span>
+                                <span class="pr-review-reply-text">{{ reply_count }}</span>
+                            </div>
+                        {% endif %}
+                        <span class="review-see-reply-black" style="display: none;"></span>
+                    </div>
+                    <div class="pr-review-like-wrap">
+                        <div class="pr-review-like"><span class="pr-review-like-icon" onclick="writeRattingRewiews({{ review.review_article_id }},'liked')"></span><span
+                                    class="pr-review-like-text like-text" id="like-{{ review.review_article_id }}">{{ review.liked }}</span></div>
+                        <div class="pr-review-like pr-review-dislike"><span class="pr-review-like-icon" onclick="writeRattingRewiews({{ review.review_article_id }},'disliked')"></span><span
+                                    class="pr-review-like-text dislike-text" id="dislike-{{ review.review_article_id }}">{{ review.disliked }}</span></div>
+                    </div>
+                </div>
+                {% if review.comment %}
+                    <div class="pr-review-reply-main" style="display: none;">
+                        <div class="pr-review-reply-main-item">
+                            <div class="pr-review-title">
+                                <div class="pr-review-reply-main-logo">
+                                    <img src="catalog/view/theme/4tv/image/icons-bg/review-admin.png" alt=""
+                                         class="img-responsive">
+                                </div>
+                                <div class="pr-review-title-date">26 ноября 2019</div>
+                            </div>
+                            <div class="pr-review-comment-wrap">
+                                <div class="pr-review-comment">{{ review.comment }}</div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="review_reply"></div>
+            </div>
+        </div>
+    {% endfor %}
+{% endif %}

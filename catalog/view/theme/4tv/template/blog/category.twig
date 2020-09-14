@@ -1,0 +1,107 @@
+{{ header }}
+
+<div  id="news-category" class="container  category-1">
+    <div class="breadcrumb-product-wrap">
+            {{ column_megamenu }}
+        <ul class="breadcrumb">
+            {% set total = breadcrumbs|length %}
+            {% set counter = 0 %}
+            {% for breadcrumb in breadcrumbs %}
+                {{ breadcrumb['separator'] }}
+                {% set counter = counter + 1 %}
+                {% if (counter == total) %}
+                    <li>{{ breadcrumb['text'] }}</li>
+                {% else %}
+                    <li><a href="{{ breadcrumb['href'] }}">{{ breadcrumb['text'] }}</a></li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+    {% if success %}
+        <div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> {{ success }}</div>
+    {% endif %}
+    <div class="ac-row row">
+        <div class="ac-col-left">
+            {{ column_left }}
+        </div>
+
+        {% if column_left and column_right %}
+            {% set class = 'col-sm-6' %}
+        {% elseif column_left or column_right %}
+            {% set class = 'col-sm-9' %}
+        {% else %}
+            {% set class = 'col-sm-12' %}
+        {% endif %}
+        <div id="content" class="{{ class }}">{{ content_top }}
+            <div class="main-category-filter">
+                <h1 class="ac-personal-title">{{ heading_title }}</h1>
+                <div class="category-sort-wrap">
+                        <div class="category-sort-select">
+                            <select id="input-sort" class="form-control" onchange="location = this.value;">
+                                {% for sorts in sorts %}
+                                    {% if sorts.value == '%s-%s'|format(sort, order) %}
+                                        <option value="{{ sorts.href }}" selected="selected">{{ sorts.text }}</option>
+                                    {% else %}
+                                        <option value="{{ sorts.href }}">{{ sorts.text }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="category-sort-select">
+                            <select id="input-limit" class="form-control" onchange="location = this.value;">
+                                {% for limits in limits %}
+                                    {% if limits.value == limit %}
+                                        <option value="{{ limits.href }}" selected="selected">{{ limits.text }}</option>
+                                    {% else %}
+                                        <option value="{{ limits.href }}">{{ limits.text }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                </div>
+            </div>
+            {% if articles %}
+                <div class="news-cat-articles">
+                    {% for article in articles %}
+                        <div class="news-cat-article">
+                            <div class="news-cat-article-img">
+                                <a href="{{ article.href }}">
+                                    <img src="{{ article.thumb }}" alt="{{ article.name }}" title="{{ article.name }}" class="img-responsive"/>
+                                </a>
+                            </div>
+                            <div class="news-cat-article-name">
+                                <a href="{{ article.href }}" class="news-cat-article-name-link">{{ article.name }}</a>
+                            </div>
+                            <div class="news-cat-article-info">
+                                <div class="news-cat-article-date">{{ article.date_added }}</div>
+                                <div class="news-cat-article-viewed"><i class="fa fa-eye"></i><span>{{ article.viewed }}</span></div>
+                                <div class="news-cat-article-viewed"><i class="fa fa-comment"></i><span>{{ article.article_review }}</span></div> {# Тут нужно вывести значение #}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="pagination-wrap" style="margin-bottom: 30px">{{ pagination }}</div>
+                <div class="pagination-wrap-mob" style="display: none">
+                    {{ pagination }}
+                </div>
+            {% else %}
+                <p>{{ text_empty }}</p>
+                <div class="buttons">
+                    <div class="pull-right"><a href="{{ continue }}" class="btn btn-primary">{{ button_continue }}</a>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        {% if column_right %}
+        <div class="ac-col-right">
+            <div class="ac-banner">
+                <aside id="column-right" class="col-sm-3 hidden-xs">
+                    {{ column_right }}
+                </aside>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+            {{ content_bottom }}
+</div>
+{{ footer }}

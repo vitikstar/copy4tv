@@ -1,0 +1,604 @@
+{{ header }}{{ column_left }}
+<div id="content">
+    <div class="page-header">
+        <div class="container-fluid">
+            <div class="pull-right">
+                <button type="submit" form="form" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+                <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a>
+            </div>
+            <h1>{{ heading_title }}</h1>
+            <ul class="breadcrumb">
+                {% for breadcrumb in breadcrumbs %}
+                    <li><a href="{{ breadcrumb['href'] }}">{{ breadcrumb['text'] }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="container-fluid">
+        {% if (error_warning) %}
+            <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+        {% endif %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
+            </div>
+            <div class="panel-body">
+                <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form" class="form-horizontal">
+                    <fieldset>
+                        <legend>{{ text_throttle_settings }}</legend>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"><span data-toggle="tooltip" title="{{ help_use_throttle }}">{{ entry_use_throttle }}</span></label>
+                            <div class="col-sm-10">
+                                <label class="radio-inline">
+                                    {% if (ne_throttle) %}
+                                        <input type="radio" name="ne_throttle" value="1" checked="checked" />
+                                        {{ text_yes }}
+                                    {% else %}
+                                        <input type="radio" name="ne_throttle" value="1" />
+                                        {{ text_yes }}
+                                    {% endif %}
+                                </label>
+                                <label class="radio-inline">
+                                    {% if (not ne_throttle) %}
+                                        <input type="radio" name="ne_throttle" value="0" checked="checked" />
+                                        {{ text_no }}
+                                    {% else %}
+                                        <input type="radio" name="ne_throttle" value="0" />
+                                        {{ text_no }}
+                                    {% endif %}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group throttle">
+                            <label class="col-sm-2 control-label" for="input-throttle-count"><span data-toggle="tooltip" title="{{ help_throttle_emails }}">{{ entry_throttle_emails }}</span></label>
+                            <div class="col-sm-10">
+                                <input type="text" name="ne_throttle_count" value="{{ ne_throttle_count }}" placeholder="{{ entry_throttle_emails }}" id="input-throttle-count" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group throttle">
+                            <label class="col-sm-2 control-label" for="input-throttle-time"><span data-toggle="tooltip" title="{{ help_throttle_time }}">{{ entry_throttle_time }}</span></label>
+                            <div class="col-sm-10">
+                                <select name="ne_throttle_time" id="input-throttle-time" class="form-control">
+                                    <option value="60" {{ ne_throttle_time == '60' ? ' selected="selected"' : "" }}>1</option>
+                                    <option value="300" {{ ne_throttle_time == '300' ? ' selected="selected"' : "" }}>5</option>
+                                    <option value="600" {{ ne_throttle_time == '600' ? ' selected="selected"' : "" }}>10</option>
+                                    <option value="900" {{ ne_throttle_time == '900' ? ' selected="selected"' : "" }}>15</option>
+                                    <option value="1800" {{ ne_throttle_time == '1800' ? ' selected="selected"' : "" }}>30</option>
+                                    <option value="3600" {{ ne_throttle_time == '3600' ? ' selected="selected"' : "" }}>60</option>
+                                    <option value="7200" {{ ne_throttle_time == '7200' ? ' selected="selected"' : "" }}>120</option>
+                                    <option value="10800" {{ ne_throttle_time == '10800' ? ' selected="selected"' : "" }}>180</option>
+                                    <option value="14400" {{ ne_throttle_time == '14400' ? ' selected="selected"' : "" }}>240</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <legend>{{ text_smtp_settings }}</legend>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">{{ entry_use_smtp }}</label>
+                            <div class="col-sm-10">
+                                <label class="radio-inline">
+                                    {% if (ne_use_smtp) %}
+                                        <input type="radio" name="ne_use_smtp" value="1" checked="checked" />
+                                        {{ text_yes }}
+                                    {% else %}
+                                        <input type="radio" name="ne_use_smtp" value="1" />
+                                        {{ text_yes }}
+                                    {% endif %}
+                                </label>
+                                <label class="radio-inline">
+                                    {% if (not ne_use_smtp) %}
+                                        <input type="radio" name="ne_use_smtp" value="0" checked="checked" />
+                                        {{ text_no }}
+                                    {% else %}
+                                        <input type="radio" name="ne_use_smtp" value="0" />
+                                        {{ text_no }}
+                                    {% endif %}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group smtp">
+                            <div class="col-sm-12">
+                                <ul class="nav nav-tabs" id="smtp-stores">
+                                    array_unshift(stores, {('store_id' : 0, 'name' : text_default) }
+                                    {% for store in stores %} )
+                                        <li><a href="#smtp-stores{{ store['store_id'] }}" data-toggle="tab">{{ store['name'] }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                                <div class="tab-content">
+                                    {% for store in stores %}
+                                        <div class="tab-pane" id="smtp-stores{{ store['store_id'] }}">
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label" for="input-smtp-protocol"><span data-toggle="tooltip" title="{{ help_mail_protocol }}">{{ entry_mail_protocol }}</span></label>
+                                                <div class="col-sm-10">
+                                                    <select name="ne_smtp[{{ store['store_id'] }}][protocol]" id="input-smtp-protocol" class="form-control">
+                                                        {% if (ne_smtp[store['store_id']]['protocol'] is defined and (ne_smtp[store['store_id']]['protocol'] == 'mail' or ne_smtp[store['store_id']]['protocol'] == 'mail_phpmailer')) %}
+                                                            <option value="mail" selected="selected">{{ text_mail }}</option>
+                                                        {% else %}
+                                                            <option value="mail">{{ text_mail }}</option>
+                                                        {% endif %}
+                                                        {% if (ne_smtp[store['store_id']]['protocol'] is defined and (ne_smtp[store['store_id']]['protocol'] == 'smtp' or ne_smtp[store['store_id']]['protocol'] == 'smtp_phpmailer')) %}
+                                                            <option value="smtp" selected="selected">{{ text_smtp }}</option>
+                                                        {% else %}
+                                                            <option value="smtp">{{ text_smtp }}</option>
+                                                        {% endif %}
+                                                        {% if (ne_smtp[store['store_id']]['protocol'] is defined and ne_smtp[store['store_id']]['protocol'] == 'mailgun') %}
+                                                            <option value="mailgun" selected="selected">{{ text_mailgun }}</option>
+                                                        {% else %}
+                                                            <option value="mailgun">{{ text_mailgun }}</option>
+                                                        {% endif %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group mailgun-{{ store['store_id'] }}">
+                                                <div class="col-sm-10 col-sm-offset-2">
+                                                    <p class="form-control-static">{{ text_mailgun_info }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group mail-{{ store['store_id'] }} smtp-{{ store['store_id'] }} mailgun-{{ store['store_id'] }}">
+                                                <label class="col-sm-2 control-label" for="input-smtp-email-{{ store['store_id'] }}">{{ entry_email }}</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" name="ne_smtp[{{ store['store_id'] }}][email]" value="{{ ne_smtp[store['store_id']]['email'] is defined ? ne_smtp[store['store_id']]['email'] : '' }}" placeholder="{{ entry_email }}" id="input-smtp-email-{{ store['store_id'] }}" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group smtp-{{ store['store_id'] }}">
+                                                <label class="col-sm-2 control-label" for="input-smtp-host-{{ store['store_id'] }}">{{ entry_smtp_host }}</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" name="ne_smtp[{{ store['store_id'] }}][host]" value="{{ ne_smtp[store['store_id']]['host'] is defined ? ne_smtp[store['store_id']]['host'] : '' }}" placeholder="{{ entry_smtp_host }}" id="input-smtp-host-{{ store['store_id'] }}" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group smtp-{{ store['store_id'] }} mailgun-{{ store['store_id'] }}">
+                                                <label class="col-sm-2 control-label" for="input-smtp-username-{{ store['store_id'] }}">{{ entry_smtp_username }}</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" name="ne_smtp[{{ store['store_id'] }}][username]" value="{{ ne_smtp[store['store_id']]['username'] is defined ? ne_smtp[store['store_id']]['username'] : '' }}" placeholder="{{ entry_smtp_username }}" id="input-smtp-username-{{ store['store_id'] }}" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group smtp-{{ store['store_id'] }} mailgun-{{ store['store_id'] }}">
+                                                <label class="col-sm-2 control-label" for="input-smtp-password-{{ store['store_id'] }}">{{ entry_smtp_password }}</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" name="ne_smtp[{{ store['store_id'] }}][password]" value="{{ ne_smtp[store['store_id']]['password'] is defined ? ne_smtp[store['store_id']]['password'] : '' }}" placeholder="{{ entry_smtp_password }}" id="input-smtp-password-{{ store['store_id'] }}" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group smtp-{{ store['store_id'] }}">
+                                                <label class="col-sm-2 control-label" for="input-smtp-port-{{ store['store_id'] }}">{{ entry_smtp_port }}</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" name="ne_smtp[{{ store['store_id'] }}][port]" value="{{ ne_smtp[store['store_id']]['port'] is defined ? ne_smtp[store['store_id']]['port'] : '' }}" placeholder="{{ entry_smtp_port }}" id="input-smtp-port-{{ store['store_id'] }}" class="form-control" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <legend>{{ text_general_settings }}</legend>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="input-sent-retries"><span data-toggle="tooltip" title="{{ help_sent_retries }}">{{ entry_sent_retries }}</span></label>
+                            <div class="col-sm-10">
+                                <input type="text" name="ne_sent_retries" value="{{ ne_sent_retries }}" placeholder="{{ entry_sent_retries }}" id="input-sent-retries" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">{{ entry_cron_code }}</label>
+                            <div class="col-sm-10">
+                                <pre>{{ cron_url }}</pre>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">{{ entry_cron_help }}</label>
+                            <div class="col-sm-10">
+                                <pre>{{ text_help }}</pre>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <legend>{{ entry_list }}</legend>
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <ul class="nav nav-tabs" id="list-stores">
+                                    {% for store in stores %}
+                                        <li><a href="#list-stores{{ store['store_id'] }}" data-toggle="tab">{{ store['name'] }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                                <div class="tab-content">
+                                    {% set list_row = {} %}
+                                    {% for store in stores %}
+                                    <div class="tab-pane" id="list-stores{{ store['store_id'] }}">
+                                        <table class="table table-bordered table-hover" id="list{{ store['store_id'] }}">
+                                            <thead>
+                                            <tr>
+                                                <td class="text-left">{{ entry_name }}</td>
+                                                <td style="width: 1px;"></td>
+                                            </tr>
+                                            </thead>
+                                            {% set store_id = store['store_id'] %}
+                                            {% set list_row = list_row|merge({ store_id : '1'}) %}
+                                            {% if (list_data[store['store_id']] is defined and list_data[store['store_id']])  %}
+                                            {% for list in list_data[store['store_id']] %}
+                                                <tbody id="list-row-{{ store['store_id'] }}-{{ list_row[store['store_id']] }}">
+                                                            <tr>
+                                                                <td class="text-left">
+                                                                    <br/>
+                                                                    {% for language in languages %}
+                                                                        <div class="input-group">
+                                                                            <span class="input-group-addon"><img src="language/{{ language['code'] }}/{{ language['code'] }}.png" title="{{ language['name'] }}" alt="{{ language['name'] }}" /></span>
+                                                                            <input type="text" name="ne_marketing_list[{{ store['store_id'] }}][{{ list_row[store['store_id']] }}][{{ language['language_id'] }}]" value="{{ list[language['language_id']] is defined ? list[language['language_id']] : '' }}" class="form-control" />
+                                                                        </div>
+                                                                        <br/>
+                                                                    {% endfor %}
+                                                                </td>
+                                                                <td class="text-left">
+                                                                    <button type="button" onclick="$('#list-row-{{ store['store_id'] }}-{{ list_row[store['store_id']] }}').remove();" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button>
+                                            </td>
+                                            </tr>
+                                                </tbody>
+                                                {% set list_row_store_id = list_row[store['store_id']]+1 %}
+
+                                                {% set list_row = list_row|merge({ store_id : list_row_store_id }) %}
+                                            {% endfor %}
+                                            {% endif %}
+                                            <tfoot>
+                                            <tr>
+                                                <td></td>
+                                                <td class="text-left">
+                                                    <button type="button" onclick="addList({{ store['store_id'] }});" data-toggle="tooltip" title="{{ button_add_list }}" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button>
+                                                </td>
+                                            </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+{% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">{{ entry_hide_marketing }}</label>
+                            <div class="col-sm-10">
+                                <label class="radio-inline">
+                                    {% if (ne_hide_marketing) %}
+                                        <input type="radio" name="ne_hide_marketing" value="1" checked="checked" />
+                                        {{ text_yes }}
+                                    {% else %}
+                                        <input type="radio" name="ne_hide_marketing" value="1" />
+                                        {{ text_yes }}
+                                    {% endif %}
+                                </label>
+                                <label class="radio-inline">
+                                    {% if (not ne_hide_marketing) %}
+                                        <input type="radio" name="ne_hide_marketing" value="0" checked="checked" />
+                                        {{ text_no }}
+                                    {% else %}
+                                        <input type="radio" name="ne_hide_marketing" value="0" />
+                                        {{ text_no }}
+                                    {% endif %}
+                                </label>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <legend>{{ entry_subscribe_confirmation }}</legend>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">{{ entry_subscribe_confirmation }}</label>
+                            <div class="col-sm-10">
+                                <label class="radio-inline">
+                                    {% if (ne_subscribe_confirmation) %}
+                                        <input type="radio" name="ne_subscribe_confirmation" value="1" checked="checked" />
+                                        {{ text_yes }}
+                                    {% else %}
+                                        <input type="radio" name="ne_subscribe_confirmation" value="1" />
+                                        {{ text_yes }}
+                                    {% endif %}
+                                </label>
+                                <label class="radio-inline">
+                                    {% if (not ne_subscribe_confirmation) %}
+                                        <input type="radio" name="ne_subscribe_confirmation" value="0" checked="checked" />
+                                        {{ text_no }}
+                                    {% else %}
+                                        <input type="radio" name="ne_subscribe_confirmation" value="0" />
+                                        {{ text_no }}
+                                    {% endif %}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group subscribe-confirmation">
+                            <div class="col-sm-12">
+                                <ul class="nav nav-tabs" id="subscribe-confirmation-stores">
+                                    {% for store in stores %}
+                                        <li><a href="subscribe-confirmation-stores{{ store['store_id'] }}" data-toggle="tab">{{ store['name'] }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                                <div class="tab-content">
+                                    {% for store in stores %}
+                                        <div class="tab-pane" id="subscribe-confirmation-stores{{ store['store_id'] }}">
+                                            <ul class="nav nav-tabs" id="languages-confirmation-stores{{ store['store_id'] }}">
+                                                {% for language in languages %}
+                                                    <li><a href="#languages-confirmation-stores{{ store['store_id'] }}-{{ language['language_id'] }}" data-toggle="tab"><img src="language/{{ language['code'] }}/{{ language['code'] }}.png" title="{{ language['name'] }}" /> {{ language['name'] }}</a></li>
+                                                {% endfor %}
+                                            </ul>
+                                            <div class="tab-content">
+                                                {% for language in languages %}
+                                                    <div class="tab-pane" id="languages-confirmation-stores{{ store['store_id'] }}-{{ language['language_id'] }}">
+                                                        <div class="form-group">
+                                                            <label class="col-sm-2 control-label" for="input-subject-{{ store['store_id'] }}-{{ language['language_id'] }}">{{ entry_subject }}</label>
+                                                            <div class="col-sm-10">
+                                                                <input type="text" name="ne_subscribe_confirmation_subject[{{ store['store_id'] }}][{{ language['language_id'] }}]" value="{{ ne_subscribe_confirmation_subject[store['store_id']][language['language_id']] is defined ? ne_subscribe_confirmation_subject[store['store_id']][language['language_id']] : '' }}" placeholder="{{ entry_subject }}" id="input-subject-{{ store['store_id'] }}-{{ language['language_id'] }}" class="form-control" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-2 control-label" for="input-message-{{ store['store_id'] }}-{{ language['language_id'] }}">{{ entry_message }}</label>
+                                                            <div class="col-sm-10">
+                                                                <textarea name="ne_subscribe_confirmation_message[{{ store['store_id'] }}][{{ language['language_id'] }}]" placeholder="{{ entry_message }}" id="input-message-{{ store['store_id'] }}-{{ language['language_id'] }}" class="form-control">{{ ne_subscribe_confirmation_message[store['store_id']][language['language_id']] is defined ? ne_subscribe_confirmation_message[store['store_id']][language['language_id']] : '' }}</textarea>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <div class="col-sm-10 col-sm-offset-2">
+                                                                {{ text_personalisation_tags }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <legend>{{ text_module_localization }} {{ entry_months }}</legend>
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <ul class="nav nav-tabs" id="languages-months">
+                                    {% for language in languages %}
+                                        <li><a href="#language-months{{ language['language_id'] }}" data-toggle="tab"><img src="language/{{ language['code'] }}/{{ language['code'] }}.png" title="{{ language['name'] }}" /> {{ language['name'] }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                                <div class="tab-content">
+                                    {% for language in languages %}
+                                        <div class="tab-pane" id="language-months{{ language['language_id'] }}">
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label" for="input-january-{{ language['language_id'] }}">{{ entry_january }}</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" name="ne_months[{{ language['language_id'] }}][0]" value="{{ ne_months[language['language_id']][0] is defined ? ne_months[language['language_id']][0] : entry_january }}" placeholder="{{ entry_january }}" id="input-january-{{ language['language_id'] }}" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label" for="input-february-{{ language['language_id'] }}">{{ entry_february }}</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" name="ne_months[{{ language['language_id'] }}][1]" value="{{ ne_months[language['language_id']][1] is defined ? ne_months[language['language_id']][1] : entry_february }}" placeholder="{{ entry_february }}" id="input-february-{{ language['language_id'] }}" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label" for="input-march-{{ language['language_id'] }}">{{ entry_march }}</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" name="ne_months[{{ language['language_id'] }}][2]" value="{{ ne_months[language['language_id']][2] is defined ? ne_months[language['language_id']][2] : entry_march }}" placeholder="{{ entry_march }}" id="input-march-{{ language['language_id'] }}" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label" for="input-april-{{ language['language_id'] }}">{{ entry_april }}</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" name="ne_months[{{ language['language_id'] }}][3]" value="{{ ne_months[language['language_id']][3] is defined ? ne_months[language['language_id']][3] : entry_april }}" placeholder="{{ entry_april }}" id="input-april-{{ language['language_id'] }}" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label" for="input-may-{{ language['language_id'] }}">{{ entry_may }}</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" name="ne_months[{{ language['language_id'] }}][4]" value="{{ ne_months[language['language_id']][4] is defined ? ne_months[language['language_id']][4] : entry_may }}" placeholder="{{ entry_may }}" id="input-may-{{ language['language_id'] }}" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label" for="input-june-{{ language['language_id'] }}">{{ entry_june }}</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" name="ne_months[{{ language['language_id'] }}][5]" value="{{ ne_months[language['language_id']][5] is defined ? ne_months[language['language_id']][5] : entry_june }}" placeholder="{{ entry_june }}" id="input-june-{{ language['language_id'] }}" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label" for="input-july-{{ language['language_id'] }}">{{ entry_july }}</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" name="ne_months[{{ language['language_id'] }}][6]" value="{{ ne_months[language['language_id']][6] is defined ? ne_months[language['language_id']][6] : entry_july }}" placeholder="{{ entry_july }}" id="input-july-{{ language['language_id'] }}" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label" for="input-august-{{ language['language_id'] }}">{{ entry_august }}</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" name="ne_months[{{ language['language_id'] }}][7]" value="{{ ne_months[language['language_id']][7] is defined ? ne_months[language['language_id']][7] : entry_august }}" placeholder="{{ entry_august }}" id="input-august-{{ language['language_id'] }}" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label" for="input-september-{{ language['language_id'] }}">{{ entry_september }}</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" name="ne_months[{{ language['language_id'] }}][8]" value="{{ ne_months[language['language_id']][8] is defined ? ne_months[language['language_id']][8] : entry_september }}" placeholder="{{ entry_september }}" id="input-september-{{ language['language_id'] }}" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label" for="input-october-{{ language['language_id'] }}">{{ entry_october }}</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" name="ne_months[{{ language['language_id'] }}][9]" value="{{ ne_months[language['language_id']][9] is defined ? ne_months[language['language_id']][9] : entry_october }}" placeholder="{{ entry_october }}" id="input-october-{{ language['language_id'] }}" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label" for="input-november-{{ language['language_id'] }}">{{ entry_november }}</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" name="ne_months[{{ language['language_id'] }}][10]" value="{{ ne_months[language['language_id']][10] is defined ? ne_months[language['language_id']][10] : entry_november }}" placeholder="{{ entry_november }}" id="input-november-{{ language['language_id'] }}" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label" for="input-december-{{ language['language_id'] }}">{{ entry_december }}</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" name="ne_months[{{ language['language_id'] }}][11]" value="{{ ne_months[language['language_id']][11] is defined ? ne_months[language['language_id']][11] : entry_december }}" placeholder="{{ entry_december }}" id="input-december-{{ language['language_id'] }}" class="form-control" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <legend>{{ text_module_localization }} {{ entry_weekdays }}</legend>
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <ul class="nav nav-tabs" id="languages-weekdays">
+                                    {% for language in languages %}
+                                        <li><a href="#language-weekdays{{ language['language_id'] }}" data-toggle="tab"><img src="language/{{ language['code'] }}/{{ language['code'] }}.png" title="{{ language['name'] }}" /> {{ language['name'] }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                                <div class="tab-content">
+                                    {% for language in languages %}
+                                        <div class="tab-pane" id="language-weekdays{{ language['language_id'] }}">
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label" for="input-sunday-{{ language['language_id'] }}">{{ entry_sunday }}</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" name="ne_weekdays[{{ language['language_id'] }}][0]" value="{{ ne_weekdays[language['language_id']][0] is defined ? ne_weekdays[language['language_id']][0] : entry_sunday }}" placeholder="{{ entry_sunday }}" id="input-sunday-{{ language['language_id'] }}" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label" for="input-monday-{{ language['language_id'] }}">{{ entry_monday }}</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" name="ne_weekdays[{{ language['language_id'] }}][1]" value="{{ ne_weekdays[language['language_id']][1] is defined ? ne_weekdays[language['language_id']][1] : entry_monday }}" placeholder="{{ entry_monday }}" id="input-monday-{{ language['language_id'] }}" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label" for="input-tuesday-{{ language['language_id'] }}">{{ entry_tuesday }}</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" name="ne_weekdays[{{ language['language_id'] }}][2]" value="{{ ne_weekdays[language['language_id']][2] is defined ? ne_weekdays[language['language_id']][2] : entry_tuesday }}" placeholder="{{ entry_tuesday }}" id="input-tuesday-{{ language['language_id'] }}" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label" for="input-wednesday-{{ language['language_id'] }}">{{ entry_wednesday }}</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" name="ne_weekdays[{{ language['language_id'] }}][3]" value="{{ ne_weekdays[language['language_id']][3] is defined ? ne_weekdays[language['language_id']][3] : entry_wednesday }}" placeholder="{{ entry_wednesday }}" id="input-wednesday-{{ language['language_id'] }}" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label" for="input-thursday-{{ language['language_id'] }}">{{ entry_thursday }}</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" name="ne_weekdays[{{ language['language_id'] }}][4]" value="{{ ne_weekdays[language['language_id']][4] is defined ? ne_weekdays[language['language_id']][4] : entry_thursday }}" placeholder="{{ entry_thursday }}" id="input-thursday-{{ language['language_id'] }}" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label" for="input-friday-{{ language['language_id'] }}">{{ entry_friday }}</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" name="ne_weekdays[{{ language['language_id'] }}][5]" value="{{ ne_weekdays[language['language_id']][5] is defined ? ne_weekdays[language['language_id']][5] : entry_friday }}" placeholder="{{ entry_friday }}" id="input-friday-{{ language['language_id'] }}" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label" for="input-saturday-{{ language['language_id'] }}">{{ entry_saturday }}</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" name="ne_weekdays[{{ language['language_id'] }}][6]" value="{{ ne_weekdays[language['language_id']][6] is defined ? ne_weekdays[language['language_id']][6] : entry_saturday }}" placeholder="{{ entry_saturday }}" id="input-saturday-{{ language['language_id'] }}" class="form-control" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                </form>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript"><!--
+        {% for store in stores %}
+        $("select[name='ne_smtp[{{ store['store_id'] }}][protocol]']").bind('change', function() {
+            if ($(this).val() == 'mailgun') {
+                $(".mail-{{ store['store_id'] }}").hide();
+                $(".smtp-{{ store['store_id'] }}").hide();
+                $(".mailgun-{{ store['store_id'] }}").show();
+            } else if ($(this).val() == 'mail') {
+                $(".mailgun-{{ store['store_id'] }}").hide();
+                $(".smtp-{{ store['store_id'] }}").hide();
+                $(".mail-{{ store['store_id'] }}").show();
+            } else {
+                $(".mailgun-{{ store['store_id'] }}").hide();
+                $(".smtp-{{ store['store_id'] }}").show();
+                $(".mail-{{ store['store_id'] }}").show();
+            }
+        });
+        $("select[name='ne_smtp[{{ store['store_id'] }}][protocol]']").trigger('change');
+
+        {% for language in languages %}
+        $('#input-message-{{ store['store_id'] }}-{{ language['language_id'] }}').summernote({
+            height: 300
+        });
+        {% endfor %}
+        {% endfor %}
+        //--></script>
+    <script type="text/javascript"><!--
+        var list_row = [{{ list_row|join(',') }}];
+
+        function addList(store_id) {
+            var html = '<tbody id="list-row-' + store_id + '-' + list_row[store_id] + '">';
+            html += '<tr>';
+            html += '<td class="text-left"><br/>';
+            {% for language in languages %}
+            html += '<div class="input-group">';
+            html += '<span class="input-group-addon"><img src="language/{{ language['code'] }}/{{ language['code'] }}.png" title="{{ language['name'] }}" alt="{{ language['name'] }}" /></span>';
+            html += '<input type="text" name="ne_marketing_list[' + store_id + '][' + list_row[store_id] + '][{{ language['language_id'] }}]" value="" class="form-control" />';
+            html += '</div><br/>';
+            {% endfor %}
+            html += '</td>';
+            html += '<td class="text-left"><button type="button" onclick="$(\'#list-row-' + store_id + '-' + list_row[store_id] + '\').remove();" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>';
+            html += '</tr>';
+            html += '</tbody>';
+
+            $('#list' + store_id + ' tfoot').before(html);
+            list_row[store_id] = list_row[store_id] + 1;
+        }
+
+        $('input[name=\'ne_throttle\']').bind('click', function() {
+            checkThrottle();
+        });
+
+        $('input[name=\'ne_use_smtp\']').bind('click', function() {
+            checkSmtp();
+        });
+
+        $('input[name=\'ne_subscribe_confirmation\']').bind('click', function() {
+            checkSubscribeConfirmation();
+        });
+
+        checkThrottle();
+        checkSmtp();
+        checkSubscribeConfirmation();
+
+        function checkThrottle() {
+            if ($('input[name=\'ne_throttle\']:checked').val() == 1) {
+                $('.throttle').show();
+            } else {
+                $('.throttle').hide();
+            }
+        }
+
+        function checkSmtp() {
+            if ($('input[name=\'ne_use_smtp\']:checked').val() == 1) {
+                $('.smtp').show();
+            } else {
+                $('.smtp').hide();
+            }
+        }
+
+        function checkSubscribeConfirmation() {
+            if ($('input[name=\'ne_subscribe_confirmation\']:checked').val() == 1) {
+                $('.subscribe-confirmation').show();
+            } else {
+                $('.subscribe-confirmation').hide();
+            }
+        }
+        //--></script>
+    <script type="text/javascript"><!--
+        $('#smtp-stores a:first').tab('show');
+        $('#list-stores a:first').tab('show');
+        $('#subscribe-confirmation-stores a:first').tab('show');
+        {% for store in stores %}
+        $('#languages-confirmation-stores{{ store["store_id"] }} a:first').tab('show');
+        {% endfor %}
+        $('#languages-months a:first').tab('show');
+        $('#languages-weekdays a:first').tab('show');
+        //--></script>
+</div>
+{{ footer }}

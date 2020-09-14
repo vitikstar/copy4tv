@@ -1,0 +1,36 @@
+{{ header }}
+<div id="checkout-confirm-success" class="container">
+  <div class="row">{{ column_left }}
+    {% if column_left and column_right %}
+    {% set class = 'col-sm-6' %}
+    {% elseif column_left or column_right %}
+    {% set class = 'col-sm-9' %}
+    {% else %}
+    {% set class = 'col-sm-12' %}
+    {% endif %}
+    <div id="content" class="{{ class }}">
+        <ul class="breadcrumb">
+            {% set total = breadcrumbs|length %}
+            {% set counter = 0 %}
+            {% for breadcrumb in breadcrumbs %}
+                {{ breadcrumb['separator'] }}
+                {% set counter = counter + 1 %}
+                {% if (counter == total) %}
+                    <li>{{ breadcrumb['text'] }}</li>
+                {% else %}
+                    <li><a href="{{ breadcrumb['href'] }}">{{ breadcrumb['text'] }}</a></li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+        {{ content_top }}
+        <div class="ch-wrapper">
+            <div class="ch-wrapper-left">
+                <h1 class="hidden-xs hidden-sm hidden-md">{{ heading_title_customer }}</h1>
+            </div>
+        </div>
+      {{ content_bottom }}
+    </div>
+    {{ column_right }}
+  </div>
+</div>
+{{ footer }}

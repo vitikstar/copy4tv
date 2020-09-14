@@ -1,0 +1,693 @@
+{{ header }}{{ column_left }}
+<div id="content">
+    <div class="page-header">
+        <div class="container-fluid">
+            <div class="pull-right">
+                <button type="submit" form="form" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+                <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a>
+            </div>
+            <h1>{{ heading_title }}</h1>
+        </div>
+    </div>
+    <div class="container-fluid">
+        {% if (error_warning) %}
+            <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+        {% endif %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-check-square-o"></i> {{ text_subscribe_box }}</h3>
+            </div>
+            <div class="panel-body">
+                <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form" class="form-horizontal">
+                    <fieldset>
+                        <legend>{{ text_settings }}</legend>
+                        <div class="form-group required">
+                            <label class="col-sm-2 control-label" for="input-name">{{ entry_name }}</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="name" value="{{ name }}" placeholder="{{ entry_name }}" id="input-name" class="form-control" />
+                                {% if (error_name) %}
+                                    <div class="text-danger">{{ error_name }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">{{ entry_status }}</label>
+                            <div class="col-sm-10">
+                                <label class="radio-inline">
+                                    {% if (status) %}
+                                        <input type="radio" name="status" value="1" checked="checked" />
+                                        {{ text_enabled }}
+                                    {% else %}
+                                        <input type="radio" name="status" value="1" />
+                                        {{ text_enabled }}
+                                    {% endif %}
+                                </label>
+                                <label class="radio-inline">
+                                    {% if (not status) %}
+                                        <input type="radio" name="status" value="0" checked="checked" />
+                                        {{ text_disabled }}
+                                    {% else %}
+                                        <input type="radio" name="status" value="0" />
+                                        {{ text_disabled }}
+                                    {% endif %}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">{{ entry_show_for }}</label>
+                            <div class="col-sm-10 col-md-2">
+                                <select name="show_for" class="form-control">
+                                    {% if (not show_for) %}
+                                        <option value="1">{{ text_everyone }}</option>
+                                        <option value="0" selected="selected">{{ text_guests }}</option>
+                                    {% else %}
+                                        <option value="1" selected="selected">{{ text_everyone }}</option>
+                                        <option value="0">{{ text_guests }}</option>
+                                    {% endif %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">{{ entry_type }}</label>
+                            <div class="col-sm-10 col-md-4">
+                                <select name="type" class="form-control">
+                                    {% if (type == '1') %}
+                                        <option value="1" selected="selected">{{ text_content_box }}</option>
+                                    {% else %}
+                                        <option value="1">{{ text_content_box }}</option>
+                                    {% endif %}
+                                    {% if (type == '2') %}
+                                        <option value="2" selected="selected">{{ text_content_box_to_modal }}</option>
+                                    {% else %}
+                                        <option value="2">{{ text_content_box_to_modal }}</option>
+                                    {% endif %}
+                                    {% if (type == '3') %}
+                                        <option value="3" selected="selected">{{ text_modal_popup }}</option>
+                                    {% else %}
+                                        <option value="3">{{ text_modal_popup }}</option>
+                                    {% endif %}
+                                    {% if (type == '4') %}
+                                        <option value="4" selected="selected">{{ text_flyin_popup }}</option>
+                                    {% else %}
+                                        <option value="4">{{ text_flyin_popup }}</option>
+                                    {% endif %}
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset class="ne-popup">
+                        <legend>{{ text_popup_settings }}</legend>
+                        <div class="form-group ne-fly-in">
+                            <label class="col-sm-2 control-label">{{ entry_position }}</label>
+                            <div class="col-sm-10 col-md-2">
+                                <select name="flyin_position" class="form-control">
+                                    {% if (flyin_position == '1') %}
+                                        <option value="1" selected="selected">{{ text_top_left }}</option>
+                                    {% else %}
+                                        <option value="1">{{ text_top_left }}</option>
+                                    {% endif %}
+                                    {% if (flyin_position == '2') %}
+                                        <option value="2" selected="selected">{{ text_top_right }}</option>
+                                    {% else %}
+                                        <option value="2">{{ text_top_right }}</option>
+                                    {% endif %}
+                                    {% if (flyin_position == '3') %}
+                                        <option value="3" selected="selected">{{ text_bottom_left }}</option>
+                                    {% else %}
+                                        <option value="3">{{ text_bottom_left }}</option>
+                                    {% endif %}
+                                    {% if (flyin_position == '4') %}
+                                        <option value="4" selected="selected">{{ text_bottom_right }}</option>
+                                    {% else %}
+                                        <option value="4">{{ text_bottom_right }}</option>
+                                    {% endif %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="input-popup-delay"><span data-toggle="tooltip" title="{{ help_popup_delay }}">{{ entry_popup_delay }}</span></label>
+                            <div class="col-sm-10 col-md-2">
+                                <input type="text" name="popup_delay" value="{{ popup_delay }}" id="input-popup-delay" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="input-popup-timeout"><span data-toggle="tooltip" title="{{ help_popup_timeout }}">{{ entry_popup_timeout }}</span></label>
+                            <div class="col-sm-10 col-md-2">
+                                <input type="text" name="popup_timeout" value="{{ popup_timeout }}" id="input-popup-timeout" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="input-repeat-time"><span data-toggle="tooltip" title="{{ help_popup_repeat_time }}">{{ entry_popup_repeat_time }}</span></label>
+                            <div class="col-sm-10 col-md-2">
+                                <input type="text" name="repeat_time" value="{{ repeat_time }}" id="input-repeat-time" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="input-popup-width">{{ entry_popup_width }}</label>
+                            <div class="col-sm-10 col-md-2">
+                                <input type="text" name="popup_width" value="{{ popup_width }}" id="input-popup-width" class="form-control" />
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <legend>{{ text_box_settings }}</legend>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">{{ entry_border }}</label>
+                            <div class="col-sm-10 col-md-2">
+                                <select name="border" class="form-control">
+                                    {% if (border == '0') %}
+                                        <option value="0" selected="selected">{{ text_none }}</option>
+                                    {% else %}
+                                        <option value="0">{{ text_none }}</option>
+                                    {% endif %}
+                                    {% if (border == '1') %}
+                                        <option value="1" selected="selected">{{ text_all }}</option>
+                                    {% else %}
+                                        <option value="1">{{ text_all }}</option>
+                                    {% endif %}
+                                    {% if (border == '2') %}
+                                        <option value="2" selected="selected">{{ text_top }}</option>
+                                    {% else %}
+                                        <option value="2">{{ text_top }}</option>
+                                    {% endif %}
+                                    {% if (border == '3') %}
+                                        <option value="3" selected="selected">{{ text_bottom }}</option>
+                                    {% else %}
+                                        <option value="3">{{ text_bottom }}</option>
+                                    {% endif %}
+                                    {% if (border == '4') %}
+                                        <option value="4" selected="selected">{{ text_left }}</option>
+                                    {% else %}
+                                        <option value="4">{{ text_left }}</option>
+                                    {% endif %}
+                                    {% if (border == '5') %}
+                                        <option value="5" selected="selected">{{ text_right }}</option>
+                                    {% else %}
+                                        <option value="5">{{ text_right }}</option>
+                                    {% endif %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="input-border-radius">{{ entry_border_radius }}</label>
+                            <div class="col-sm-10 col-md-2">
+                                <input type="text" name="border_radius" value="{{ border_radius }}" id="input-border-radius" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="input-border-width">{{ entry_border_width }}</label>
+                            <div class="col-sm-10 col-md-2">
+                                <input type="text" name="border_width" value="{{ border_width }}" id="input-border-width" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="input-border-color">{{ entry_border_color }}</label>
+                            <div class="col-sm-10 col-md-4">
+                                <div class="input-group color">
+                                    <input type="text" name="border_color" value="{{ border_color }}" id="input-border-color" class="form-control" />
+                                    <span class="input-group-addon"><i></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">{{ entry_shadow }}</label>
+                            <div class="col-sm-10">
+                                <label class="radio-inline">
+                                    {% if (shadow) %}
+                                        <input type="radio" name="shadow" value="1" checked="checked" />
+                                        {{ text_yes }}
+                                    {% else %}
+                                        <input type="radio" name="shadow" value="1" />
+                                        {{ text_yes }}
+                                    {% endif %}
+                                </label>
+                                <label class="radio-inline">
+                                    {% if (not shadow) %}
+                                        <input type="radio" name="shadow" value="0" checked="checked" />
+                                        {{ text_no }}
+                                    {% else %}
+                                        <input type="radio" name="shadow" value="0" />
+                                        {{ text_no }}
+                                    {% endif %}
+                                </label>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <legend>{{ text_form_settings }}</legend>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">{{ entry_fields }}</label>
+                            <div class="col-sm-10 col-md-4">
+                                <select name="fields" class="form-control">
+                                    {% if (fields == '1') %}
+                                        <option value="1" selected="selected">{{ text_only_email }}</option>
+                                    {% else %}
+                                        <option value="1">{{ text_only_email }}</option>
+                                    {% endif %}
+                                    {% if (fields == '2') %}
+                                        <option value="2" selected="selected">{{ text_email_name }}</option>
+                                    {% else %}
+                                        <option value="2">{{ text_email_name }}</option>
+                                    {% endif %}
+                                    {% if (fields == '3') %}
+                                        <option value="3" selected="selected">{{ text_email_full }}</option>
+                                    {% else %}
+                                        <option value="3">{{ text_email_full }}</option>
+                                    {% endif %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">{{ entry_field_orientation }}</label>
+                            <div class="col-sm-10 col-md-2">
+                                <select name="field_orientation" class="form-control">
+                                    {% if (field_orientation == '0') %}
+                                        <option value="0" selected="selected">{{ text_stacked }}</option>
+                                    {% else %}
+                                        <option value="0">{{ text_stacked }}</option>
+                                    {% endif %}
+                                    {% if (field_orientation == '1') %}
+                                        <option value="1" selected="selected">{{ text_stacked_compact }}</option>
+                                    {% else %}
+                                        <option value="1">{{ text_stacked_compact }}</option>
+                                    {% endif %}
+                                    {% if (field_orientation == '2') %}
+                                        <option value="2" selected="selected">{{ text_inline }}</option>
+                                    {% else %}
+                                        <option value="2">{{ text_inline }}</option>
+                                    {% endif %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="input-field-border-radius">{{ entry_field_border_radius }}</label>
+                            <div class="col-sm-10 col-md-2">
+                                <input type="text" name="field_border_radius" value="{{ field_border_radius }}" id="input-field-border-radius" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="input-field-border-color">{{ entry_field_border_color }}</label>
+                            <div class="col-sm-10 col-md-4">
+                                <div class="input-group color">
+                                    <input type="text" name="field_border_color" value="{{ field_border_color }}" id="input-field-border-color" class="form-control" />
+                                    <span class="input-group-addon"><i></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="input-field-active-border-color">{{ entry_field_active_border_color }}</label>
+                            <div class="col-sm-10 col-md-4">
+                                <div class="input-group color">
+                                    <input type="text" name="field_active_border_color" value="{{ field_active_border_color }}" id="input-field-active-border-color" class="form-control" />
+                                    <span class="input-group-addon"><i></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="input-button-border-radius">{{ entry_button_border_radius }}</label>
+                            <div class="col-sm-10 col-md-2">
+                                <input type="text" name="button_border_radius" value="{{ button_border_radius }}" id="input-button-border-radius" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="input-button-background-color">{{ entry_button_background_color }}</label>
+                            <div class="col-sm-10 col-md-4">
+                                <div class="input-group color">
+                                    <input type="text" name="button_background_color" value="{{ button_background_color }}" id="input-button-background-color" class="form-control" />
+                                    <span class="input-group-addon"><i></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="input-button-text-color">{{ entry_button_text_color }}</label>
+                            <div class="col-sm-10 col-md-4">
+                                <div class="input-group color">
+                                    <input type="text" name="button_text_color" value="{{ button_text_color }}" id="input-button-text-color" class="form-control" />
+                                    <span class="input-group-addon"><i></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="input-button-text">{{ entry_button_text }}</label>
+                            <div class="col-sm-10 col-md-4">
+                                {% for language in languages %}
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><img src="language/{{ language['code'] }}/{{ language['code'] }}.png" title="{{ language['name'] }}" alt="{{ language['name'] }}" /></span>
+                                        <input type="text" name="button_text[{{ language['language_id'] }}]" value="{{ button_text[language['language_id']] is empty ? text_subscribe : button_text[language['language_id']] }}" class="form-control" />
+                                    </div>
+                                    <br/>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="input-form-background-color">{{ entry_background_color }}</label>
+                            <div class="col-sm-10 col-md-4">
+                                <div class="input-group color">
+                                    <input type="text" name="form_background_color" value="{{ form_background_color }}" id="input-form-background-color" class="form-control" />
+                                    <span class="input-group-addon"><i></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="input-success-text-color">{{ entry_success_text_color }}</label>
+                            <div class="col-sm-10 col-md-4">
+                                <div class="input-group color">
+                                    <input type="text" name="form_success_text_color" value="{{ form_success_text_color }}" id="input-success-text-color" class="form-control" />
+                                    <span class="input-group-addon"><i></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="input-error-text-color">{{ entry_error_text_color }}</label>
+                            <div class="col-sm-10 col-md-4">
+                                <div class="input-group color">
+                                    <input type="text" name="form_error_text_color" value="{{ form_error_text_color }}" id="input-error-text-color" class="form-control" />
+                                    <span class="input-group-addon"><i></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">{{ entry_list_type }}</label>
+                            <div class="col-sm-10 col-md-2">
+                                <select name="list_type" class="form-control">
+                                    {% if (list_type == '1') %}
+                                        <option value="0">{{ text_checkboxes }}</option>
+                                        <option value="1" selected="selected">{{ text_radio_buttons }}</option>
+                                    {% else %}
+                                        <option value="0" selected="selected">{{ text_checkboxes }}</option>
+                                        <option value="1">{{ text_radio_buttons }}</option>
+                                    {% endif %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">{{ entry_accept }}</label>
+                            <div class="col-sm-10 col-md-10">
+                                <div class="checkbox">
+                                    <label><input type="checkbox" name="accept" value="1"{% if (accept) %} checked="checked"{% endif %} /> {{ text_accept }}</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group accept-checkbox">
+                            <label class="col-sm-2 control-label" for="input-accept-text"><span data-toggle="tooltip" title="{{ text_accept_text }}">{{ entry_accept_text }}</span></label>
+                            <div class="col-sm-10 col-md-10">
+                                {% for language in languages %}
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><img src="language/{{ language['code'] }}/{{ language['code'] }}.png" title="{{ language['name'] }}" alt="{{ language['name'] }}" /></span>
+                                        <textarea name="accept_text[{{ language['language_id'] }}]" class="form-control">{{ accept_text[language['language_id']] is empty ? '' : accept_text[language['language_id']] }}</textarea>
+                                    </div>
+                                    <br/>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="form-group accept-checkbox">
+                            <label class="col-sm-2 control-label" for="input-accept-error">{{ entry_accept_error }}</label>
+                            <div class="col-sm-10 col-md-10">
+                                {% for language in languages %}
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><img src="language/{{ language['code'] }}/{{ language['code'] }}.png" title="{{ language['name'] }}" alt="{{ language['name'] }}" /></span>
+                                        <input type="text" name="accept_error[{{ language['language_id'] }}]" value="{{ accept_error[language['language_id']] is empty ? '' : accept_error[language['language_id']] }}" class="form-control" />
+                                    </div>
+                                    <br/>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <legend>{{ text_content_settings }}</legend>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="input-heading-text-color">{{ entry_heading_text_color }}</label>
+                            <div class="col-sm-10 col-md-4">
+                                <div class="input-group color">
+                                    <input type="text" name="heading_text_color" value="{{ heading_text_color }}" id="input-heading-text-color" class="form-control" />
+                                    <span class="input-group-addon"><i></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">{{ entry_heading_text }}</label>
+                            <div class="col-sm-10 col-md-6">
+                                {% for language in languages %}
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><img src="language/{{ language['code'] }}/{{ language['code'] }}.png" title="{{ language['name'] }}" alt="{{ language['name'] }}" /></span>
+                                        <input type="text" name="heading[{{ language['language_id'] }}]" value="{{ heading[language['language_id']] is defined ? heading[language['language_id']] : text_content_heading }}" class="form-control" />
+                                    </div>
+                                    <br/>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="input-content-text-color">{{ entry_text_color }}</label>
+                            <div class="col-sm-10 col-md-4">
+                                <div class="input-group color">
+                                    <input type="text" name="content_text_color" value="{{ content_text_color }}" id="input-content-text-color" class="form-control" />
+                                    <span class="input-group-addon"><i></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">{{ entry_text }}</label>
+                            <div class="col-sm-10 col-md-10">
+                                {% for language in languages %}
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><img src="language/{{ language['code'] }}/{{ language['code'] }}.png" title="{{ language['name'] }}" alt="{{ language['name'] }}" /></span>
+                                        <textarea name="text[{{ language['language_id'] }}]" class="form-control">{{ text[language['language_id']] is defined ? text[language['language_id']] : text_content_text }}</textarea>
+                                    </div>
+                                    <br/>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">{{ entry_content_divider }}</label>
+                            <div class="col-sm-10 col-md-2">
+                                <select name="content_divider" class="form-control">
+                                    {% if (content_divider == '0') %}
+                                        <option value="0" selected="selected">{{ text_none }}</option>
+                                    {% else %}
+                                        <option value="0">{{ text_none }}</option>
+                                    {% endif %}
+                                    {% if (content_divider == '1') %}
+                                        <option value="1" selected="selected">{{ text_triangle }}</option>
+                                    {% else %}
+                                        <option value="1">{{ text_triangle }}</option>
+                                    {% endif %}
+                                    {% if (content_divider == '2') %}
+                                        <option value="2" selected="selected">{{ text_wide_triangle }}</option>
+                                    {% else %}
+                                        <option value="2">{{ text_wide_triangle }}</option>
+                                    {% endif %}
+                                    {% if (content_divider == '3') %}
+                                        <option value="3" selected="selected">{{ text_zigzag }}</option>
+                                    {% else %}
+                                        <option value="3">{{ text_zigzag }}</option>
+                                    {% endif %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="input-content-background-color">{{ entry_background_color }}</label>
+                            <div class="col-sm-10 col-md-4">
+                                <div class="input-group color">
+                                    <input type="text" name="content_background_color" value="{{ content_background_color }}" id="content-background-color" class="form-control" />
+                                    <span class="input-group-addon"><i></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <legend>{{ text_content_image_settings }}</legend>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">{{ entry_position }}</label>
+                            <div class="col-sm-10 col-md-2">
+                                <select name="image_position" class="form-control">
+                                    {% if (image_position == '1') %}
+                                        <option value="1" selected="selected">{{ text_above_text }}</option>
+                                    {% else %}
+                                        <option value="1">{{ text_above_text }}</option>
+                                    {% endif %}
+                                    {% if (image_position == '2') %}
+                                        <option value="2" selected="selected">{{ text_below_text }}</option>
+                                    {% else %}
+                                        <option value="2">{{ text_below_text }}</option>
+                                    {% endif %}
+                                    {% if (image_position == '3') %}
+                                        <option value="3" selected="selected">{{ text_left_from_text }}</option>
+                                    {% else %}
+                                        <option value="3">{{ text_left_from_text }}</option>
+                                    {% endif %}
+                                    {% if (image_position == '4') %}
+                                        <option value="4" selected="selected">{{ text_right_from_text }}</option>
+                                    {% else %}
+                                        <option value="4">{{ text_right_from_text }}</option>
+                                    {% endif %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">{{ entry_image }}</label>
+                            <div class="col-sm-10">
+                                <label class="radio-inline text-center" style="padding-left: 0;padding-right: 20px">
+                                    <img src="{{ HTTPS_CATALOG }}image/ne/no_image.png" alt="" class="img-thumbnail" style="width:100px"><br>
+                                    {% if (image == 0) %}
+                                        <input type="radio" name="image" value="0" checked="checked" style="margin: 10px auto 20px" />
+                                    {% else %}
+                                        <input type="radio" name="image" value="0" style="margin: 10px auto 20px" />
+                                    {% endif %}
+                                </label>
+                                <label class="radio-inline text-center" style="padding-left: 0;padding-right: 20px">
+                                    <img src="{{ HTTPS_CATALOG }}image/ne/1.png" alt="" class="img-thumbnail" style="width:100px"><br>
+                                    {% if (image == 1) %}
+                                        <input type="radio" name="image" value="1" checked="checked" style="margin: 10px auto 20px" />
+                                    {% else %}
+                                        <input type="radio" name="image" value="1" style="margin: 10px auto 20px" />
+                                    {% endif %}
+                                </label>
+                                <label class="radio-inline text-center" style="padding-left: 0;padding-right: 20px">
+                                    <img src="{{ HTTPS_CATALOG }}image/ne/2.png" alt="" class="img-thumbnail" style="width:100px"><br>
+                                    {% if (image == 2) %}
+                                        <input type="radio" name="image" value="2" checked="checked" style="margin: 10px auto 20px" />
+                                    {% else %}
+                                        <input type="radio" name="image" value="2" style="margin: 10px auto 20px" />
+                                    {% endif %}
+                                </label>
+                                <label class="radio-inline text-center" style="padding-left: 0;padding-right: 20px">
+                                    <img src="{{ HTTPS_CATALOG }}image/ne/3.png" alt="" class="img-thumbnail" style="width:100px"><br>
+                                    {% if (image == 3) %}
+                                        <input type="radio" name="image" value="3" checked="checked" style="margin: 10px auto 20px" />
+                                    {% else %}
+                                        <input type="radio" name="image" value="3" style="margin: 10px auto 20px" />
+                                    {% endif %}
+                                </label>
+                                <label class="radio-inline text-center" style="padding-left: 0;padding-right: 20px">
+                                    <img src="{{ HTTPS_CATALOG }}image/ne/4.png" alt="" class="img-thumbnail" style="width:100px"><br>
+                                    {% if (image == 4) %}
+                                        <input type="radio" name="image" value="4" checked="checked" style="margin: 10px auto 20px" />
+                                    {% else %}
+                                        <input type="radio" name="image" value="4" style="margin: 10px auto 20px" />
+                                    {% endif %}
+                                </label>
+                                <label class="radio-inline text-center" style="padding-left: 0;padding-right: 20px">
+                                    <img src="{{ HTTPS_CATALOG }}image/ne/5.png" alt="" class="img-thumbnail" style="width:100px"><br>
+                                    {% if (image == 5) %}
+                                        <input type="radio" name="image" value="5" checked="checked" style="margin: 10px auto 20px" />
+                                    {% else %}
+                                        <input type="radio" name="image" value="5" style="margin: 10px auto 20px" />
+                                    {% endif %}
+                                </label>
+                                <label class="radio-inline text-center" style="padding-left: 0;padding-right: 20px">
+                                    <img src="{{ HTTPS_CATALOG }}image/ne/6.png" alt="" class="img-thumbnail" style="width:100px"><br>
+                                    {% if (image == 6) %}
+                                        <input type="radio" name="image" value="6" checked="checked" style="margin: 10px auto 20px" />
+                                    {% else %}
+                                        <input type="radio" name="image" value="6" style="margin: 10px auto 20px" />
+                                    {% endif %}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="input-image">{{ entry_custom_image }}</label>
+                            <div class="col-sm-10">
+                                <a href="" id="thumb-image" data-toggle="image" class="img-thumbnail"><img src="{{ thumb }}" alt="" title="" data-placeholder="{{ placeholder }}" /></a>
+                                <input type="hidden" name="image_custom" value="{{ image_custom }}" id="input-image" />
+                                <p class="help-block">{{ text_custom_image_text }}</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="input-image-width">{{ entry_image_width }}</label>
+                            <div class="col-sm-10 col-md-2">
+                                <input type="text" name="image_width" value="{{ image_width }}" id="input-image-width" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">{{ entry_image_circled }}</label>
+                            <div class="col-sm-10">
+                                <label class="radio-inline">
+                                    {% if (image_circled) %}
+                                        <input type="radio" name="image_circled" value="1" checked="checked" />
+                                        {{ text_yes }}
+                                    {% else %}
+                                        <input type="radio" name="image_circled" value="1" />
+                                        {{ text_yes }}
+                                    {% endif %}
+                                </label>
+                                <label class="radio-inline">
+                                    {% if (not image_circled) %}
+                                        <input type="radio" name="image_circled" value="0" checked="checked" />
+                                        {{ text_no }}
+                                    {% else %}
+                                        <input type="radio" name="image_circled" value="0" />
+                                        {{ text_no }}
+                                    {% endif %}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">{{ entry_hide_on_mobile }}</label>
+                            <div class="col-sm-10">
+                                <label class="radio-inline">
+                                    {% if (hide_image_on_mobile) %}
+                                        <input type="radio" name="hide_image_on_mobile" value="1" checked="checked" />
+                                        {{ text_yes }}
+                                    {% else %}
+                                        <input type="radio" name="hide_image_on_mobile" value="1" />
+                                        {{ text_yes }}
+                                    {% endif %}
+                                </label>
+                                <label class="radio-inline">
+                                    {% if (not hide_image_on_mobile) %}
+                                        <input type="radio" name="hide_image_on_mobile" value="0" checked="checked" />
+                                        {{ text_no }}
+                                    {% else %}
+                                        <input type="radio" name="hide_image_on_mobile" value="0" />
+                                        {{ text_no }}
+                                    {% endif %}
+                                </label>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <legend>{{ text_custom_styles }}</legend>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">{{ entry_css_code }}</label>
+                            <div class="col-sm-10 col-md-10">
+                                <textarea name="css_code" class="form-control" rows="10">{{ css_code }}</textarea>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript"><!--
+        $(function(){
+            $('.color').colorpicker({
+                'format': 'hex'
+            });
+
+            $('select[name=\'type\']').bind('change', function(){
+                if ($(this).val() == '1') {
+                    $('.ne-popup').hide();
+                } else {
+                    $('.ne-popup').show();
+                    if ($(this).val() == '4') {
+                        $('.ne-fly-in').show();
+                    } else {
+                        $('.ne-fly-in').hide();
+                    }
+                }
+            }).trigger('change');
+
+            $('input[name=\'accept\']').bind('change', function(){
+                if ($(this).prop('checked')) {
+                    $('.accept-checkbox').show();
+                } else {
+                    $('.accept-checkbox').hide();
+                }
+            }).trigger('change');
+
+        });
+        //--></script>
+</div>
+{{ footer }}

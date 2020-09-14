@@ -1,0 +1,1513 @@
+{{ header }}
+
+
+
+<div id="product-product" class="container">
+
+
+  <div class="breadcrumb-product-wrap">
+          {{ column_megamenu }}
+      <ul class="breadcrumb">
+          {% for breadcrumb in breadcrumbs %}
+              <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+          {% endfor %}
+      </ul>
+  </div>
+
+
+  <div class="row">
+    <div id="content" class="col-sm-12">
+        {{ content_top }}
+      <div class="row product-image-info">
+
+
+        <div class="col-sm-6 product-image">
+            {% if thumb or images %}
+                <div class="product-image-inner">
+                    <ul class="thumbnails image-main-wrap">
+                        {% if thumb %}
+                            <li><a class="thumbnail" data-index="0" href="{{ popup }}" title="{{ heading_title }}"><img src="{{ thumb }}" title="{{ heading_title }}" alt="{{ heading_title }}" /></a></li>
+                        {% endif %}
+
+                        {% if product_video %}
+                            <li class="image-main-wrap-video" style="display: none;">
+                                <a class="thumbnail" data-index="{{ product_video_index }}" href="javascript:void(0)">
+                                    <iframe width="560" height="315" src="{{ product_video }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                </a>
+                            </li>
+                        {% endif %}
+
+                    </ul>
+
+                    <div class="image-additional-wrap">
+                        <ul class="thumbnails thumbnails-images {% if thumbnails_images_slider %}thumbnails-images-slider{% endif %}">
+                            {% if images %}
+                                {% for image in images %}
+                                    <li class="image-additional {% if image.index == 0 %}active{% endif %}"><a class="thumbnail" href="javascript:void(0)" title="{{ heading_title }}" data-index="{{ image.index }}" data-main-popup="{{ image.popup_main }}" data-main-img="{{ image.thumb_main }}"> <img src="{{ image.thumb }}" title="{{ heading_title }}" alt="{{ heading_title }}" /></a></li>
+                                {% endfor %}
+                            {% endif %}
+                        </ul>
+                        {% if product_video %}
+                            <ul class="thumbnails thumbnails-video">
+                                <li class="image-additional">
+                                    <a class="thumbnail" href="javascript:void(0)" title="" data-index="{{ product_video_index }}" data-main-popup="" data-main-img="">
+                                        <span class="thumbnails-video-icon">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="16" viewBox="0 0 13 16"><defs><clipPath id="sg6za"><path fill="#fff" d="M0-.001l13 8-13 8z"/></clipPath></defs><g><g><path fill="none" stroke="#019fff" stroke-miterlimit="50" stroke-width="2" d="M0-.001v0l13 8v0l-13 8v0z" clip-path="url(&quot;#sg6za&quot;)"/></g></g></svg>
+                                        </span>
+                                        <span class="thumbnails-video-title">Видео</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        {% endif %}
+                    </div>
+                </div>
+          {% endif %}
+
+            <!-- появляется при прокрутке -->
+            <div class="pii-scroll-wrapper-main" style="display: none;">
+                <div class="pii-scroll-wrap">
+
+                    <ul class="nav nav-tabs pr-nav-tabs">
+                        <li class="active"><a href="javascript:void(0);" onclick="nav_tabs_all(this);">Все о товаре</a></li>
+                        <li><a href="#tab-description" data-toggle="tab">{{ tab_description }}</a></li>
+                        {% if attribute_groups %}
+                            <li><a href="#tab-specification" data-toggle="tab">{{ tab_attribute }}</a></li>
+                        {% endif %}
+                        {% if product_video %}
+                            <li><a href="#tab-video" data-toggle="tab">Видеообзор</a></li>
+                        {% endif %}
+                        {% if review_status %}
+                            <li><a class="tab-review" href="#tab-review" data-toggle="tab">{{ tab_review }}</a></li>
+                        {% endif %}
+                    </ul>
+
+                    <div class="pii-scroll-info">
+                        {% if model %}
+                            <div class="pr-model-wrap">
+                                <div class="pr-model">Код товара: <span>{{ model }}</span></div>
+                            </div>
+                        {% endif %}
+                        {% if price %}
+                            <div class="pr-price-wrap{% if special %} pr-price-special-wrap{% endif %}">
+                                {% if not special %}
+                                    <div class="pr-price">{{ price }}</div>
+                                {% else %}
+                                    <div class="pr-price-not-special"><span class="pr-price-not-special-inner">{{ price }}</span></div>
+                                    <div class="pr-price">{{ special }}</div>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                        <div class="pr-quantity-inf-wrap">
+                            <div class="pr-quantity-block-wrap">
+                                <div class="pr-quantity-inf-title">Кол-во</div>
+                                <div class="pr-quantity-block">
+                                    <div>
+                                        <input name="pr_product_id_q" value="" style="display: none;" hidden="">
+                                        <input name="pr_product_id" value="1" style="display: none;" hidden="">
+                                        <button id="pr-increase-quantity">+</button>
+                                        <input type="text" name="pr_quantity" value="1" class="input-quantity">
+                                        <button id="pr-decrease-quantity">-</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pr-quantity-opt-block">
+                                <div class="pr-quantity-opt-block-1">При покупке от 8 шт.</div>
+                                <div class="pr-quantity-opt-block-2">
+                                    <div class="pr-price">100<span class="symbol-right"> грн</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Товар в наличии -->
+                    <div class="pr-is-available pr-available-wrapper">
+                        <div class="pr-available-wrap">
+                            <div class="pr-available">
+                                <div class="pr-available-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2c5.514 0 10 4.486 10 10s-4.486 10-10 10-10-4.486-10-10 4.486-10 10-10zm0-2c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm6.25 8.891l-1.421-1.409-6.105 6.218-3.078-2.937-1.396 1.436 4.5 4.319 7.5-7.627z"/></svg>
+                                </div>
+                                <div class="pr-available-text">Товар в наличии</div>
+                            </div>
+                        </div>
+                        <div id="product_1" class="pr-product-buy-wrap">
+                            <input type="hidden" name="product_id" value="{{ product_id }}" />
+                            <div>
+                                <button type="button" id="button-cart" data-loading-text="{{ text_loading }}" class="pr-product-buy btn btn-default btn-lg btn-block"><span class="pr-product-buy-icon"></span>Добавить в корзину</button>
+                            </div>
+                            <div>
+                                <button type="button" class="pr-product-buy-one-click btn btn-default btn-lg btn-block" data-toggle="modal" data-target="#pr-one-click-modal"><span class="pr-product-buy-one-click-icon"></span>Купить в 1 клик</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <script>
+                $(window).on('load scroll', function() {
+                    pii_scroll();
+                });
+                function pii_scroll() {
+                    var pii_scroll_block = $('#pii-scroll-top').offset().top;
+                    var pii_scroll_current = $(window).scrollTop();
+                    if (pii_scroll_current > pii_scroll_block) {
+                        $('.pii-scroll-wrapper-main').fadeIn();
+                    } else {
+                        $('.pii-scroll-wrapper-main').fadeOut();
+                    }
+                }
+
+                $(document).ready(function() {
+                    $('.pr-nav-tabs a').click(function() {
+                        var attr_href = $(this).attr('href');
+                        setTimeout(function() {
+                            $('.pr-nav-tabs a[href="'+attr_href+'"]').parent().addClass('active').siblings().removeClass('active');
+                        });
+                    });
+                });
+
+            </script>
+            <!-- end появляется при прокрутке -->
+
+        </div>
+
+          <div class="modal fade modal-custom" id="product-image-popup">
+              <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                          <div class="modal-title">{{ heading_title }}</div>
+                      </div>
+                      <div class="modal-body">
+
+                          <div class="swiper-container gallery-top">
+                              <div class="swiper-wrapper">
+                                  {% if images %}
+                                      {% for image in images %}
+                                          <div class="swiper-slide">
+                                              <img src="{{ image.thumb_main }}" alt="">
+                                          </div>
+                                      {% endfor %}
+                                  {% endif %}
+                                  {% if product_video %}
+                                      <div class="swiper-slide swiper-slide-video">
+                                          <iframe width="100%" height="500" src="{{ product_video }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                      </div>
+                                  {% endif %}
+                              </div>
+                              <!-- Add Arrows -->
+                              <div class="swiper-button-prev swiper-button-white">
+                                  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="29" height="54" viewBox="0 0 29 54"><g><g><image width="29" height="54" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB0AAAA2CAYAAAA7+JL6AAAB1UlEQVRYR8XZPWsVQRQG4CeKhQipDBbaiJJKK4v0VoJipQgaLOwUG7FItNFCUBvBRgUrBS1ELfwAUUws9C8loPjByA4Ml7vsze7Oyf6Bh3funJkz586J+xbwEXfmgswEruEIvkegB/AVi/iBk7XRBH7DIazjFDZqogfxZRJMP2ct9HCTcD/e4xw28/6pgU6CZ/Cz3LBjo0ebJd2HNzg/CY69vAlMZbEXL3ERv6eV5FhJj+HTLOBYSZfwGfN4gqttCcfaSJPgFfztOuWGLO9xvMMePMS1WcAhy5vAD9iN+1jtSje0ZE7gbV+wT9LTeI1duIm7W0nYZyOV4A3c6wNuJekFPMNOXMeDvuCsaAKfYwdSSTweAs6CXsLTMcEu9DIe4U9zjr4YmrBrI1UD25KmQk+l8AvLeDVWwrakJZgu33TMjf6VZ+9t3Gou3bO1wHJ5U6GvNH1M6tjSZVztS0lDwZx0W9CEh8LbupHypgkvmWlwyOGQ4fBjsDrc1Q2GX205cfglXsKh7UqGwxuzaXBIC5rh8GY7w+HPihIOfUBlOPyp2AZXfxRnOPz5n+HwQUcJpylZ2Egnw+HDqza4+pguw+EDyQyHj15LOHTInOHwcXoJ///j4B+DjYx3cImhCQAAAABJRU5ErkJggg=="/></g></g></svg>
+                              </div>
+                              <div class="swiper-button-next swiper-button-white">
+                                  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="29" height="54" viewBox="0 0 29 54"><g><g><image width="29" height="54" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB0AAAA2CAYAAAA7+JL6AAAB20lEQVRYR93Zv49MURQA4G8JCY0/iMISIrGrQBQroZKg2USDREHjRyEaoVOIlQiVkKg0KoWKakM0FEIlEYXsRk7ynowxu29m3r1nE6+dyf3mvNxz7rlnZnAIl3AQXyU8M3iFXXiHPRlwoDvwHDuxjL34VDPgQOPZjmeYxQfsrgm36Ch4Hz7WiHgQjfW34RHm8bmJ+H1peBiN9bfiSU14FNrCD3EEXxCv+m2piNdCY/3NuI8FfGvSqQi8HjoKPoA3fSPuQlv4Nk7jO/bjdR94HDTWj+/dKQWPi7bwLSziR1OzX04T8SRou/51nMdPzGFieBo08EH4MF5MEvG0aBgXcRW/cBRPx4X7oGFcwLVJ4b5owOdwEys4iaWuiEugYZxpUmoVJ7rgUugwfAr31oq4JBrG8aZeb8JZ3B0Fl0bHgmugAR/DA2xpUivy+s9TCw0gWttoBv6Ba6It/LjpRq7gclvEu9Kq7+fRS0enGf3XjSgotSNtf/Bf8H+Lpr/e2MGpGyk9ZdKLQ2f9Lb17O8HSxWHwTE052tIP8fR2Jb0xS29B05vt1GtF5HTqBSr9qhhjgNRL8fDcofr1P33QEbOk1JFO+vAqfUw3PAmtPpBMH71uyJB5Q8bp6X8c/AYaBZFHwtyEwwAAAABJRU5ErkJggg=="/></g></g></svg>
+                              </div>
+                          </div>
+                          <div class="swiper-container gallery-thumbs">
+                              <div class="swiper-wrapper">
+                                  {% if images %}
+                                      {% for image in images %}
+                                          <div class="swiper-slide">
+                                              <img src="{{ image.thumb }}" alt="">
+                                          </div>
+                                      {% endfor %}
+                                  {% endif %}
+                                  {% if product_video %}
+                                      <div class="swiper-slide swiper-slide-video-thumbs">
+                                          <div class="swiper-slide-video-thumbs-inner">
+                                              <span class="thumbnails-video-icon">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="16" viewBox="0 0 13 16"><defs><clipPath id="sg6za"><path fill="#fff" d="M0-.001l13 8-13 8z"/></clipPath></defs><g><g><path fill="none" stroke="#019fff" stroke-miterlimit="50" stroke-width="2" d="M0-.001v0l13 8v0l-13 8v0z" clip-path="url(&quot;#sg6za&quot;)"/></g></g></svg>
+                                              </span>
+                                              <span class="thumbnails-video-title">Видео</span>
+                                          </div>
+                                      </div>
+                                  {% endif %}
+                              </div>
+                          </div>
+
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <script>
+              $(document).ready(function() {
+
+                  $('.image-additional-wrap .thumbnails-images a').click(function(e) {
+                      e.preventDefault();
+
+                      $('.image-additional-wrap li').removeClass('active');
+                      $(this).parent().addClass('active');
+
+                      var index = $(this).attr('data-index');
+                      var main_popup = $(this).attr('data-main-popup');
+                      var main_img = $(this).attr('data-main-img');
+
+                      $('.image-main-wrap a').attr('data-index', index);
+                      $('.image-main-wrap a').attr('href', main_popup);
+                      $('.image-main-wrap a img').attr('src', main_img);
+                  });
+
+
+                  $('.image-main-wrap a, .thumbnails-video a').click(function(e) {
+                      e.preventDefault();
+                      var index = $(this).attr('data-index');
+
+                      $('#product-image-popup .swiper-container').css({'opacity':'0'});
+                      $('#product-image-popup').modal('show');
+
+                      setTimeout(function() {
+                          gallery_swiper_initialize(index);
+                          $('#product-image-popup .swiper-container').css({'opacity':'1'});
+                      }, 350);
+
+//                      $('#image-popup').modal('hide');
+                  });
+              });
+          </script>
+          <script>
+              function gallery_swiper_initialize(index) {
+                  var galleryTop = new Swiper('.gallery-top', {
+                      nextButton: '.swiper-button-next',
+                      prevButton: '.swiper-button-prev',
+                      direction: 'horizontal',
+                      loop: false
+                  });
+                  var galleryThumbs = new Swiper('.gallery-thumbs', {
+                      spaceBetween: 10,
+                      centeredSlides: true,
+                      slidesPerView: 'auto',
+                      touchRatio: 0.2,
+                      slideToClickedSlide: true,
+                      direction: 'horizontal',
+                      loop: false
+                  });
+
+                  galleryTop.params.control = galleryThumbs;
+                  galleryThumbs.params.control = galleryTop;
+
+                  if (index === '0') {
+                      $('.gallery-top .swiper-wrapper').css({'transform':'translate3d(0px, 0px, 0px)'});
+                      galleryTop.slideTo(0, false,false);
+                      galleryThumbs.slideTo(0, false,false);
+                  } else {
+                      galleryTop.slideTo(index, false,false);
+                      galleryThumbs.slideTo(index, false,false);
+                  }
+
+                  var swiper_slide_video = $('.swiper-slide-video').prev().height();
+                  $('.swiper-slide-video').height(swiper_slide_video);
+                  $('.swiper-slide-video iframe').height(swiper_slide_video);
+
+              }
+          </script>
+          {% if thumbnails_images_slider %}
+              <script>
+                  $('.thumbnails-images').slick({
+                      arrows: true,
+                      slidesToShow: 2,
+                      slidesToScroll: 1,
+                      vertical: true,
+                      verticalSwiping: true,
+                      dots: false,
+                      infinite: false,
+                      responsive: [
+                          {
+                              breakpoint: 1800,
+                              settings: {
+                                  slidesToShow: 5,
+                                  slidesToScroll: 1,
+                                  dots: true
+                              }
+                          },
+                          {
+                              breakpoint: 1365,
+                              settings: {
+                                  arrows: true,
+                                  slidesToShow: 4,
+                                  slidesToScroll: 4,
+                                  dots: true
+                              }
+                          },
+                          {
+                              breakpoint: 1200,
+                              settings: {
+                                  arrows: true,
+                                  slidesToShow: 3,
+                                  slidesToScroll: 3,
+                                  dots: true
+                              }
+                          },
+                          {
+                              breakpoint: 991,
+                              settings: {
+                                  arrows: true,
+                                  slidesToShow: 2,
+                                  slidesToScroll: 2,
+                                  dots: true
+                              }
+                          },
+                          {
+                              breakpoint: 745,
+                              settings: {
+                                  dots: true,
+                                  slidesToShow: 1,
+                                  slidesToScroll: 1
+                              }
+                          }
+                      ]
+                  });
+              </script>
+          {% endif %}
+
+
+
+
+
+
+
+
+
+
+
+        <div class="col-sm-6 product-info">
+
+            <div class="row product-info-left-right">
+                <div class="col-sm-8 product-info-left">
+                    {% if model %}
+                    <div class="pr-model-wrap">
+                        <div class="pr-model">Код товара: <span>{{ model }}</span></div>
+                    </div>
+                    {% endif %}
+                    <h1>{{ heading_title }}</h1>
+                    {% if review_status %}
+                        <div class="rating pr-rating">
+                            <p>
+                                {% for i in 1..5 %}
+                                    {% if rating < i %}
+                                        <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i></span>
+                                    {% else %}
+                                        <span class="fa fa-stack"><i class="fa fa-star fa-stack-1x"></i><i class="fa fa-star-o fa-stack-1x"></i></span>
+                                    {% endif %}
+                                {% endfor %}
+                                {#<a href="" onclick="$('a[href=\'#tab-review\']').trigger('click'); return false;">{{ reviews }}</a> / <a href="" onclick="$('a[href=\'#tab-review\']').trigger('click'); return false;">{{ text_write }}</a>#}
+                                <a href="" onclick="$('a[href=\'#tab-review\']').trigger('click'); return false;" class="pr-rating-text">{{ reviews }}</a>
+                            </p>
+                        </div>
+                    {% endif %}
+
+                    <ul class="nav nav-tabs pr-nav-tabs">
+                        <li class="active"><a href="javascript:void(0);" onclick="nav_tabs_all(this);">Все о товаре</a></li>
+                        <li><a href="#tab-description" data-toggle="tab">{{ tab_description }}</a></li>
+                        {% if attribute_groups %}
+                            <li><a href="#tab-specification" data-toggle="tab">{{ tab_attribute }}</a></li>
+                        {% endif %}
+                        {% if product_video %}
+                            <li><a href="#tab-video" data-toggle="tab">Видеообзор</a></li>
+                        {% endif %}
+                        {% if review_status %}
+                            <li><a class="tab-review" href="#tab-review" data-toggle="tab">{{ tab_review }}</a></li>
+                        {% endif %}
+                    </ul>
+                    <script>
+                        function nav_tabs_all(el) {
+                            $(el).parent().siblings().removeClass('active');
+                            $(el).parent().addClass('active');
+                            $('.pr-tab-content > .tab-pane').addClass('active');
+                        }
+                    </script>
+
+
+
+                    {% if price %}
+                        <div class="pr-price-wrap{% if special %} pr-price-special-wrap{% endif %}">
+                            {% if not special %}
+                                <div class="pr-price">{{ price }}</div>
+                            {% else %}
+                                <div class="pr-price-not-special"><span class="pr-price-not-special-inner">{{ price }}</span></div>
+                                <div class="pr-price">{{ special }}</div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+
+
+
+                    <div class="pr-quantity-inf-wrap">
+                        <div class="pr-quantity-block-wrap">
+                            <div class="pr-quantity-inf-title">Кол-во</div>
+                            <div class="pr-quantity-block">
+                                <div>
+                                    <input name="pr_product_id_q" value="" style="display: none;" hidden="">
+                                    <input name="pr_product_id" value="1" style="display: none;" hidden="">
+                                    <button id="pr-increase-quantity">+</button>
+                                    <input type="text" name="pr_quantity" value="1" class="input-quantity">
+                                    <button id="pr-decrease-quantity">-</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pr-quantity-opt-block">
+                            <div class="pr-quantity-opt-block-1">При покупке от 8 шт.</div>
+                            <div class="pr-quantity-opt-block-2">
+                                <div class="pr-price">100<span class="symbol-right"> грн</span></div>
+                            </div>
+                        </div>
+                        <div class="pr-quantity-color-wrap">
+                            <div class="pr-quantity-inf-title">Цвет:</div>
+                            <div class="pr-quantity-color">
+                                <div class="pr-quantity-color-inner pr-quantity-color-inner-1 active">
+                                    <div class="pr-quantity-color-in pr-quantity-color-in-1" style="background: #333;">
+                                        <svg style="fill: #fff;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M9 21.035l-9-8.638 2.791-2.87 6.156 5.874 12.21-12.436 2.843 2.817z"/></svg>
+                                    </div>
+                                </div>
+                                <div class="pr-quantity-color-inner pr-quantity-color-inner-2">
+                                    <div class="pr-quantity-color-in pr-quantity-color-in-2" style="background: #ededed;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M9 21.035l-9-8.638 2.791-2.87 6.156 5.874 12.21-12.436 2.843 2.817z"/></svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Товар в наличии -->
+                    <div class="pr-is-available pr-available-wrapper">
+                        <div class="pr-available-wrap">
+                            <div class="pr-available">
+                                <div class="pr-available-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2c5.514 0 10 4.486 10 10s-4.486 10-10 10-10-4.486-10-10 4.486-10 10-10zm0-2c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm6.25 8.891l-1.421-1.409-6.105 6.218-3.078-2.937-1.396 1.436 4.5 4.319 7.5-7.627z"/></svg>
+                                </div>
+                                <div class="pr-available-text">Товар в наличии</div>
+                            </div>
+                        </div>
+                        <div id="product" class="pr-product-buy-wrap">
+                            <input type="hidden" name="product_id" value="{{ product_id }}" />
+                            <button type="button" id="button-cart" data-loading-text="{{ text_loading }}" class="pr-product-buy btn btn-default btn-lg btn-block"><span class="pr-product-buy-icon"></span>Добавить в корзину</button>
+                            <button type="button" class="pr-product-buy-one-click btn btn-default btn-lg btn-block" data-toggle="modal" data-target="#pr-one-click-modal"><span class="pr-product-buy-one-click-icon"></span>Купить в 1 клик</button>
+                        </div>
+                    </div>
+                    <div class="modal fade modal-custom modal-vertical-center" id="pr-one-click-modal">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                                    <div class="modal-title"><span>Быстрый заказ</span></div>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="pr-one-click-modal-form">
+                                        <div class="pr-one-click-modal-text">Пожалуйста оставьте ваше имя и номер телефона и наш оператор свяжется с вами в течение часа.</div>
+                                        <div class="form-group">
+                                            <input type="text" name="one_click_name" class="form-control" placeholder="Ваше имя">
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="tel" name="one_click_tel" class="form-control" placeholder="+38 (ХХХ) ХХХ-ХХ-ХХ">
+                                        </div>
+                                        <input type="button" class="one-click-form-go btn btn-default" value="Заказать">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Ожидается -->
+                    <div class="pr-wait-available pr-available-wrapper">
+                        <div class="pr-available-wrap">
+                            <div class="pr-available">
+                                <div class="pr-available-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2c5.514 0 10 4.486 10 10s-4.486 10-10 10-10-4.486-10-10 4.486-10 10-10zm0-2c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-1 6h2v8h-2v-8zm1 12.25c-.69 0-1.25-.56-1.25-1.25s.56-1.25 1.25-1.25 1.25.56 1.25 1.25-.56 1.25-1.25 1.25z"/></svg>
+                                </div>
+                                <div class="pr-available-text">Ожидается поставка</div>
+                            </div>
+                        </div>
+                        <div id="product" class="pr-product-buy-wrap">
+                            <input type="hidden" name="product_id" value="{{ product_id }}" />
+                            <button type="button" id="button-cart" data-loading-text="{{ text_loading }}" class="pr-product-buy btn btn-default btn-lg btn-block"><span class="pr-product-buy-icon"></span>Предварительный заказ</button>
+                            <button type="button" class="pr-product-buy-one-click btn btn-default btn-lg btn-block"><span class="pr-product-buy-one-click-icon"></span>Сообщите когда появится</button>
+                        </div>
+                    </div>
+
+                    <!-- Нет в наличии -->
+                    <div class="pr-no-available pr-available-wrapper">
+                        <div class="pr-available-wrap">
+                            <div class="pr-available">
+                                <div class="pr-available-text">Нет в наличии</div>
+                            </div>
+                        </div>
+                        <div id="product" class="pr-product-buy-wrap">
+                            <input type="hidden" name="product_id" value="{{ product_id }}" />
+                            <button type="button" class="pr-product-buy-one-click btn btn-default btn-lg btn-block"><span class="pr-product-buy-one-click-icon"></span>Сообщите когда появится</button>
+                        </div>
+                    </div>
+
+
+                    {#<div class="btn-group">#}
+                    {#<button type="button" data-toggle="tooltip" class="btn btn-default" title="{{ button_wishlist }}" onclick="wishlist.add('{{ product_id }}');"><i class="fa fa-heart"></i></button>#}
+                    {#<button type="button" data-toggle="tooltip" class="btn btn-default" title="{{ button_compare }}" onclick="compare.add('{{ product_id }}');"><i class="fa fa-exchange"></i></button>#}
+                    {#</div>#}
+
+                    <div id="pii-scroll-top"></div>
+
+
+                    <div class="pr-products-compare-wish-btn">
+                        <div class="pr-compare-block pr-wish-compare-block">
+                    <span class="pr-compare-btn" onclick="compare.add('{{ product_id }}');">
+                       <span class="pr-wish-compare-active-icon"></span>
+                    </span>
+                            <div class="pr-compare-text">
+                                <span><span class="pr-compare-text-inner">Добавить товар</span><br><a href="javascript:void(0)">к сравнению</a></span>
+                            </div>
+                        </div>
+                        <div class="pr-wish-block pr-wish-compare-block active">  <!-- когда товар добавлен в закладки добавляается класс active -->
+                            <span class="pr-wishlist-btn" onclick="wishlist.add('{{ product_id }}');">
+                        <span class="pr-wish-compare-active-icon"></span>
+                    </span>
+                            <div class="pr-compare-text">
+                                <span><span class="pr-compare-text-inner">Товар добавлен</span><br><a href="javascript:void(0)">в список желаний</a></span> <!-- когда товар добавлен в закладки "Добавить товар" меняется на "Товар добавлен" -->
+                            </div>
+                        </div>
+                        <span class="pr-wishlist-btn-h" style="display: none;"></span>
+                        <span class="pr-compare-btn-h" style="display: none;"></span>
+                    </div>
+
+                    <div class="pr-social-wrap">
+                        <div class="pr-social">
+                            <div class="pr-social-text">Поделиться:</div>
+                            <div class="pr-social-icons">
+                                <a href="javascript:void(0)" class="pr-social-icon-1 pr-social-icon"></a>
+                                <a href="javascript:void(0)" class="pr-social-icon-2 pr-social-icon"></a>
+                                <a href="javascript:void(0)" class="pr-social-icon-3 pr-social-icon"></a>
+                                <a href="javascript:void(0)" class="pr-social-icon-4 pr-social-icon"></a>
+                                <a href="javascript:void(0)" class="pr-social-icon-5 pr-social-icon"></a>
+                                <a href="javascript:void(0)" class="pr-social-icon-6 pr-social-icon"></a>
+                            </div>
+                        </div>
+                        <div class="pr-social-print">
+                            <div class="pr-social-text">Распечатать:</div>
+                            <div class="pr-social-icons">
+                                <a href="javascript:void(0)" class="pr-social-icon-1 pr-social-icon"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4 product-info-right">
+                    <div class="pr-sale-pay-del-wrap">
+                        <div class="pr-sale pr-sale-pay-del-block">
+                            <div class="pr-sale-pay-del-title"><span>Цена</span></div>
+                            <ul class="pr-sale-pay-del-text ul-icon-green">
+                                <li>Розничная</li>
+                                <li>Оптовая по телефону</li>
+                            </ul>
+                        </div>
+                        <div class="pr-pay pr-sale-pay-del-block">
+                            <div class="pr-sale-pay-del-title"><span>Способы оплаты</span></div>
+                            <ul class="pr-sale-pay-del-text ul-icon-green">
+                                <li>Наложенный платеж</li>
+                                <li>Наличными</li>
+                                <li>Картой VISA/MasterCard</li>
+                                <li>Мгновенно через LiqPay</li>
+                            </ul>
+                        </div>
+                        <div class="pr-del pr-sale-pay-del-block">
+                            <div class="pr-sale-pay-del-title"><span>Способы доставки</span></div>
+                            <ul class="pr-sale-pay-del-text ul-icon-green">
+                                <li>Самовывоз из магазина</li>
+                                <li class="li-title">Бесплатно от 5000 грн:</li>
+                                <li>«Нова пошта»</li>
+                                <li>«Ін Тайм»</li>
+                                <li>«Делівері»</li>
+                                <li>«Укрпошта»</li>
+                                <li class="li-title">За пределы Украины:</li>
+                                <li>«Укрпошта»</li>
+                            </ul>
+                        </div>
+                        <div class="pr-warranty pr-sale-pay-del-block">
+                            <div class="pr-sale-pay-del-title"><span>Гарантия 12 месяцев<span>обмен или возврат товарав течение 14 дней</span></span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+            {#<div id="product"> {% if options %}#}
+                    {#<hr>#}
+                    {#<h3>{{ text_option }}</h3>#}
+                    {#{% for option in options %}#}
+                        {#{% if option.type == 'select' %}#}
+                            {#<div class="form-group{% if option.required %} required {% endif %}">#}
+                                {#<label class="control-label" for="input-option{{ option.product_option_id }}">{{ option.name }}</label>#}
+                                {#<select name="option[{{ option.product_option_id }}]" id="input-option{{ option.product_option_id }}" class="form-control">#}
+                                    {#<option value="">{{ text_select }}</option>#}
+                                    {#{% for option_value in option.product_option_value %}#}
+                                        {#<option value="{{ option_value.product_option_value_id }}">{{ option_value.name }}#}
+                                            {#{% if option_value.price %}#}
+                                                {#({{ option_value.price_prefix }}{{ option_value.price }})#}
+                                            {#{% endif %} </option>#}
+                                    {#{% endfor %}#}
+                                {#</select>#}
+                            {#</div>#}
+                        {#{% endif %}#}
+                        {#{% if option.type == 'radio' %}#}
+                            {#<div class="form-group{% if option.required %} required {% endif %}">#}
+                                {#<label class="control-label">{{ option.name }}</label>#}
+                                {#<div id="input-option{{ option.product_option_id }}"> {% for option_value in option.product_option_value %}#}
+                                        {#<div class="radio">#}
+                                            {#<label>#}
+                                                {#<input type="radio" name="option[{{ option.product_option_id }}]" value="{{ option_value.product_option_value_id }}" />#}
+                                                {#{% if option_value.image %} <img src="{{ option_value.image }}" alt="{{ option_value.name }} {% if option_value.price %} {{ option_value.price_prefix }} {{ option_value.price }} {% endif %}" class="img-thumbnail" /> {% endif %}#}
+                                                {#{{ option_value.name }}#}
+                                                {#{% if option_value.price %}#}
+                                                    {#({{ option_value.price_prefix }}{{ option_value.price }})#}
+                                                {#{% endif %} </label>#}
+                                        {#</div>#}
+                                    {#{% endfor %} </div>#}
+                            {#</div>#}
+                        {#{% endif %}#}
+                        {#{% if option.type == 'checkbox' %}#}
+                            {#<div class="form-group{% if option.required %} required {% endif %}">#}
+                                {#<label class="control-label">{{ option.name }}</label>#}
+                                {#<div id="input-option{{ option.product_option_id }}"> {% for option_value in option.product_option_value %}#}
+                                        {#<div class="checkbox">#}
+                                            {#<label>#}
+                                                {#<input type="checkbox" name="option[{{ option.product_option_id }}][]" value="{{ option_value.product_option_value_id }}" />#}
+                                                {#{% if option_value.image %} <img src="{{ option_value.image }}" alt="{{ option_value.name }} {% if option_value.price %} {{ option_value.price_prefix }} {{ option_value.price }} {% endif %}" class="img-thumbnail" /> {% endif %}#}
+                                                {#{{ option_value.name }}#}
+                                                {#{% if option_value.price %}#}
+                                                    {#({{ option_value.price_prefix }}{{ option_value.price }})#}
+                                                {#{% endif %} </label>#}
+                                        {#</div>#}
+                                    {#{% endfor %} </div>#}
+                            {#</div>#}
+                        {#{% endif %}#}
+                        {#{% if option.type == 'text' %}#}
+                            {#<div class="form-group{% if option.required %} required {% endif %}">#}
+                                {#<label class="control-label" for="input-option{{ option.product_option_id }}">{{ option.name }}</label>#}
+                                {#<input type="text" name="option[{{ option.product_option_id }}]" value="{{ option.value }}" placeholder="{{ option.name }}" id="input-option{{ option.product_option_id }}" class="form-control" />#}
+                            {#</div>#}
+                        {#{% endif %}#}
+                        {#{% if option.type == 'textarea' %}#}
+                            {#<div class="form-group{% if option.required %} required {% endif %}">#}
+                                {#<label class="control-label" for="input-option{{ option.product_option_id }}">{{ option.name }}</label>#}
+                                {#<textarea name="option[{{ option.product_option_id }}]" rows="5" placeholder="{{ option.name }}" id="input-option{{ option.product_option_id }}" class="form-control">{{ option.value }}</textarea>#}
+                            {#</div>#}
+                        {#{% endif %}#}
+                        {#{% if option.type == 'file' %}#}
+                            {#<div class="form-group{% if option.required %} required {% endif %}">#}
+                                {#<label class="control-label">{{ option.name }}</label>#}
+                                {#<button type="button" id="button-upload{{ option.product_option_id }}" data-loading-text="{{ text_loading }}" class="btn btn-default btn-block"><i class="fa fa-upload"></i> {{ button_upload }}</button>#}
+                                {#<input type="hidden" name="option[{{ option.product_option_id }}]" value="" id="input-option{{ option.product_option_id }}" />#}
+                            {#</div>#}
+                        {#{% endif %}#}
+                        {#{% if option.type == 'date' %}#}
+                            {#<div class="form-group{% if option.required %} required {% endif %}">#}
+                                {#<label class="control-label" for="input-option{{ option.product_option_id }}">{{ option.name }}</label>#}
+                                {#<div class="input-group date">#}
+                                    {#<input type="text" name="option[{{ option.product_option_id }}]" value="{{ option.value }}" data-date-format="YYYY-MM-DD" id="input-option{{ option.product_option_id }}" class="form-control" />#}
+                                    {#<span class="input-group-btn">#}
+                {#<button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>#}
+                {#</span></div>#}
+                            {#</div>#}
+                        {#{% endif %}#}
+                        {#{% if option.type == 'datetime' %}#}
+                            {#<div class="form-group{% if option.required %} required {% endif %}">#}
+                                {#<label class="control-label" for="input-option{{ option.product_option_id }}">{{ option.name }}</label>#}
+                                {#<div class="input-group datetime">#}
+                                    {#<input type="text" name="option[{{ option.product_option_id }}]" value="{{ option.value }}" data-date-format="YYYY-MM-DD HH:mm" id="input-option{{ option.product_option_id }}" class="form-control" />#}
+                                    {#<span class="input-group-btn">#}
+                {#<button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>#}
+                {#</span></div>#}
+                            {#</div>#}
+                        {#{% endif %}#}
+                        {#{% if option.type == 'time' %}#}
+                            {#<div class="form-group{% if option.required %} required {% endif %}">#}
+                                {#<label class="control-label" for="input-option{{ option.product_option_id }}">{{ option.name }}</label>#}
+                                {#<div class="input-group time">#}
+                                    {#<input type="text" name="option[{{ option.product_option_id }}]" value="{{ option.value }}" data-date-format="HH:mm" id="input-option{{ option.product_option_id }}" class="form-control" />#}
+                                    {#<span class="input-group-btn">#}
+                {#<button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>#}
+                {#</span></div>#}
+                            {#</div>#}
+                        {#{% endif %}#}
+                    {#{% endfor %}#}
+                {#{% endif %}#}
+                {#<div class="form-group">#}
+                    {#<input type="text" name="quantity" value="{{ minimum }}" size="2" id="input-quantity" class="form-control" />#}
+                    {#<input type="hidden" name="product_id" value="{{ product_id }}" />#}
+                    {#<button type="button" id="button-cart" data-loading-text="{{ text_loading }}" class="btn btn-default btn-lg btn-block">{{ button_cart }}</button>#}
+                {#</div>#}
+                {#{% if minimum > 1 %}#}
+                    {#<div class="alert alert-info"><i class="fa fa-info-circle"></i> {{ text_minimum }}</div>#}
+                {#{% endif %}</div>#}
+
+
+
+
+            <div class="tab-content pr-tab-content">
+                <div class="tab-pane active" id="tab-description">
+
+                    <div class="pr-tab-content-title">{{ tab_description }} <span>{{ heading_title }}</span></div>
+
+                    {#{{ description }}#}
+                    <div class="pr-description">
+                        <p><strong>Ajax StarteKit Plus</strong> — стартовый комплект беспроводной системы безопасности Ajax с хабом второго поколеня Hub Plus, датчиком движения Ajax MotionProtect, универсальным датчиком открытия окна/двери Ajax DoorProtect и брелком для управления охранной системой Ajax Space Control.</p>
+                        <p>Система управляется удаленно с помощью мобильных приложений на iOS и Android. В несколько кликов можно настроить датчики, активировать частичную охрану и проверить состояние каждого устройства. Ajax легко подключается к пульту охраны. Запрос на обслуживание можно отправить сразу из мобильного приложения — в списке есть Полиция охраны Украины и более 45 частных охранных компаний со всей страны. Возможности StarterKit расширяются за счет дополнительных датчиков Ajax. С их помощью профессиональная охранная сигнализация превращается в систему, которая помогает предотвратить проникновение, пожар и потоп.</p>
+                        <p>В приложении можно смотреть в реальном времени видеопоток с видеокамер, которые поддерживают протокол RTSP (возможность подключения до 50 камер к хабу).</p>
+                        <div class="before-ul-title">Основные отличия от комплекта <a class="before-ul-title-blue" href="javascript:void(0)">StarterKit</a>:</div>
+                        <ul class="ul-icon-green">
+                            <li>Работа по WiFi и Ethernet;</li>
+                            <li>Поддержка 2 SIM-карт;</li>
+                            <li>До 150 подключенных устройств;</li>
+                            <li>До 99 пользователей системы;</li>
+                            <li>До 16 часов автономной работы (при отключенных Ethernet и WiFi).</li>
+                        </ul>
+                        <div class="before-ul-title">Особенности <span class="before-ul-title-gray">Ajax StarterKit Plus Black</span>:</div>
+                        <ul class="ul-icon-green">
+                            <li>Сертифицированная сигнализация профессионального уровня;</li>
+                            <li>Возможность подключить к пульту охранной компании;</li>
+                            <li>Два активных канала связи — WiFi и Ethernet;</li>
+                            <li>Моментальная отправка сигналов тревоги;</li>
+                            <li>Уведомление о тревогах с помощью SMS, push-сообщений и звонка на номер владельца;</li>
+                            <li>Удобное управление и настройка с помощью мобильного приложения на iOS и Android;</li>
+                            <li>Самостоятельная установка системы за 15 минут.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                {% if attribute_groups %}
+                    <div class="tab-pane active" id="tab-specification">
+                        <div class="pr-tab-content-title">{{ tab_attribute }} <span>{{ heading_title }}</span></div>
+                        <table class="table table-bordered">
+                            <tbody>
+                            {% for attribute_group in attribute_groups %}
+                                {% for attribute in attribute_group.attribute %}
+                                    <tr>
+                                        <td>{{ attribute.name }}</td>
+                                        <td>{{ attribute.text }}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% endif %}
+
+                {% if product_video %}
+                    <div class="tab-pane active" id="tab-video">
+                        <div class="pr-tab-content-title">Видеообзор <span>{{ heading_title }}</span></div>
+                        <iframe width="100%" height="500" src="{{ product_video }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                {% endif %}
+
+                {#{% if review_status %}#}
+                    {#<div class="tab-pane active" id="tab-review">#}
+                        {#<div class="pr-tab-content-title">Отзывы покупателей <span>34</span></div>#}
+                        {#<form class="form-horizontal" id="form-review">#}
+                            {#<div id="review"></div>#}
+                            {#<h2>{{ text_write }}</h2>#}
+                            {#{% if review_guest %}#}
+                                {#<div class="form-group required">#}
+                                    {#<div class="col-sm-12">#}
+                                        {#<label class="control-label" for="input-name">{{ entry_name }}</label>#}
+                                        {#<input type="text" name="name" value="{{ customer_name }}" id="input-name" class="form-control" />#}
+                                    {#</div>#}
+                                {#</div>#}
+                                {#<div class="form-group required">#}
+                                    {#<div class="col-sm-12">#}
+                                        {#<label class="control-label" for="input-review">{{ entry_review }}</label>#}
+                                        {#<textarea name="text" rows="5" id="input-review" class="form-control"></textarea>#}
+                                        {#<div class="help-block">{{ text_note }}</div>#}
+                                    {#</div>#}
+                                {#</div>#}
+                                {#<div class="form-group required">#}
+                                    {#<div class="col-sm-12">#}
+                                        {#<label class="control-label">{{ entry_rating }}</label>#}
+                                        {#&nbsp;&nbsp;&nbsp; {{ entry_bad }}&nbsp;#}
+                                        {#<input type="radio" name="rating" value="1" />#}
+                                        {#&nbsp;#}
+                                        {#<input type="radio" name="rating" value="2" />#}
+                                        {#&nbsp;#}
+                                        {#<input type="radio" name="rating" value="3" />#}
+                                        {#&nbsp;#}
+                                        {#<input type="radio" name="rating" value="4" />#}
+                                        {#&nbsp;#}
+                                        {#<input type="radio" name="rating" value="5" />#}
+                                        {#&nbsp;{{ entry_good }}</div>#}
+                                {#</div>#}
+                                {#{{ captcha }}#}
+                                {#<div class="buttons clearfix">#}
+                                    {#<div class="pull-right">#}
+                                        {#<button type="button" id="button-review" data-loading-text="{{ text_loading }}" class="btn btn-primary">{{ button_continue }}</button>#}
+                                    {#</div>#}
+                                {#</div>#}
+                            {#{% else %}#}
+                                {#{{ text_login }}#}
+                            {#{% endif %}#}
+                        {#</form>#}
+                    {#</div>#}
+                {#{% endif %}#}
+
+
+                <style>
+                    #oneclick {
+                        display: none;
+                    }
+                </style>
+
+                {% if review_status %}
+                    <div class="tab-pane active" id="tab-review">
+                        <div class="pr-tab-content-title">
+                            <div class="pr-tab-content-title-text">Отзывы покупателей <span>34</span></div>
+                            <div class="pr-review-sort-create-wrap">
+                                <select class="pr-review-sort-select form-control" onchange="location = this.value;">
+                                    <option value="https://test.uniup.com.ua/resivery-sat-t2-android-iptv?sort=p.sort_order&amp;order=ASC" selected="selected">По популярности</option>
+                                    <option value="https://test.uniup.com.ua/resivery-sat-t2-android-iptv?sort=pd.name&amp;order=ASC">Название (А - Я)</option>
+                                    <option value="https://test.uniup.com.ua/resivery-sat-t2-android-iptv?sort=pd.name&amp;order=DESC">Название (Я - А)</option>
+                                    <option value="https://test.uniup.com.ua/resivery-sat-t2-android-iptv?sort=p.price&amp;order=ASC">Цена (низкая &gt; высокая)</option>
+                                    <option value="https://test.uniup.com.ua/resivery-sat-t2-android-iptv?sort=p.price&amp;order=DESC">Цена (высокая &gt; низкая)</option>
+                                    <option value="https://test.uniup.com.ua/resivery-sat-t2-android-iptv?sort=rating&amp;order=DESC">Рейтинг (начиная с высокого)</option>
+                                    <option value="https://test.uniup.com.ua/resivery-sat-t2-android-iptv?sort=rating&amp;order=ASC">Рейтинг (начиная с низкого)</option>
+                                    <option value="https://test.uniup.com.ua/resivery-sat-t2-android-iptv?sort=p.model&amp;order=ASC">Код Товара (А - Я)</option>
+                                    <option value="https://test.uniup.com.ua/resivery-sat-t2-android-iptv?sort=p.model&amp;order=DESC">Код Товара (Я - А)</option>
+                                </select>
+                                <button type="button" class="pr-review-create btn btn-default"><span class="pr-review-create-icon"></span>Написать отзыв</button>
+                            </div>
+                        </div>
+
+                        <div id="pr-create-review" class="pr-create-review-new-block" style="display: none;">
+                            <div class="modal-custom">
+                                <div class="close"></div>
+                            </div>
+                            <div class="pr-create-review-title">Написать отзыв</div>
+
+                            <div class="pr-create-review-body">
+                                <div class="pr-create-review-rating rating">
+                                    <p>
+                                        {% for i in 1..5 %}
+                                            {% if rating < i %}
+                                                <span class="fa fa-stack">
+                                                    <i class="fa fa-star-o fa-stack-1x"></i>
+                                                    <span class="fa-stack-text">
+                                                        {% if i == 1 %}Плохой{% endif %}
+                                                        {% if i == 2 %}Так себе{% endif %}
+                                                        {% if i == 3 %}Неплохой{% endif %}
+                                                        {% if i == 4 %}Хороший{% endif %}
+                                                        {% if i == 5 %}Отличный{% endif %}
+                                                    </span>
+                                                </span>
+                                            {% else %}
+                                                <span class="fa fa-stack">
+                                                    <i class="fa fa-star fa-stack-1x"></i>
+                                                    <i class="fa fa-star-o fa-stack-1x"></i>
+                                                    <span class="fa-stack-text">
+                                                        {% if i == 1 %}Плохой{% endif %}
+                                                        {% if i == 2 %}Так себе{% endif %}
+                                                        {% if i == 3 %}Неплохой{% endif %}
+                                                        {% if i == 4 %}Хороший{% endif %}
+                                                        {% if i == 5 %}Отличный{% endif %}
+                                                    </span>
+                                                </span>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </p>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="pr-create-review-comment form-group">
+                                            <div class="pr-create-review-label">Комментарий</div>
+                                            <textarea name="" id="" class="pr-create-review-comment-input form-control" placeholder=""></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="pr-create-review-adv form-group">
+                                            <div class="pr-create-review-label">Достоинства</div>
+                                            <input type="text" value="" name="" class="pr-create-review-adv-input form-control" id="" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="pr-create-review-disadv form-group">
+                                            <div class="pr-create-review-label">Недостатки</div>
+                                            <input type="text" value="" name="" class="pr-create-review-disadv-input form-control" id="" placeholder="">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="pr-create-review-line"></div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="pr-create-review-name form-group">
+                                            <div class="pr-create-review-label">Ваше имя и фамилия</div>
+                                            <input type="text" value="" name="" class="pr-create-review-name-input form-control" id="" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="pr-create-review-email form-group">
+                                            <div class="pr-create-review-label">Электронная почта</div>
+                                            <input type="email" value="" name="" class="pr-create-review-email-input form-control" id="" placeholder="">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="pr-create-review-send-wrap">
+                                    <div class="pr-create-review-send-political">
+                                        <input type="checkbox" class="checkbox-input-mod" checked>
+                                        <div class="pr-create-review-send-political-text">При регистрации вы соглашаетесь с <a href="javascript:void(0)">нашими правилами</a> и <a href="javascript:void(0)">пользовательским соглашением</a>.</div>
+                                    </div>
+                                    <div class="pr-create-review-send">
+                                        <span class="pr-create-review-send-cancel">Отмена</span>
+                                        <button type="button" class="pr-create-review-send-btn btn btn-default">Оставить отзыв</button>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="pr-reviews">
+
+                            <div class="pr-review">
+                                <div class="pr-review-title">
+                                    <div class="pr-review-title-icon"><span>СА</span></div>
+                                    <div class="pr-review-title-name-rating">
+                                        <div class="pr-review-title-name">Сергій Анатолійович</div>
+                                        <div class="pr-review-title-rating">
+                                            <div class="rating">
+                                                <p>
+                                                    {% for i in 1..5 %}
+                                                        {% if rating < i %}
+                                                            <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i></span>
+                                                        {% else %}
+                                                            <span class="fa fa-stack"><i class="fa fa-star fa-stack-1x"></i><i class="fa fa-star-o fa-stack-1x"></i></span>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="pr-review-title-buy"><span>Купил этот товар</span></div>
+                                    <div class="pr-review-title-date">26 ноября 2019</div>
+                                </div>
+                                <div class="pr-review-comment-wrap">
+                                    <div class="pr-review-comment">Додатково придбав ще три датчика руху кімнатних і один зовнішній. Все синхронізувалось без проблем і працює. Поки що налаштував інтернет тільки від клмплектної сімкарти Лайф. Датчиками руху перекрив всі кімнати-коридори. Датчик відкриття дверей трохи понапрягав. Використовував з малим магнітом і таки налаштував (в них надто мала зона взаємодії і перш ніж фіксувати остаточно треба цю зону виявити). Покупкою задоволений, сервісом теж.</div>
+                                    <div class="pr-review-comment-adv"><strong>Достоинства: </strong>Все налаштувалось правильно, працює. Дзвінок і смс приходять з затримкою 2–3 секунди.</div>
+                                    <div class="pr-review-comment-disadv pr-review-comment-adv"><strong>Недостатки: </strong>Поки що не виявлено.</div>
+                                </div>
+                                <div class="pr-review-reply-like">
+
+                                    <div class="pr-review-reply-like-wrapper">
+                                        <div class="pr-review-reply-wrap">
+                                            <div class="pr-review-reply pr-review-reply-only" onclick="review_reply(this)"><span class="pr-review-reply-icon"></span><span class="pr-review-reply-text">Ответить</span></div>
+                                            <div class="pr-review-reply-see pr-review-reply" onclick="see_all_reply(this)"><span class="pr-review-reply-icon"></span><span class="pr-review-reply-text">4 ответа</span></div>
+                                            <span class="review-see-reply-black" style="display: none;"></span>
+                                        </div>
+                                        <div class="pr-review-like-wrap">
+                                            <div class="pr-review-like"><span class="pr-review-like-icon"></span><span class="pr-review-like-text">32</span></div>
+                                            <div class="pr-review-like pr-review-dislike"><span class="pr-review-like-icon"></span><span class="pr-review-like-text">2</span></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="pr-review-reply-main" style="display: none;">
+                                        <div class="pr-review-reply-main-item">
+                                            <div class="pr-review-title">
+                                                <div class="pr-review-reply-main-logo">
+                                                    <img src="catalog/view/theme/4tv/image/icons-bg/review-admin.png" alt="" class="img-responsive">
+                                                </div>
+                                                <div class="pr-review-title-date">26 ноября 2019</div>
+                                            </div>
+                                            <div class="pr-review-comment-wrap">
+                                                <div class="pr-review-comment">Добрый день, Тарас! Спасибо за обращение, Ваш отзыв передан ответственному сотруднику через форму обратной связи (внизу страницы) для решения проблемы, мы с Вами свяжемся.</div>
+                                            </div>
+                                        </div>
+
+                                        <div class="pr-review-reply-main-item">
+                                            <div class="pr-review-title">
+                                                <div class="pr-review-title-name">Тарас Білий</div>
+                                                <div class="pr-review-title-date">26 ноября 2019</div>
+                                            </div>
+                                            <div class="pr-review-comment-wrap">
+                                                <div class="pr-review-comment">Добрый день, Тарас! Спасибо за обращение, Ваш отзыв передан ответственному сотруднику через форму обратной связи (внизу страницы) для решения проблемы, мы с Вами свяжемся.</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="review_reply"></div>
+
+                                </div>
+                            </div>
+
+                            <div class="pr-review">
+                                <div class="pr-review-title">
+
+
+                                    <div class="pr-review-title-img">
+                                        <img src="catalog/view/theme/4tv/image/icons-bg/review-author-1.png" alt="" class="img-responsive">
+                                    </div>
+
+                                    <div class="pr-review-title-name-rating">
+                                        <div class="pr-review-title-name">Сергій Анатолійович</div>
+                                        <div class="pr-review-title-rating">
+                                            <div class="rating">
+                                                <p>
+                                                    {% for i in 1..5 %}
+                                                        {% if rating < i %}
+                                                            <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i></span>
+                                                        {% else %}
+                                                            <span class="fa fa-stack"><i class="fa fa-star fa-stack-1x"></i><i class="fa fa-star-o fa-stack-1x"></i></span>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="pr-review-title-buy"><span>Купил этот товар</span></div>
+                                    <div class="pr-review-title-date">26 ноября 2019</div>
+                                </div>
+                                <div class="pr-review-comment-wrap">
+                                    <div class="pr-review-comment">Додатково придбав ще три датчика руху кімнатних і один зовнішній. Все синхронізувалось без проблем і працює. Поки що налаштував інтернет тільки від клмплектної сімкарти Лайф. Датчиками руху перекрив всі кімнати-коридори. Датчик відкриття дверей трохи понапрягав. Використовував з малим магнітом і таки налаштував (в них надто мала зона взаємодії і перш ніж фіксувати остаточно треба цю зону виявити). Покупкою задоволений, сервісом теж.</div>
+                                    <div class="pr-review-comment-adv"><strong>Достоинства: </strong>Все налаштувалось правильно, працює. Дзвінок і смс приходять з затримкою 2–3 секунди.</div>
+                                    <div class="pr-review-comment-disadv pr-review-comment-adv"><strong>Недостатки: </strong>Поки що не виявлено.</div>
+                                </div>
+                                <div class="pr-review-reply-like">
+
+                                    <div class="pr-review-reply-like-wrapper">
+                                        <div class="pr-review-reply-wrap">
+                                            <div class="pr-review-reply pr-review-reply-only" onclick="review_reply(this)"><span class="pr-review-reply-icon"></span><span class="pr-review-reply-text">Ответить</span></div>
+                                            <div class="pr-review-reply-see pr-review-reply" onclick="see_all_reply(this)"><span class="pr-review-reply-icon"></span><span class="pr-review-reply-text">4 ответа</span></div>
+                                            <span class="review-see-reply-black" style="display: none;"></span>
+                                        </div>
+                                        <div class="pr-review-like-wrap">
+                                            <div class="pr-review-like"><span class="pr-review-like-icon"></span><span class="pr-review-like-text">32</span></div>
+                                            <div class="pr-review-like pr-review-dislike"><span class="pr-review-like-icon"></span><span class="pr-review-like-text">2</span></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="pr-review-reply-main" style="display: none;">
+                                        <div class="pr-review-reply-main-item">
+                                            <div class="pr-review-title">
+                                                <div class="pr-review-reply-main-logo">
+                                                    <img src="catalog/view/theme/4tv/image/icons-bg/review-admin.png" alt="" class="img-responsive">
+                                                </div>
+                                                <div class="pr-review-title-date">26 ноября 2019</div>
+                                            </div>
+                                            <div class="pr-review-comment-wrap">
+                                                <div class="pr-review-comment">Добрый день, Тарас! Спасибо за обращение, Ваш отзыв передан ответственному сотруднику через форму обратной связи (внизу страницы) для решения проблемы, мы с Вами свяжемся.</div>
+                                            </div>
+                                        </div>
+
+                                        <div class="pr-review-reply-main-item">
+                                            <div class="pr-review-title">
+                                                <div class="pr-review-title-name">Тарас Білий</div>
+                                                <div class="pr-review-title-date">26 ноября 2019</div>
+                                            </div>
+                                            <div class="pr-review-comment-wrap">
+                                                <div class="pr-review-comment">Добрый день, Тарас! Спасибо за обращение, Ваш отзыв передан ответственному сотруднику через форму обратной связи (внизу страницы) для решения проблемы, мы с Вами свяжемся.</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="review_reply"></div>
+
+
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div id="product-more-button" class="review-more-btn"> <!-- По аналогу с каталогом, когда грузится добавляется класс animation чтобы вращалась картинка -->
+                            <div class="product-more-button-text">Посмотреть еще 30 комментариев</div>
+                            <div class="product-more-button-icon">
+                                <img src="catalog/view/theme/4tv/image/icons-bg/product-more-icon.svg" alt="" class="img-responsive">
+                            </div>
+                        </div>
+
+
+                    </div>
+                {% endif %}
+
+
+
+
+                <script>
+                    function review_reply(e) {
+                        var el = $(e);
+
+                        if (el.closest('.pr-review-reply-like').find('#review_reply').length) {
+                            $('#review_reply').remove();
+                        } else if (el.closest('.pr-review-reply-like').find('#review_reply').length === 0) {
+                            $('#review_reply').remove();
+                            var html = '';
+                            html += '<div id="review_reply" class="pr-create-review-new-block">';
+                            html += '<div class="pr-create-review-body">' ;
+                            html += '<div class="row">' ;
+                            html += '<div class="col-sm-12">';
+                            html += '<div class="pr-create-review-comment form-group">';
+                            html += '<div class="pr-create-review-label">Комментарий</div>';
+                            html += '<textarea name="" id="" class="pr-create-review-comment-input form-control" placeholder=""></textarea>';
+                            html += '</div>';
+                            html += '</div>';
+                            html += '<div class="col-sm-6">';
+                            html += '<div class="pr-create-review-name form-group">';
+                            html += '<div class="pr-create-review-label">Ваше имя и фамилия</div>';
+                            html += '<input type="text" value="" name="" class="pr-create-review-name-input form-control" id="" placeholder="">';
+                            html += '</div>';
+                            html += '</div>';
+                            html += '<div class="col-sm-6">';
+                            html += '<div class="pr-create-review-email form-group">';
+                            html += '<div class="pr-create-review-label">Электронная почта</div>';
+                            html += '<input type="email" value="" name="" class="pr-create-review-email-input form-control" id="" placeholder="">';
+                            html += '</div>';
+                            html += '</div>';
+                            html += '</div>';
+                            html += '<div class="pr-create-review-send-wrap">';
+                            html += '<div class="pr-create-review-send-political">';
+                            html += '<input type="checkbox" class="checkbox-input-mod" checked>';
+                            html +='<div class="pr-create-review-send-political-text">При регистрации вы соглашаетесь с <a href="javascript:void(0)">нашими правилами</a> и <a href="javascript:void(0)">пользовательским соглашением</a>.</div>';
+                            html +='</div>';
+                            html += '<div class="pr-create-review-send">';
+                            html += '<span class="pr-create-review-send-cancel" onclick="remove_review_reply(this)">Отмена</span>';
+                            html +='<button type="button" class="pr-create-review-send-btn btn btn-default">Оставить отзыв</button>';
+                            html +='</div>';
+                            html +='</div>';
+                            html +='</div>';
+                            html +='</div>';
+
+                            el.closest('.pr-review-reply-like').find('.review_reply').html(html);
+                        }
+
+                        el.toggleClass('active');
+                    }
+
+
+                    function remove_review_reply(e) {
+                        var el = $(e);
+                        el.closest('.pr-review-reply-like').find('.pr-review-reply-only').toggleClass('active');
+                        $('#review_reply').remove();
+                    }
+
+                    function see_all_reply(e) {
+                        var el = $(e);
+                        el.closest('.pr-review-reply-like').toggleClass('active');
+
+//                        $('#review_reply').remove();
+
+                    }
+
+                    $(document).ready(function() {
+                        $('.pr-review-create').click(function() {
+                            $('#tab-review .pr-tab-content-title').css({'display':'none'});
+                            $('#pr-create-review').show();
+                        });
+
+                        $('#pr-create-review .close, #pr-create-review .pr-create-review-send-cancel').click(function() {
+                            $('#pr-create-review').hide();
+                            $('#tab-review .pr-tab-content-title').css({'display':'flex'});
+                        });
+                    });
+                </script>
+
+
+
+
+            </div>
+            <script>
+                $(document).ready(function() {
+                    /* scroll anchor */
+                    $('.pr-nav-tabs a').click(function() {
+                        var id  = $('.pr-tab-content');
+                        var top = $(id).offset().top - 40;
+                        $('html, body').animate({scrollTop: top}, 300);
+                    });
+                });
+            </script>
+
+
+        </div>
+      </div>
+
+
+      {#{% if products %}#}
+      {#<h3>{{ text_related }}</h3>#}
+      {#<div class="row"> {% set i = 0 %}#}
+        {#{% for product in products %}#}
+        {#{% if column_left and column_right %}#}
+        {#{% set class = 'col-xs-8 col-sm-6' %}#}
+        {#{% elseif column_left or column_right %}#}
+        {#{% set class = 'col-xs-6 col-md-4' %}#}
+        {#{% else %}#}
+        {#{% set class = 'col-xs-6 col-sm-3' %}#}
+        {#{% endif %}#}
+        {#<div class="{{ class }}">#}
+          {#<div class="product-thumb transition">#}
+            {#<div class="image"><a href="{{ product.href }}"><img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" class="img-responsive" /></a></div>#}
+            {#<div class="caption">#}
+              {#<h4><a href="{{ product.href }}">{{ product.name }}</a></h4>#}
+              {#<p>{{ product.description }}</p>#}
+              {#{% if product.rating %}#}
+              {#<div class="rating"> {% for j in 1..5 %}#}
+                {#{% if product.rating < j %} <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i></span> {% else %} <span class="fa fa-stack"><i class="fa fa-star fa-stack-1x"></i><i class="fa fa-star-o fa-stack-1x"></i></span> {% endif %}#}
+                {#{% endfor %} </div>#}
+              {#{% endif %}#}
+              {#{% if product.price %}#}
+              {#<p class="price"> {% if not product.special %}#}
+                {#{{ product.price }}#}
+                {#{% else %} <span class="price-new">{{ product.special }}</span> <span class="price-old">{{ product.price }}</span> {% endif %}#}
+                {#{% if product.tax %} <span class="price-tax">{{ text_tax }} {{ product.tax }}</span> {% endif %} </p>#}
+              {#{% endif %} </div>#}
+            {#<div class="button-group">#}
+              {#<button type="button" onclick="cart.add('{{ product.product_id }}', '{{ product.minimum }}');"><span class="hidden-xs hidden-sm hidden-md">{{ button_cart }}</span> <i class="fa fa-shopping-cart"></i></button>#}
+              {#<button type="button" data-toggle="tooltip" title="{{ button_wishlist }}" onclick="wishlist.add('{{ product.product_id }}');"><i class="fa fa-heart"></i></button>#}
+              {#<button type="button" data-toggle="tooltip" title="{{ button_compare }}" onclick="compare.add('{{ product.product_id }}');"><i class="fa fa-exchange"></i></button>#}
+            {#</div>#}
+          {#</div>#}
+        {#</div>#}
+        {#{% if column_left and column_right and (i + 1) % 2 == 0 %}#}
+        {#<div class="clearfix visible-md visible-sm"></div>#}
+        {#{% elseif column_left or column_right and (i + 1) % 3 == 0 %}#}
+        {#<div class="clearfix visible-md"></div>#}
+        {#{% elseif (i + 1) % 4 == 0 %}#}
+        {#<div class="clearfix visible-md"></div>#}
+        {#{% endif %}#}
+        {#{% set i = i + 1 %}#}
+        {#{% endfor %} </div>#}
+        {#{% endif %}#}
+        {#{% if tags %}#}
+        {#<p>{{ text_tags }}#}
+        {#{% for i in 0..tags|length %}#}
+        {#{% if i < (tags|length - 1) %} <a href="{{ tags[i].href }}">{{ tags[i].tag }}</a>,#}
+        {#{% else %} <a href="{{ tags[i].href }}">{{ tags[i].tag }}</a> {% endif %}#}
+        {#{% endfor %} </p>#}
+        {#{% endif %}#}
+
+
+
+      {{ content_bottom }}</div>
+    {{ column_right }}</div>
+</div>
+<script type="text/javascript"><!--
+$('select[name=\'recurring_id\'], input[name="quantity"]').change(function(){
+	$.ajax({
+		url: 'index.php?route=product/product/getRecurringDescription',
+		type: 'post',
+		data: $('input[name=\'product_id\'], input[name=\'quantity\'], select[name=\'recurring_id\']'),
+		dataType: 'json',
+		beforeSend: function() {
+			$('#recurring-description').html('');
+		},
+		success: function(json) {
+			$('.alert-dismissible, .text-danger').remove();
+
+			if (json['success']) {
+				$('#recurring-description').html(json['success']);
+			}
+		}
+	});
+});
+//--></script> 
+<script type="text/javascript"><!--
+$('#button-cart').on('click', function() {
+	$.ajax({
+		url: 'index.php?route=checkout/cart/add',
+		type: 'post',
+		data: $('#product input[type=\'text\'], #product input[type=\'hidden\'], #product input[type=\'radio\']:checked, #product input[type=\'checkbox\']:checked, #product select, #product textarea'),
+		dataType: 'json',
+		beforeSend: function() {
+			$('#button-cart').button('loading');
+		},
+		complete: function() {
+			$('#button-cart').button('reset');
+		},
+		success: function(json) {
+			$('.alert-dismissible, .text-danger').remove();
+			$('.form-group').removeClass('has-error');
+
+			if (json['error']) {
+				if (json['error']['option']) {
+					for (i in json['error']['option']) {
+						var element = $('#input-option' + i.replace('_', '-'));
+
+						if (element.parent().hasClass('input-group')) {
+							element.parent().after('<div class="text-danger">' + json['error']['option'][i] + '</div>');
+						} else {
+							element.after('<div class="text-danger">' + json['error']['option'][i] + '</div>');
+						}
+					}
+				}
+
+				if (json['error']['recurring']) {
+					$('select[name=\'recurring_id\']').after('<div class="text-danger">' + json['error']['recurring'] + '</div>');
+				}
+
+				// Highlight any found errors
+				$('.text-danger').parent().addClass('has-error');
+			}
+
+			if (json['success']) {
+				$('.breadcrumb').after('<div class="alert alert-success alert-dismissible">' + json['success'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+
+                $('#cart #cart-total').html(json['total']);
+
+				$('html, body').animate({ scrollTop: 0 }, 'slow');
+
+				$('#cart > ul').load('index.php?route=common/cart/info ul li');
+			}
+		}
+	});
+});
+//--></script> 
+<script type="text/javascript"><!--
+$('.date').datetimepicker({
+	language: '{{ datepicker }}',
+	pickTime: false
+});
+
+$('.datetime').datetimepicker({
+	language: '{{ datepicker }}',
+	pickDate: true,
+	pickTime: true
+});
+
+$('.time').datetimepicker({
+	language: '{{ datepicker }}',
+	pickDate: false
+});
+
+$('button[id^=\'button-upload\']').on('click', function() {
+	var node = this;
+
+	$('#form-upload').remove();
+
+	$('body').prepend('<form enctype="multipart/form-data" id="form-upload" style="display: none;"><input type="file" name="file" /></form>');
+
+	$('#form-upload input[name=\'file\']').trigger('click');
+
+	if (typeof timer != 'undefined') {
+    	clearInterval(timer);
+	}
+
+	timer = setInterval(function() {
+		if ($('#form-upload input[name=\'file\']').val() != '') {
+			clearInterval(timer);
+
+			$.ajax({
+				url: 'index.php?route=tool/upload',
+				type: 'post',
+				dataType: 'json',
+				data: new FormData($('#form-upload')[0]),
+				cache: false,
+				contentType: false,
+				processData: false,
+				beforeSend: function() {
+					$(node).button('loading');
+				},
+				complete: function() {
+					$(node).button('reset');
+				},
+				success: function(json) {
+					$('.text-danger').remove();
+
+					if (json['error']) {
+						$(node).parent().find('input').after('<div class="text-danger">' + json['error'] + '</div>');
+					}
+
+					if (json['success']) {
+						alert(json['success']);
+
+						$(node).parent().find('input').val(json['code']);
+					}
+				}
+			});
+		}
+	}, 500);
+});
+//--></script>
+
+
+<script type="text/javascript"><!--
+$('#review').delegate('.pagination a', 'click', function(e) {
+    e.preventDefault();
+
+    $('#review').fadeOut('slow');
+
+    $('#review').load(this.href);
+
+    $('#review').fadeIn('slow');
+});
+
+$('#review').load('index.php?route=product/product/review&product_id={{ product_id }}');
+
+$('#button-review').on('click', function() {
+	$.ajax({
+		url: 'index.php?route=product/product/write&product_id={{ product_id }}',
+		type: 'post',
+		dataType: 'json',
+		data: $("#form-review").serialize(),
+		beforeSend: function() {
+			$('#button-review').button('loading');
+		},
+		complete: function() {
+			$('#button-review').button('reset');
+		},
+		success: function(json) {
+			$('.alert-dismissible').remove();
+
+			if (json['error']) {
+				$('#review').after('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> ' + json['error'] + '</div>');
+			}
+
+			if (json['success']) {
+				$('#review').after('<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> ' + json['success'] + '</div>');
+
+				$('input[name=\'name\']').val('');
+				$('textarea[name=\'text\']').val('');
+				$('input[name=\'rating\']:checked').prop('checked', false);
+			}
+		}
+	});
+});
+
+
+
+//$(document).ready(function() {
+//	$('.thumbnails').magnificPopup({
+//		type:'image',
+//		delegate: 'a',
+//		gallery: {
+//			enabled: true
+//		}
+//	});
+//});
+//--></script>
+
+
+
+
+
+
+<div class="pr-header-cart-dropdown header-phone-dropdown dropdown-menu dropdown-menu-custom modal-custom" style="display: none;">
+    <div class="dropdown-menu-arrow"></div>
+    <div class="header-phone-tel-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="header-phone-tel-body">
+        <div class="pr-header-cart-dropdown-img">
+            <img src="catalog/view/theme/4tv/image/icons-bg/popup-cart-img.png" alt="" class="img-responsive">
+        </div>
+        <div class="pr-header-cart-dropdown-info">
+            <div class="pr-header-cart-dropdown-title">Ajax StarterKit Plus Black</div>
+            <a href="javascript:void(0)" class="pr-header-cart-dropdown-link-cart">Добавлен в корзину</a>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function() {
+        $('.pr-header-cart-dropdown').appendTo('.pr-header-cart-dropdown-wrap');
+        $('.pr-header-cart-dropdown').show();
+    });
+</script>
+
+
+{{ footer }} 

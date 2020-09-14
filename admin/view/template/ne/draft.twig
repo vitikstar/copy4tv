@@ -1,0 +1,277 @@
+{{ header }}{{ column_left }}
+<div id="content">
+    <div class="page-header">
+        <div class="container-fluid">
+            <div class="pull-right">
+                <button type="submit" form="form" data-toggle="tooltip" title="{{ button_delete }}" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
+            </div>
+            <h1>{{ heading_title }}</h1>
+        </div>
+    </div>
+    <div class="container-fluid">
+        {% if (error_warning) %}
+            <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+        {% endif %}
+        {% if (success) %}
+            <div class="alert alert-success"><i class="fa fa-check-circle"></i> {{ success }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+        {% endif %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-files-o"></i> {{ text_draft_newsletters }}</h3>
+            </div>
+            <div class="panel-body">
+                <div class="well">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label" for="input-date">{{ column_date }}</label>
+                                <div class="input-group date">
+                                    <input type="text" name="filter_date" value="{{ filter_date }}" placeholder="{{ column_date }}" data-date-format="YYYY-MM-DD" id="input-date" class="form-control" />
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="input-subject">{{ column_subject }}</label>
+                                <input type="text" name="filter_subject" value="{{ filter_subject }}" placeholder="{{ column_subject }}" id="input-subject" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label" for="input-to">{{ column_to }}</label>
+                                <select name="filter_to" id="input-to" class="form-control">
+                                    {% if (filter_to == '') %}
+                                        <option value="" selected="selected"></option>
+                                    {% else %}
+                                        <option value=""></option>
+                                    {% endif %}
+                                    {% if (filter_to == 'newsletter') %}
+                                        <option value="newsletter" selected="selected">{{ text_newsletter }}</option>
+                                    {% else %}
+                                        <option value="newsletter">{{ text_newsletter }}</option>
+                                    {% endif %}
+                                    {% if (filter_to == 'customer_all') %}
+                                        <option value="customer_all" selected="selected">{{ text_customer_all }}</option>
+                                    {% else %}
+                                        <option value="customer_all">{{ text_customer_all }}</option>
+                                    {% endif %}
+                                    {% if (filter_to == 'customer_group') %}
+                                        <option value="customer_group" selected="selected">{{ text_customer_group }}</option>
+                                    {% else %}
+                                        <option value="customer_group">{{ text_customer_group }}</option>
+                                    {% endif %}
+                                    {% if (filter_to == 'customer') %}
+                                        <option value="customer" selected="selected">{{ text_customer }}</option>
+                                    {% else %}
+                                        <option value="customer">{{ text_customer }}</option>
+                                    {% endif %}
+                                    {% if (filter_to == 'affiliate_all') %}
+                                        <option value="affiliate_all" selected="selected">{{ text_affiliate_all }}</option>
+                                    {% else %}
+                                        <option value="affiliate_all">{{ text_affiliate_all }}</option>
+                                    {% endif %}
+                                    {% if (filter_to == 'affiliate') %}
+                                        <option value="affiliate" selected="selected">{{ text_affiliate }}</option>
+                                    {% else %}
+                                        <option value="affiliate">{{ text_affiliate }}</option>
+                                    {% endif %}
+                                    {% if (filter_to == 'product') %}
+                                        <option value="product" selected="selected">{{ text_product }}</option>
+                                    {% else %}
+                                        <option value="product">{{ text_product }}</option>
+                                    {% endif %}
+                                    {% if (filter_to == 'marketing') %}
+                                        <option value="marketing" selected="selected">{{ text_marketing }}</option>
+                                    {% else %}
+                                        <option value="marketing">{{ text_marketing }}</option>
+                                    {% endif %}
+                                    {% if (filter_to == 'marketing_all') %}
+                                        <option value="marketing_all" selected="selected">{{ text_marketing_all }}</option>
+                                    {% else %}
+                                        <option value="marketing_all">{{ text_marketing_all }}</option>
+                                    {% endif %}
+                                    {% if (filter_to == 'subscriber') %}
+                                        <option value="subscriber" selected="selected">{{ text_subscriber_all }}</option>
+                                    {% else %}
+                                        <option value="subscriber">{{ text_subscriber_all }}</option>
+                                    {% endif %}
+                                    {% if (filter_to == 'all') %}
+                                        <option value="all" selected="selected">{{ text_all }}</option>
+                                    {% else %}
+                                        <option value="all">{{ text_all }}</option>
+                                    {% endif %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="input-store">{{ column_store }}</label>
+                                <select name="filter_store" id="input-store" class="form-control">
+                                    <option value=""></option>
+                                    {% if (filter_store == '0') %}
+                                        <option value="0" selected="selected">{{ text_default }}</option>
+                                    {% else %}
+                                        <option value="0">{{ text_default }}</option>
+                                    {% endif %}
+                                    {% for store in stores %}
+                                        {% if (filter_store == store['store_id']) %}
+                                            <option value="{{ store['store_id'] }}" selected="selected">{{ store['name'] }}</option>
+                                        {% else %}
+                                            <option value="{{ store['store_id'] }}">{{ store['name'] }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <button type="button" id="button-filter" class="btn btn-primary pull-right"><i class="fa fa-search"></i> {{ button_filter }}</button>
+                        </div>
+                    </div>
+                </div>
+                <form action="{{ delete }}" method="post" enctype="multipart/form-data" id="form" class="form-horizontal">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                            <tr>
+                                <td style="width: 1px;" class="text-center"><input type="checkbox" onclick="$('input[name*=\'selected\']').prop('checked', this.checked);" /></td>
+                                <td class="text-left">
+                                    {% if (sort == 'date') %}
+                                        <a href="{{ sort_date }}" class="{{ order|lower }}">{{ column_date }}</a>
+                                    {% else %}
+                                        <a href="{{ sort_date }}">{{ column_date }}</a>
+                                    {% endif %}
+                                </td>
+                                <td class="text-left">
+                                    {% if (sort == 'subject') %}
+                                        <a href="{{ sort_subject }}" class="{{ order|lower }}">{{ column_subject }}</a>
+                                    {% else %}
+                                        <a href="{{ sort_subject }}">{{ column_subject }}</a>
+                                    {% endif %}
+                                </td>
+                                <td class="text-left">
+                                    {% if (sort == 'to') %}
+                                        <a href="{{ sort_to }}" class="{{ order|lower }}">{{ column_to }}</a>
+                                    {% else %}
+                                        <a href="{{ sort_to }}">{{ column_to }}</a>
+                                    {% endif %}
+                                </td>
+                                <td class="text-right">
+                                    {% if (sort == 'store_id') %}
+                                        <a href="{{ sort_store }}" class="{{ order|lower }}">{{ column_store }}</a>
+                                    {% else %}
+                                        <a href="{{ sort_store }}">{{ column_store }}</a>
+                                    {% endif %}
+                                </td>
+                                <td class="text-right">{{ column_actions }}</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% if (draft) %}
+                                {% for entry in draft %}
+                                    <tr>
+                                        <td class="text-center">
+                                            {% if (entry['draft_id'] in selected) %}
+                                                <input type="checkbox" name="selected[]" value="{{ entry['draft_id'] }}" checked="checked" />
+                                            {% else %}
+                                                <input type="checkbox" name="selected[]" value="{{ entry['draft_id'] }}" />
+                                            {% endif %}
+                                        </td>
+                                        <td class="text-left">{{ entry['datetime'] }}</td>
+                                        <td class="text-left">{{ entry['subject'] }}</td>
+                                        <td class="text-left">
+                                            {% if (entry['to'] == 'newsletter') %}
+                                                {{ text_newsletter }}
+                                            {% elseif (entry['to'] == 'customer_all') %}
+                                                {{ text_customer_all }}
+                                            {% elseif (entry['to'] == 'customer_group') %}
+                                                {{ text_customer_group }}
+                                            {% elseif (entry['to'] == 'customer') %}
+                                                {{ text_customer }}
+                                            {% elseif (entry['to'] == 'affiliate_all') %}
+                                                {{ text_affiliate_all }}
+                                            {% elseif (entry['to'] == 'affiliate') %}
+                                                {{ text_affiliate }}
+                                            {% elseif (entry['to'] == 'product') %}
+                                                {{ text_product }}
+                                            {% elseif (entry['to'] == 'marketing') %}
+                                                {{ text_marketing }}
+                                            {% elseif (entry['to'] == 'marketing_all') %}
+                                                {{ text_marketing_all }}
+                                            {% elseif (entry['to'] == 'subscriber') %}
+                                                {{ text_subscriber_all }}
+                                            {% elseif (entry['to'] == 'all') %}
+                                                {{ text_all }}
+                                            {% endif %}
+                                        </td>
+                                        <td class="text-right">
+                                            {% if (entry['store_id'] == '0') %}
+                                                {{ text_default }}
+                                            {% else %}
+                                                {% for store in stores %}
+                                                    {% if (entry['store_id'] == store['store_id']) %}
+                                                        {{ store['name'] }}
+
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endif %}
+                                        </td>
+                                        <td class="text-right">
+                                            <a href="{{ detail ~ entry['draft_id'] }}" data-toggle="tooltip" title="{{ button_edit }}" class="btn btn-primary"><i class="fa fa-pencil"></i></a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td class="text-center" colspan="6">{{ text_no_results }}</td>
+                                </tr>
+                            {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+                <div class="row">
+                    <div class="col-sm-6 text-left">{{ pagination }}</div>
+                    <div class="col-sm-6 text-right">{{ results }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript"><!--
+        $('#button-filter').on('click', function() {
+            var url = 'index.php?route=ne/draft&user_token={{ user_token }}';
+
+            var filter_subject = $('input[name=\'filter_subject\']').val();
+
+            if (filter_subject) {
+                url += '&filter_subject=' + encodeURIComponent(filter_subject);
+            }
+
+            var filter_date = $('input[name=\'filter_date\']').val();
+
+            if (filter_date) {
+                url += '&filter_date=' + encodeURIComponent(filter_date);
+            }
+
+            var filter_to = $('select[name=\'filter_to\']').val();
+
+            if (filter_to) {
+                url += '&filter_to=' + encodeURIComponent(filter_to);
+            }
+
+            var filter_store = $('select[name=\'filter_store\']').val();
+
+            if (filter_store) {
+                url += '&filter_store=' + encodeURIComponent(filter_store);
+            }
+
+            location = url;
+        });
+        //--></script>
+    <script type="text/javascript"><!--
+        $('.date').datetimepicker({
+            pickTime: false
+        });
+        //--></script>
+</div>
+{{ footer }}

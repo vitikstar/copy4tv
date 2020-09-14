@@ -1,0 +1,39 @@
+{{ header }}
+<div id="common-home" class="container">
+  <div id="content">
+
+    <div class="row-menu-banner">
+      <div class="menu-block menu-banner-block">
+          {{ column_left }}
+
+        {{ mega_menu }}
+      </div>
+      <div class="banner-block menu-banner-block">
+          {{ content_top }}
+      </div>
+    </div>
+
+      {{ content_bottom }}
+
+  </div>
+
+
+
+
+
+  {#<div class="row">{{ column_left }}#}
+    {#{% if column_left and column_right %}#}
+    {#{% set class = 'col-sm-6' %}#}
+    {#{% elseif column_left or column_right %}#}
+    {#{% set class = 'col-sm-9' %}#}
+    {#{% else %}#}
+    {#{% set class = 'col-sm-12' %}#}
+    {#{% endif %}#}
+    {#<div id="content" class="{{ class }}">#}
+      {##}
+        {#{{ content_top }}#}
+
+        {#{{ content_bottom }}</div>#}
+    {#{{ column_right }}</div>#}
+</div>
+{{ footer }}

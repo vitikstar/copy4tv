@@ -1,0 +1,30 @@
+{% if (marketings) %}
+<table class="table table-bordered table-hover">
+    <thead>
+    <tr>
+        <td style="width: 1px;" class="text-center"><input type="checkbox" onclick="$('input[name*=\'selected\']').prop('checked', this.checked);" /></td>
+        <td class="text-left">
+             Имя
+        </td>
+        <td class="text-left">
+            Телефон
+        </td>
+    </tr>
+    </thead>
+    <tbody>
+        {% for marketing in marketings %}
+            <tr>
+                <td class="text-center">
+                    {% if (marketing['customer_id'] in selected) %}
+                        <input type="checkbox" name="customer_id" value="{{ marketing['customer_id'] }}" checked="checked" />
+                    {% else %}
+                        <input type="checkbox" name="customer_id" value="{{ marketing['customer_id'] }}" />
+                    {% endif %}
+                </td>
+                <td class="text-left">{{ marketing['name'] }}</td>
+                <td class="text-left">{{ marketing['telephone'] }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}

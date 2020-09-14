@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/1999/REC-html401-19991224/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>{{ subject }}</title>
+</head>
+<body style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #000000;">
+<div style="width: 680px;"><a href="{{ store_url }}" title="{{ store_name }}"><img src="{{ logo }}" alt="{{ store_name }}" style="margin-bottom: 20px; border: none;" /></a>
+  <p>{{ text_product }} <a href="{{ link }}">{{ product }}</a></p>
+  {% if name is defined %}
+  <p>{{ text_name }} {{ name }}</p>
+  {% endif %}
+  {% if city is defined %}
+  <p>{{ text_city }} {{ city }}</p>
+  {% endif %}
+  {% if rating is defined %}
+  <p>{{ text_rating }} {{ rating }}</p>
+  {% endif %}
+  {% if text is defined %}
+  <p>{{ text_text }}</p>
+  <p>{{ text }}</p>
+  {% endif %}
+  {% if good is defined %}
+  <p>{{ text_good }}</p>
+  <p>{{ good }}</p>
+  {% endif %}
+  {% if bad is defined %}
+  <p>{{ text_bad }}</p>
+  <p>{{ bad }}</p>
+  {% endif %}
+  {% if avatar is defined %}
+  <p>{{ text_avatar }}</p>
+  <p><img src="{{ avatar }}"/></p>
+  {% endif %}
+  {% if image is defined %}
+  <p>{{ text_image }}</p>
+  <p>
+  {% for value in image %}
+    <img src="{{ value }}"/>
+  {% endfor %}
+  </p>
+  {% endif %}
+</div>
+</body>
+</html>

@@ -1,0 +1,128 @@
+{{ header }}
+<div id="account-newsletter" class="container">
+    <div class="breadcrumb-product-wrap">
+            {{ column_megamenu }}
+        <ul class="breadcrumb">
+            {% set total = breadcrumbs|length %}
+            {% set counter = 0 %}
+            {% for breadcrumb in breadcrumbs %}
+                {{ breadcrumb['separator'] }}
+                {% set counter = counter + 1 %}
+                {% if (counter == total) %}
+                    <li>{{ breadcrumb['text'] }}</li>
+                {% else %}
+                    <li><a href="{{ breadcrumb['href'] }}">{{ breadcrumb['text'] }}</a></li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+    {% if success %}
+        <div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> {{ success }}
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+        </div>
+    {% endif %}
+    <div class="ac-row row">
+        <div class="ac-col-left">{{ column_left }}</div>
+
+        {% if column_left and column_right %}
+            {% set class = 'col-sm-6' %}
+        {% elseif column_left or column_right %}
+            {% set class = 'col-sm-9' %}
+        {% else %}
+            {% set class = 'col-sm-12' %}
+        {% endif %}
+        <div id="content" class="{{ class }}">{{ content_top }}
+            <div class="ac-personal-title">{{ text_newsletter }}</div>
+            <div class="ch-block-3 ch-block">
+                <div class="ch-del-pay-items">
+                    {% for k,item in type_all %}
+                        <div class="ch-del-pay-item">
+                            <div class="ch-del-pay-item-title-wrap">
+                                <label for="ch-pay-input-{{ k }}" class="ch-del-pay-label">
+                                    <input type="checkbox" name="ac-newsletter" id="ch-pay-input-{{ k }}"
+                                           value="{{ item['alias'] }}"
+                                           class="checkbox-input-mod" {% if item['checked']==1 %} checked="checked" {% endif %}>
+                                    <span class="ch-del-pay-item-title">{{ item['name'] }}</span>
+                                </label>
+                                <div class="ch-del-pay-item-text">{{ item['description'] }}</div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="ac-newsletter-channel-wrap">
+                <div class="ac-banner-question-title">{{ text_form_send }}</div>
+                <div class="ac-newsletter-channel ac-banner-question">
+                    <div class="ac-banner-question-items">
+                        {% for item in form_send_all %}
+                            <div class="ac-banner-question-item">
+                                <label>
+                                    <input type="checkbox"
+                                           name="ac_newsletter_channel" {% if item['checked']==1 %} checked="checked" {% endif %}
+                                           class="checkbox-input-mod"
+                                           value="{{ item['alias'] }}">
+                                    <span>{{ item['name'] }}</span>
+                                </label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <span>
+                <button type="button" class="btn btn-default" id="newsletter"
+                        style="    margin: 20px;">{{ entry_newsletter }}</button>
+            </span>
+        </div>
+        <div class="ac-col-right">
+            <div class="ac-banner">
+                {{ column_right }}
+            </div>
+        </div>
+    </div>
+    {{ content_bottom }}
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $('.ch-block-3 .ch-del-pay-label').click(function () {
+//            $('.ch-block-3 .ch-del-pay-item').removeClass('active');
+            var wrapper = $(this).closest('.ch-del-pay-item');
+//            wrapper.toggleClass('active');
+//
+//            wrapper.siblings().find('.checkbox-input-mod').prop('checked', false);
+
+            if ($(this).find('input').is(':checked')) {
+                wrapper.addClass('active');
+            } else {
+                wrapper.removeClass('active');
+            }
+        });
+        $('#newsletter').on('click', function () {
+// console.log($("input[name='ac_newsletter_channel']:checked").serialize());
+// console.log($("input[name='ac-newsletter']:checked").serialize());
+            var newsletter_channel = {};
+            $("input[name='ac_newsletter_channel']:checked").each(function (i, e) {
+                newsletter_channel[i] = this.value;
+            });
+            var newsletter = {};
+            $("input[name='ac-newsletter']:checked").each(function (i, e) {
+                newsletter[i] = this.value;
+            });
+            $.ajax({
+                url: 'index.php?route=account/newsletter/newsletter',
+                data: {
+                    'newsletter_channel': newsletter_channel,
+                    'newsletter': newsletter,
+                },
+                type: 'post',
+                dataType: 'json',
+                success: function (json) {
+                    location.href = json['redirect'];
+                    //if(!json['error']) location.reload();
+                }
+            });
+        })
+    });
+</script>
+{{ footer }}

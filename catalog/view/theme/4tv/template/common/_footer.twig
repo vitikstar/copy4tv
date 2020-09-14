@@ -1,0 +1,372 @@
+<footer>
+    <link href="/catalog/view/javascript/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:400,400i,300,700" rel="stylesheet" type="text/css" />
+    <div class="container">
+        <div class="footer-wrap">
+            <div class="footer-column-1 footer-column">
+                {{ sections_sirius[1] }}
+            </div>
+            <div class="footer-column-2 footer-column">
+                <div class="footer-column-title">{{ column_sirius[1]['name'] }}</div>
+                <ul class="footer-column-text">
+                    {% if column_sirius[1]['menu'] is defined %}
+                        {% for menu in column_sirius[1]['menu'] %}
+                            <li><a href="{{ menu['url'] }}">{{ menu['title'] }}</a></li>
+                        {% endfor %}
+                    {% endif %}
+                </ul>
+            </div>
+            <div class="footer-column-3 footer-column">
+                <div class="footer-column-title">{{ column_sirius[2]['name'] }}</div>
+                <ul class="footer-column-text">
+                    {% if column_sirius[2]['menu'] is defined %}
+                        {% for menu in column_sirius[2]['menu'] %}
+                            <li><a href="{{ menu['url'] }}">{{ menu['title'] }}</a></li>
+                        {% endfor %}
+                    {% endif %}
+                </ul>
+            </div>
+            <div class="footer-column-4 footer-column">
+                <div class="footer-column-title">{{ column_sirius[3]['name'] }}</div>
+                <ul class="footer-column-text">
+                    {% if column_sirius[3]['menu'] is defined %}
+                        {% for menu in column_sirius[3]['menu'] %}
+                            <li><a href="{{ menu['url'] }}">{{ menu['title'] }}</a></li>
+                        {% endfor %}
+                    {% endif %}
+                </ul>
+            </div>
+            <div class="footer-column-5 footer-column">
+                {{ sections_sirius[2] }}
+            </div>
+            <div class="footer-column-6 footer-column">
+                {{ sections_sirius[3] }}
+            </div>
+        </div>
+
+        <div class="footer-copyright-wrap">
+            {{ sections_sirius[4] }}
+        </div>
+    </div>
+    {{ sirius_auth_register_popup }}
+</footer>
+
+{#<footer>#}
+  {#<div class="container">#}
+    {#<div class="row">#}
+      {#{% for columns in column_sirius %}#}
+        {#<div class="col-sm-3">#}
+          {#<h5>{{ columns['name'] }}</h5>#}
+          {#{%  if columns['menu'] is iterable %}#}
+            {#<ul class="list-unstyled">#}
+              {#{% for item in columns['menu'] %}#}
+                {#<li><a href="{{ item['url'] }}">{{ item['title'] }}</a></li>#}
+                {#{%  if item['child'] is defined %}#}
+                  {#<ul class="">#}
+                    {#{% for child in item['child'] %}#}
+                    {#<li><a href="{{ child['url'] }}">{{ child['title'] }}</a>#}
+                      {#{% endfor %}#}
+                  {#</ul>#}
+                {#{% endif %}#}
+                {#{% endfor %}#}
+            {#</ul>#}
+          {#{% else %}#}
+            {#{{ item }}#}
+          {#{% endif %}#}
+        {#</div>#}
+      {#{% endfor %}#}
+    {#</div>#}
+    {#<hr>#}
+    {#{{ sections_sirius[1] }}#}
+    {#    всього 4#}
+  {#</div>#}
+{#</footer>#}
+
+{% for script in scripts %}
+    <script src="{{ script }}" type="text/javascript"></script>
+{% endfor %}
+<!--
+OpenCart is open source software and you are free to remove the powered by OpenCart if you want, but its generally accepted practise to make a small donation.
+Please donate via PayPal to donate@opencart.com
+//-->
+
+
+<div class="button-to-top" style="display: none;"><i class="fa fa-long-arrow-up"></i></div>
+<script>
+    $(document).ready(function() {
+        $('.button-to-top').click(function() {
+            $('body,html').animate({scrollTop:0},300);
+        });
+    });
+
+    $(window).on('scroll', function() {
+        var scroll = $(this).scrollTop();
+        if (scroll > 800) {
+            $('.button-to-top').fadeIn();
+        } else {
+            $('.button-to-top').fadeOut();
+        }
+    });
+</script>
+
+
+<script>
+    $(document).ready(function() {
+        $('.latest-block-wrap, .special-block-wrap, :not(#product-category).bestseller-block-wrap, .sirius-wishlist-block-wrap, .featured-block-wrap, .buy-width-product-block-wrap').each(function() {
+
+            var wrapper = $(this);
+            var length = wrapper.find('.swiper-slide').length;
+
+            if (window.innerWidth > 1800) {
+                if (length <= 6) {
+                    wrapper.find('.swiper-pager').hide();
+                    wrapper.find('.swiper-pagination').hide();
+                }
+            }
+            if (window.innerWidth <= 1800 && window.innerWidth > 1200) {
+                if (length <= 4) {
+                    wrapper.find('.swiper-pager').hide();
+                    wrapper.find('.swiper-pagination').hide();
+                }
+            }
+            if (window.innerWidth <= 1200 && window.innerWidth > 768) {
+                if (length <= 3) {
+                    wrapper.find('.swiper-pager').hide();
+                    wrapper.find('.swiper-pagination').hide();
+                }
+            }
+            if (window.innerWidth <= 767 && window.innerWidth > 500) {
+                if (length <= 2) {
+                    wrapper.find('.swiper-pager').hide();
+                    wrapper.find('.swiper-pagination').hide();
+                }
+            }
+            if (window.innerWidth <= 500) {
+                if (length <= 1) {
+                    wrapper.find('.swiper-pager').hide();
+                    wrapper.find('.swiper-pagination').hide();
+                }
+            }
+
+            wrapper.find('.products-slider').swiper({
+                slidesPerView: 6,
+//            pagination: '.bestseller-slider-wrapper .swiper-pagination',
+//            paginationClickable: true,
+                nextButton: wrapper.find('.swiper-button-next'),
+                prevButton: wrapper.find('.swiper-button-prev'),
+                pagination: wrapper.find('.swiper-pagination'),
+                paginationClickable: true,
+                breakpoints:{
+                    1800:{
+                        slidesPerView: 4
+                    },
+                    1200:{
+                        slidesPerView: 3
+                    },
+                    768:{
+                        slidesPerView: 2
+                    },
+                    500:{
+                        slidesPerView: 'auto'
+                    }
+                }
+//              loop: true
+            });
+        });
+
+
+
+
+        $('#product-category .bestseller-block-wrap, #product-category .viewed-block-wrap').each(function() {
+            var wrapper = $(this);
+            var length = wrapper.find('.swiper-slide').length;
+            if (window.innerWidth > 1800) {
+                if (length <= 5) {
+                    wrapper.find('.swiper-pager').hide();
+                    wrapper.find('.swiper-pagination').hide();
+                }
+            }
+            if (window.innerWidth <= 1800 && window.innerWidth > 1200) {
+                if (length <= 4) {
+                    wrapper.find('.swiper-pager').hide();
+                    wrapper.find('.swiper-pagination').hide();
+                }
+            }
+            if (window.innerWidth <= 1200 && window.innerWidth > 768) {
+                if (length <= 2) {
+                    wrapper.find('.swiper-pager').hide();
+                    wrapper.find('.swiper-pagination').hide();
+                }
+            }
+            if (window.innerWidth <= 767 && window.innerWidth > 500) {
+                if (length <= 2) {
+                    wrapper.find('.swiper-pager').hide();
+                    wrapper.find('.swiper-pagination').hide();
+                }
+            }
+            if (window.innerWidth <= 500) {
+                if (length <= 1) {
+                    wrapper.find('.swiper-pager').hide();
+                    wrapper.find('.swiper-pagination').hide();
+                }
+            }
+            wrapper.find('.products-slider').swiper({
+                slidesPerView: 5,
+                pagination:  wrapper.find('.swiper-pagination'),
+                paginationClickable: true,
+                nextButton: wrapper.find('.swiper-button-next'),
+                prevButton: wrapper.find('.swiper-button-prev'),
+                breakpoints:{
+                    1800:{
+                        slidesPerView: 4
+                    },
+                    1200:{
+                        slidesPerView: 2
+                    },
+                    768:{
+                        slidesPerView: 2
+                    },
+                    500:{
+//                        slidesPerView: 2,
+                        slidesPerView: 'auto'
+//                        spaceBetween: 30
+                    }
+                }
+            });
+        });
+
+
+
+
+
+        var wrapper = $('.manufacturer-block-wrap');
+        var length = wrapper.find('.swiper-slide').length;
+        if (window.innerWidth > 1800) {
+            if (length <= 7) {
+                wrapper.find('.swiper-pager').hide();
+                wrapper.find('.swiper-pagination').hide();
+            }
+        }
+        if (window.innerWidth <= 1800 && window.innerWidth > 1200) {
+            if (length <= 5) {
+                wrapper.find('.swiper-pager').hide();
+                wrapper.find('.swiper-pagination').hide();
+            }
+        }
+        if (window.innerWidth <= 1200 && window.innerWidth > 768) {
+            if (length <= 5) {
+                wrapper.find('.swiper-pager').hide();
+                wrapper.find('.swiper-pagination').hide();
+            }
+        }
+        if (window.innerWidth <= 767 && window.innerWidth > 500) {
+            if (length <= 3) {
+                wrapper.find('.swiper-pager').hide();
+                wrapper.find('.swiper-pagination').hide();
+            }
+        }
+        if (window.innerWidth <= 500) {
+            if (length <= 2) {
+                wrapper.find('.swiper-pager').hide();
+                wrapper.find('.swiper-pagination').hide();
+            }
+        }
+        wrapper.find('.products-slider').swiper({
+            slidesPerView: 7,
+            slidesPerGroup: 7,
+            pagination:  wrapper.find('.swiper-pagination'),
+            paginationClickable: true,
+            nextButton: wrapper.find('.swiper-button-next'),
+            prevButton: wrapper.find('.swiper-button-prev'),
+            breakpoints:{
+                1800:{
+                    slidesPerView: 5,
+                    slidesPerGroup: 5
+                },
+                1200:{
+                    slidesPerView: 5,
+                    slidesPerGroup: 5
+                },
+                768:{
+                    slidesPerView: 3,
+                    slidesPerGroup: 3
+                },
+                500:{
+//                    slidesPerView: 2,
+//                    slidesPerGroup: 2
+                    slidesPerView: 'auto'
+                }
+            }
+//            loop: true
+        });
+
+
+
+
+        var wrapper = $('.blog-latest-slider-wrapper');
+        var length = wrapper.find('.swiper-slide').length;
+        if (window.innerWidth > 1800) {
+            if (length <= 4) {
+                wrapper.find('.swiper-pager').hide();
+                wrapper.find('.swiper-pagination').hide();
+            }
+        }
+        if (window.innerWidth <= 1800 && window.innerWidth > 1200) {
+            if (length <= 4) {
+                wrapper.find('.swiper-pager').hide();
+                wrapper.find('.swiper-pagination').hide();
+            }
+        }
+        if (window.innerWidth <= 1200 && window.innerWidth > 768) {
+            if (length <= 3) {
+                wrapper.find('.swiper-pager').hide();
+                wrapper.find('.swiper-pagination').hide();
+            }
+        }
+        if (window.innerWidth <= 767 && window.innerWidth > 500) {
+            if (length <= 2) {
+                wrapper.find('.swiper-pager').hide();
+                wrapper.find('.swiper-pagination').hide();
+            }
+        }
+        if (window.innerWidth <= 500) {
+            if (length <= 1) {
+                wrapper.find('.swiper-pager').hide();
+                wrapper.find('.swiper-pagination').hide();
+            }
+        }
+
+        wrapper.find('.products-slider').swiper({
+            slidesPerView: 4,
+            pagination:  wrapper.find('.swiper-pagination'),
+            paginationClickable: true,
+            nextButton: wrapper.find('.swiper-button-next'),
+            prevButton: wrapper.find('.swiper-button-prev'),
+            breakpoints:{
+                1800:{
+                    slidesPerView: 4
+                },
+                1200:{
+                    slidesPerView: 3
+                },
+                768:{
+                    slidesPerView: 2
+                },
+                500:{
+                    slidesPerView: 'auto'
+                }
+            }
+//              loop: true
+        });
+
+
+
+    });
+</script>
+
+
+
+<div class="mobile-menu-blocker-bg"></div>
+
+
+</body></html>

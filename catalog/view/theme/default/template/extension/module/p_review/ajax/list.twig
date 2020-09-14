@@ -1,0 +1,75 @@
+{% if p_reviews['p_reviews'] %}     
+{% for review in p_reviews['p_reviews'] %}
+<table class="table table-striped table-bordered">
+  <tr>
+    {% if review['avatar'] %}
+	<td class="text-center column-avatar">
+	  <p><img src="{{ review['avatar'] }}" alt="{{ review['name'] }}" class="img-responsive" /></p>
+	</td>
+	{% endif %}
+    <td>
+	  {% if review['title'] %}
+	  <h2>{{ review['title'] }}</h2>
+	  {% endif %}
+	  <p>
+	    {% if review['rating'] %}
+	    <span class="rating">
+		  {% for i in 1..5 %}
+		  {% if review['rating'] < i %}
+		  <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-2x"></i></span>
+		  {% else %}
+		  <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span>
+		  {% endif %}
+		  {% endfor %}
+	    </span>
+	    {% endif %}
+		{% if review['name'] %}
+	    <i>{{ review['name'] }}</i>
+	    {% endif %}
+		{% if review['city'] %}
+	    <i>{{ review['city'] }}</i>
+	    {% endif %}
+		{% if review['date_added'] %}
+	    <i>{{ review['date_added'] }}</i>
+	    {% endif %}
+	  </p>
+	  {% if review['text'] %}
+	  <p><strong>{{ entry_text }}</strong><br/>{{ review['text'] }}</p>
+	  {% endif %}
+	  {% if review['good'] %}
+	  <p><strong>{{ entry_good }}</strong><br/>{{ review['good'] }}</p>
+	  {% endif %}
+	  {% if review['bad'] %}
+	  <p><strong>{{ entry_bad }}</strong><br/>{{ review['bad'] }}</p>
+	  {% endif %}
+	  {% if review['image'] %}
+	  <p><strong>{{ entry_image }}</strong></p>
+	  <p class="p-thumbnail p-thumbnail{{ review['p_review_id'] }}">{% for value in review['image'] %}<a data-thumbnail="{{ review['p_review_id'] }}" href="{{ value['thumb'] }}"><img src="{{ value['thumbnail'] }}" class="img-thumbnail"></a>{% endfor %}</p>
+	  {% endif %}
+	  {% if review['comment'] %}
+	  <blockquote><strong>{{ entry_comment }}</strong><br/>{{ review['comment'] }}</blockquote>
+	  {% endif %}
+	  {% if review['readmore'] %}
+	  <p class="text-left"><a class="btn btn-primary btn-sm" href="{{ review['href'] }}">{{ button_readmore }}</a>
+	  {% endif %}
+    </td>
+  </tr>
+</table>	
+{% endfor %}
+<div class="text-right">{{ p_reviews['pagination'] }}</div>
+{% if field_image %}
+<script type="text/javascript"><!--
+	$('.p-thumbnail a').on('click', function() {
+		$('.p-thumbnail' + $(this).data('thumbnail')).magnificPopup({
+			type:'image',
+			delegate: 'a',
+			gallery: {
+			    enabled:true
+			}
+		});
+	});
+--></script>
+{% endif %}
+{% else %}
+<p>{{ text_no_p_review }}</p>
+{% endif %}

@@ -1,0 +1,27 @@
+<div class="form-group">
+    <label class="col-sm-2 control-label" for="input-news">Новость</label>
+    <div class="col-sm-10">
+        <select name="article_id" id="input-news" class="form-control">
+            <option value="0">Выберите</option>
+            {% for item in blogs_item_all %}
+                <option value="{{ item['article_id'] }}" {% if article_id %} selected="selected" {% endif %}>{{ item['name'] }}</option>
+            {% endfor %}
+        </select>
+    </div>
+</div>
+
+<script>
+    $('select[name=\'article_id\']').on('change', function() {
+        $.ajax({
+            url: 'index.php?route=viber/send/textarea&user_token={{ user_token }}',
+            dataType: 'html',
+            data: {
+                'article_id': $(this).val()
+            },
+            type: 'post',
+            success: function(html) {
+                $("#result-textarea").html(html);
+            }
+        });
+    });
+</script>

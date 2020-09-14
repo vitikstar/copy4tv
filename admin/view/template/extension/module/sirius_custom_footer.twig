@@ -1,0 +1,318 @@
+{{ header }}{{ column_left }}
+<div id="content">
+    <div class="page-header">
+        <div class="container-fluid">
+            <div class="pull-right">
+                    <a onclick="$('#form').attr('action', '{{ save }}'); megamenuSubmit(); $('#form').submit();" class="btn btn-primary"><i class="fa fa-save"></i><span>&nbsp;{{ button_save }}</a>
+                    <a onclick="$('#form').attr('action', '{{ save_and_close }}'); megamenuSubmit(); $('#form').submit();" class="btn btn-primary"><i class="fa fa-save"></i>&nbsp;{{ button_save_and_close }}</a>
+                <a href="{{ close }}" data-toggle="tooltip" title="{{ button_close }}" class="btn btn-default"><i class="fa fa-close"></i> {{ button_close }}</a>
+            </div>
+            <img width="36" height="36" style="float:left" src="view/image/sirius.png" alt=""/>
+            <h1>{{ heading_title_raw ~ " " ~ text_module_version }}</h1>
+            <ul class="breadcrumb">
+                {% for breadcrumb in breadcrumbs %}
+                    <li><a href="{{ breadcrumb['href'] }}">{{ breadcrumb['text'] }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        {% if (error_warning) %}
+            <div class="alert alert-danger">
+                <i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+        {% endif %}
+        {% if (success is defined and success) %}
+            <div class="alert alert-success">
+                <i class="fa fa-check-circle"></i>
+                {{ success }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+        {% endif %}
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#tab-general" data-toggle="tab">{{ tab_general }}</a></li>
+                        <li><a href="#tab-sections" data-toggle="tab">{{ tab_sections }}</a></li>
+                        <li><a href="#tab-columns" data-toggle="tab">{{ tab_columns }}</a></li>
+                        <li><a href="#tab-socials" data-toggle="tab">Соц. сети</a></li>
+                        <li><a href="#tab-logs" data-toggle="tab">{{ tab_logs }}</a></li>
+                </ul>
+
+                <form action="{{ save }}" method="post" enctype="multipart/form-data" id="form">
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tab-general">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
+                                <div class="col-sm-10">
+                                    <select name="module_sirius_custom_footer_status" id="input-status" class="form-control">
+                                        {% if module_sirius_custom_footer_status %}
+                                            <option value="1" selected="selected">{{ text_enabled }}</option>
+                                            <option value="0">{{ text_disabled }}</option>
+                                        {% else %}
+                                            <option value="1">{{ text_enabled }}</option>
+                                            <option value="0" selected="selected">{{ text_disabled }}</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane" id="tab-sections">
+                            {% for section_id in range(1,4) %}
+                            <div class='form-group'><h3>Секция №{{ section_id }}</h3></div>
+                            <div class='form-group'>
+                                <div id="section_{{ section_id }}" class="htabs">
+                                    <ul class="nav nav-tabs">
+                                        {% for language in languages %}
+                                        <li class="{{ language['language_id'] == 1? 'active': '' }}"><a href="#section-{{ section_id }}-{{ language['language_id'] }}" data-toggle="tab">
+                                                <img src="language/{{ language['code'] }}/{{ language['code'] }}.png" title="{{ language['name'] }}">
+                                                {{ language['name'] }}</a></li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                                <div class="tab-content">
+                                    {% for language in languages %}
+                                        <div class="tab-pane {{ language['language_id'] == 1? 'active': '' }}" id="section-{{ section_id }}-{{ language['language_id'] }}">
+                                            <textarea class="form-control"  rows="6" name="module_sirius_custom_footer_sections[{{ section_id }}][{{ language['language_id'] }}]"   data-toggle="summernote"  data-lang="ru-RU" >
+                                                {% if module_sirius_custom_footer_sections[section_id][language['language_id']] is defined  %}
+                                                        {{ module_sirius_custom_footer_sections[section_id][language['language_id']] }}
+                                                {% endif %}
+                                            </textarea>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="tab-pane" id="tab-columns">
+                            {% for column_id in range(1,5) %}
+                                <div id="column_{{ column_id }}">
+
+                                    <div class="form-group">
+                                        <h3>Колонка №{{ column_id }}</h3>
+                                        {% for language in languages %}
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><img src="language/{{ language['code'] }}/{{ language['code'] }}.png" title="{{ language['name'] }}" /></span>
+                                                {% if module_sirius_custom_footer_column_names[column_id][language['language_id']] is defined  %}
+                                                        {% set  column_value = module_sirius_custom_footer_column_names[column_id][language['language_id']] %}
+                                                {% endif %}
+                                                <input class="form-control" name="module_sirius_custom_footer_column_names[{{ column_id }}][{{ language['language_id'] }}]" value="{{ column_value }}"/>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+
+                                    <div class="content-type form-group">
+                                        <label>Тип данных: </label>
+                                        <label><input type="radio" target="{{ column_id }}" id="column_type_{{ column_id }}_0" name="module_sirius_custom_footer_column_types[{{ column_id }}]" {% if ( module_sirius_custom_footer_column_types[column_id] == 0 ) %}checked{% endif %} value="0">Текст</label>
+                                        <label><input type="radio" target="{{ column_id }}" id="column_type_{{ column_id }}_1" name="module_sirius_custom_footer_column_types[{{ column_id }}]" {% if ( module_sirius_custom_footer_column_types[column_id] == 1 ) %}checked{% endif %} value="1">Меню</label>
+                                    </div>
+
+                                    <div id="column_text_{{ column_id }}" class='form-group'>
+                                        <div id="column_text_{{ column_id }}_tabs" class="htabs">
+                                            <ul class="nav nav-tabs">
+                                                {% for language in languages %}
+                                                    <li class="{{ language['language_id'] == 1? 'active': '' }}"><a href="#column_text-{{ column_id }}-{{ language['language_id'] }}" data-toggle="tab">
+                                                            <img src="language/{{ language['code'] }}/{{ language['code'] }}.png" title="{{ language['name'] }}">
+                                                            {{ language['name'] }}</a></li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+
+                                        <div class="tab-content">
+                                            {% for language in languages %}
+                                                <div class="tab-pane {{ language['language_id'] == 1? 'active': '' }}" id="column_text-{{ column_id }}-{{ language['language_id'] }}">
+                                                    <textarea class='form-control' rows="6" name="module_sirius_custom_footer_column_texts[{{ column_id }}][{{ language['language_id'] }}]"   data-toggle="summernote"  data-lang="ru-RU">
+                                                        {% if module_sirius_custom_footer_sections[section_id][language['language_id']] is defined  %}
+                                                                {{ module_sirius_custom_footer_sections[section_id][language['language_id']] }}
+                                                        {% endif %}
+                                                    </textarea>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+
+                                    <div id="column_menu_{{ column_id }}" class="form-group clearfix container_mega_menu">
+                                        <div class="col-sm-4">
+                                            <ul class="nav nav-tabs" >
+                                                <li class="active"><a href="#tab-menu-category-{{ column_id }}" data-toggle="tab">{{ tab_menu_category }}</a></li>
+                                                <li><a href="#tab-menu-information-{{ column_id }}" data-toggle="tab">{{ tab_menu_information }}</a></li>
+                                                <li><a href="#tab-menu-manufacturer-{{ column_id }}" data-toggle="tab">{{ tab_menu_manufacturer }}</a></li>
+                                                <li><a href="#tab-menu-custom-{{ column_id }}" data-toggle="tab">{{ tab_menu_custom }}</a></li>
+                                            </ul>
+                                            <div class="tab-content" >
+                                                <div class="tab-pane active" id="tab-menu-category-{{ column_id }}">
+
+                                                    <div class="well well-sm" style="min-height: 150px;max-height: 400px;overflow: auto;">
+                                                        {% set class = 'odd' %}
+                                                        {% for category in categories %}
+                                                            {% set class = class == 'even' ? 'odd' : 'even' %}
+                                                            <div class="{{ class }}">
+                                                                <label><input class="category" type="checkbox"
+                                                                              value="{{ category['category_id'] }}"
+                                                                              data="{{ category['name'] }}"/>
+                                                                    {{ category['name'] }}</label>
+                                                            </div>
+                                                        {% endfor %}
+                                                    </div>
+                                                    <a onclick="$(this).parent().find(':checkbox').prop('checked', true);">{{ text_select_all }}</a> / <a onclick="$(this).parent().find(':checkbox').prop('checked', false);">{{ text_unselect_all }}</a> <br><br><a class="button add-to-menu btn btn-primary" href="javascript:void(0);"><span>Добавить в меню</span></a>
+                                                </div>
+                                                <div class="tab-pane" id="tab-menu-information-{{ column_id }}">
+
+                                                    <div class="well well-sm" style="min-height: 150px;max-height: 400px;overflow: auto;">
+                                                        {% set class = 'odd' %}
+                                                        {% for information in informations %}
+                                                            {% set class = class == 'even' ? 'odd' : 'even' %}
+                                                            <div class="{{ class }}">
+                                                                <label><input class="infomation" type="checkbox"
+                                                                              value="{{ information['id'] }}"
+                                                                              data="{{ information['title'] }}"/>
+                                                                    {{ information['title'] }}</label>
+                                                            </div>
+                                                        {% endfor %}
+                                                    </div>
+                                                    <a onclick="$(this).parent().find(':checkbox').prop('checked', true);">{{ text_select_all }}</a> / <a onclick="$(this).parent().find(':checkbox').prop('checked', false);">{{ text_unselect_all }}</a> <br><br><a class="button add-to-menu btn btn-primary" href="javascript:void(0);"><span>Добавить в меню</span></a>
+                                                </div>
+                                                <div class="tab-pane" id="tab-menu-manufacturer-{{ column_id }}">
+
+                                                    <div class="well well-sm" style="min-height: 150px;max-height: 400px;overflow: auto;">
+                                                        {% set class = 'odd' %}
+                                                        {% for manufacturer in manufacturers %}
+                                                            {% set class = class == 'even' ? 'odd' : 'even' %}
+                                                            <div class="{{ class }}">
+                                                                <label><input class="manufacturer" type="checkbox"
+                                                                              value="{{ manufacturer['id'] }}"
+                                                                              data="{{ manufacturer['name'] }}"/>
+                                                                    {{ manufacturer['name'] }}</label>
+                                                            </div>
+                                                        {% endfor %}
+                                                    </div>
+                                                    <a onclick="$(this).parent().find(':checkbox').prop('checked', true);">{{ text_select_all }}</a> / <a onclick="$(this).parent().find(':checkbox').prop('checked', false);">{{ text_unselect_all }}</a> <br><br>
+                                                    <a class="button add-to-menu btn btn-primary" href="javascript:void(0);"><span>Добавить в меню</span></a>
+                                                </div>
+                                                <div class="tab-pane" id="tab-menu-custom-{{ column_id }}" >
+
+                                                    <div>
+                                                        <p><label>Название : </label><input class="form-control title" type="text"
+                                                                                            value="Название ссылки" placeholder="Название ссылки"/></p>
+
+                                                        <p><label>Ссылка : </label><input class="form-control url" type="text" value="Ссылка" placeholder="Ссылка"/></p>
+                                                        <p><label>Параметр : </label><input class="form-control class_menu" type="text" value="Параметр" placeholder="Параметр"/></p>
+                                                    </div>
+                                                    </ul>
+                                                    <a class="button add-to-menu_custom btn btn-primary" href="javascript:void(0);">Добавить в меню</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-8 right">
+                                            <div class="dd menu_area">
+                                                <ol class='dd-list' id='area_column_menu_{{ column_id }}'>
+
+                                                </ol>
+                                                <script>
+                                                    $(document).ready(function () {
+                                                        $.ajax({
+                                                            url: 'index.php?route=extension/module/sirius_custom_footer/get-menu-html&user_token={{ user_token }}',
+                                                            type: "POST",
+                                                            data:{
+                                                                'parent_id':0,
+                                                                'current_lang':{{ current_lang }},
+                                                                'column_id':{{ column_id }},
+                                                            },
+                                                            dataType:'html',
+                                                            success: function (data) {
+                                                                $('#area_column_menu_{{ column_id }}').html(data);
+                                                            }
+                                                        });
+                                                    });
+                                                </script>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                            {% endfor %}
+                        </div>
+                        <div class="tab-pane" id="tab-socials">
+                            <div class="form-group">
+                                    <h3>{{ entry_vk }}</h3>
+                                    <div class="input-group">
+                                        <input type="text" name="module_sirius_custom_footer_vk" value="{{ module_sirius_custom_footer_vk }}" placeholder="{{ entry_vk }}" id="input-vk" class="form-control" />
+                                    </div>
+                            </div>
+                            <div class="form-group">
+                                <h3>{{ entry_fb }}</h3>
+                                <div class="input-group">
+                                    <input type="text" name="module_sirius_custom_footer_fb" value="{{ module_sirius_custom_footer_fb }}" placeholder="{{ entry_fb }}" id="input-fb" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <h3>{{ entry_googleplus }}</h3>
+                                <div class="input-group">
+                                    <input type="text" name="module_sirius_custom_footer_googleplus" value="{{ module_sirius_custom_footer_googleplus }}" placeholder="{{ entry_googleplus }}" id="input-googleplus" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <h3>{{ entry_youtube }}</h3>
+                                <div class="input-group">
+                                    <input type="text" name="module_sirius_custom_footer_youtube" value="{{ module_sirius_custom_footer_youtube }}" placeholder="{{ entry_youtube }}" id="input-youtube" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <h3>{{ entry_twitter }}</h3>
+                                <div class="input-group">
+                                    <input type="text" name="module_sirius_custom_footer_twitter" value="{{ module_sirius_custom_footer_twitter }}" placeholder="{{ entry_twitter }}" id="input-twitter" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tab-logs">
+                            <textarea style="width: 100%; height: 300px; padding: 5px; border: 1px solid #CCCCCC; background: #FFFFFF; overflow: scroll;">{{ logs  }} )</textarea>
+                                </div>
+                        </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        function updateColumnType(target){
+            var value = $("#column_" + target + " .content-type [type=radio]:checked").val();
+            if (value == 0) {
+                $("#column_menu_" + target).hide();
+                $("#column_text_" + target).show();
+            } else {
+                $("#column_text_" + target).hide();
+                $("#column_menu_" + target).show();
+            }
+        }
+        $(".content-type input[type=radio]").click(function() {
+            updateColumnType($(this).attr('target'));
+        });
+
+        var selectedItems = new Array();
+        $(".content-type input[type=radio]:checked").each(function() {
+            var target = $(this).attr('target');
+            var id = $(this).attr('id');
+            if (id.substr( - 1) == 1){
+                $("#column_text_" + target).hide();
+                $("#column_menu_" + target).show();
+            } else {
+                $("#column_menu_" + target).hide();
+                $("#column_text_" + target).show();
+            }
+        });
+        var langs = [], temp = {};
+        {% for lang in languages %}
+        {{ "temp['id'] = "~lang["language_id"]~";\n" }}
+        {{ "temp['name'] = '"~lang["name"]~"';\n" }}
+        {{ "temp['image'] = '"~lang["image"]~"';\n" }}
+        {{ "langs.push(temp); temp = {};\n" }}
+        {% endfor %}
+        </script>
+    <script type="text/javascript" src="view/javascript/summernote/summernote.js"></script>
+    <link href="view/javascript/summernote/summernote.css" rel="stylesheet" />
+    <script type="text/javascript" src="view/javascript/summernote/summernote-image-attributes.js"></script>
+    <script type="text/javascript" src="view/javascript/summernote/opencart.js"></script>
+</div>
+{{ footer }}

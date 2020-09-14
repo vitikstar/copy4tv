@@ -1,0 +1,70 @@
+.simple_button_left
+{
+	float: left;
+	padding-top: 5px;
+	padding-right: 20px;
+}
+.simple_button_right
+{
+	float: right;
+}
+.simplereg_button_left
+{
+	float: left;
+	padding-top: 5px;
+	padding-right: 20px;
+}
+.simplereg_button_right
+{
+	float: right;
+}
+.checkout_table_header
+{
+	font-weight: bold;
+}
+.checkout_loginza_button_content
+{
+	min-height: 20px !important;
+}
+.checkout_button_left
+{
+	float: left;
+	padding-top: 5px;
+	padding-right: 20px;
+	font-weight: bold;
+}
+.checkout_button_right
+{
+	float: right;
+}	
+.checkout_icons_header
+{
+	font-weight: bold;
+}
+.account_table_header
+{
+	font-weight: bold;
+}
+.account_loginza_button_content
+{
+	min-height: 20px !important;
+}
+.account_button_right
+{
+	float: right;
+}
+.account_button_left
+{
+	float: left;
+	padding-top: 5px;
+	padding-right: 20px;
+	font-weight: bold;
+}
+.account_icons_header
+{
+	font-weight: bold;
+}
+.account_socnetauth2__header{
+	font-size: 16px;
+    margin-top: 10px;
+}

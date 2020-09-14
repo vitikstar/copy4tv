@@ -1,0 +1,47 @@
+{{ header }}
+<div id="account-review" class="container">
+    <div class="breadcrumb-product-wrap">
+            {{ column_megamenu }}
+        <ul class="breadcrumb">
+            {% set total = breadcrumbs|length %}
+            {% set counter = 0 %}
+            {% for breadcrumb in breadcrumbs %}
+                {{ breadcrumb['separator'] }}
+                {% set counter = counter + 1 %}
+                {% if (counter == total) %}
+                    <li>{{ breadcrumb['text'] }}</li>
+                {% else %}
+                    <li><a href="{{ breadcrumb['href'] }}">{{ breadcrumb['text'] }}</a></li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+
+    {% if success %}
+        <div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> {{ success }}
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+        </div>
+    {% endif %}
+    <div class="ac-row row">
+
+        <div class="ac-col-left">{{ column_left }}</div>
+
+        {% if column_left and column_right %}
+            {% set class = 'col-sm-6' %}
+        {% elseif column_left or column_right %}
+            {% set class = 'col-sm-9' %}
+        {% else %}
+            {% set class = 'col-sm-12' %}
+        {% endif %}
+        <div id="content" class="{{ class }}">
+            {{ content_top }}
+        </div>
+{#        <div class="ac-col-right">#}
+{#            <div class="ac-banner">#}
+{#                {{ column_right }}#}
+{#            </div>#}
+{#        </div>#}
+    </div>
+    {{ content_bottom }}
+</div>
+{{ footer }}

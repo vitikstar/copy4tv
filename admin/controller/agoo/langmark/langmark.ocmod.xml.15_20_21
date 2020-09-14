@@ -1,0 +1,41 @@
+<file path="catalog/controller/common/maintenance.php" error="skip">
+	<operation error="skip">
+        <search position="after"><![CDATA[function index() {]]></search>
+        <add position="after"><![CDATA[
+		if (is_callable(array($this->url, 'langmark_setRegistry')) && $this->registry) {
+			if (defined('DIR_CATALOG')) {
+				$this->registry->set('langmark_admin_work', true);
+			} else {
+  				if (!function_exists('agoo_cont')) {
+					if (!defined('SC_VERSION')) define('SC_VERSION', (int)substr(str_replace('.','',VERSION), 0, 2));
+
+					if (function_exists('modification')) {
+						require_once(modification(DIR_SYSTEM . 'helper/seocmsprofunc.php'));
+					} else {
+						require_once(DIR_SYSTEM . 'helper/seocmsprofunc.php');
+					}
+				}
+				if (!$this->registry->get('controller_record_langmark')) {
+			   		$this->registry = agoo_cont('record/langmark', $this->registry);
+                }
+			}
+
+			if ($this->config->get('ascp_settings') != '') {
+				$langmark_settings = $this->config->get('ascp_settings');
+			} else {
+				$langmark_settings = Array();
+			}
+
+
+			if (isset($langmark_settings['langmark_widget_status']) && $langmark_settings['langmark_widget_status'] && !$this->registry->get('admin_work')) {
+				if (!class_exists('agooMultilang', false)) {
+					loadlibrary('agoo/multilang');
+					$multilang = new agooMultilang($this->registry);
+				}
+			}
+			$this->url->langmark_setRegistry($this->registry);
+
+		}
+    ]]></add>
+	</operation>
+</file>

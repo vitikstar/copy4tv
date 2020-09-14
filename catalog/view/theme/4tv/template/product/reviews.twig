@@ -1,0 +1,157 @@
+<div class="pr-reviews">
+    <div class="pr-review">
+        <div class="pr-review-title">
+            <div class="pr-review-title-icon"><span>СА</span></div>
+            <div class="pr-review-title-name-rating">
+                <div class="pr-review-title-name">Сергій Анатолійович</div>
+                <div class="pr-review-title-rating">
+                    <div class="rating">
+                        <p>
+                            {% for i in 1..5 %}
+                                {% if rating < i %}
+                                    <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i></span>
+                                {% else %}
+                                    <span class="fa fa-stack"><i class="fa fa-star fa-stack-1x"></i><i class="fa fa-star-o fa-stack-1x"></i></span>
+                                {% endif %}
+                            {% endfor %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="pr-review-title-buy"><span>Купил этот товар</span></div>
+            <div class="pr-review-title-date">26 ноября 2019</div>
+        </div>
+        <div class="pr-review-comment-wrap">
+            <div class="pr-review-comment">Додатково придбав ще три датчика руху кімнатних і один зовнішній. Все синхронізувалось без проблем і працює. Поки що налаштував інтернет тільки від клмплектної сімкарти Лайф. Датчиками руху перекрив всі кімнати-коридори. Датчик відкриття дверей трохи понапрягав. Використовував з малим магнітом і таки налаштував (в них надто мала зона взаємодії і перш ніж фіксувати остаточно треба цю зону виявити). Покупкою задоволений, сервісом теж.</div>
+            <div class="pr-review-comment-adv"><strong>Достоинства: </strong>Все налаштувалось правильно, працює. Дзвінок і смс приходять з затримкою 2–3 секунди.</div>
+            <div class="pr-review-comment-disadv pr-review-comment-adv"><strong>Недостатки: </strong>Поки що не виявлено.</div>
+        </div>
+        <div class="pr-review-reply-like">
+
+            <div class="pr-review-reply-like-wrapper">
+                <div class="pr-review-reply-wrap">
+                    <div class="pr-review-reply pr-review-reply-only" onclick="review_reply(this)"><span class="pr-review-reply-icon"></span><span class="pr-review-reply-text">Ответить</span></div>
+                    <div class="pr-review-reply-see pr-review-reply" onclick="see_all_reply(this)"><span class="pr-review-reply-icon"></span><span class="pr-review-reply-text">4 ответа</span></div>
+                    <span class="review-see-reply-black" style="display: none;"></span>
+                </div>
+                <div class="pr-review-like-wrap">
+                    <div class="pr-review-like"><span class="pr-review-like-icon"></span><span class="pr-review-like-text">32</span></div>
+                    <div class="pr-review-like pr-review-dislike"><span class="pr-review-like-icon"></span><span class="pr-review-like-text">2</span></div>
+                </div>
+            </div>
+
+            <div class="pr-review-reply-main" style="display: none;">
+                <div class="pr-review-reply-main-item">
+                    <div class="pr-review-title">
+                        <div class="pr-review-reply-main-logo">
+                            <img src="catalog/view/theme/4tv/image/icons-bg/review-admin.png" alt="" class="img-responsive">
+                        </div>
+                        <div class="pr-review-title-date">26 ноября 2019</div>
+                    </div>
+                    <div class="pr-review-comment-wrap">
+                        <div class="pr-review-comment">Добрый день, Тарас! Спасибо за обращение, Ваш отзыв передан ответственному сотруднику через форму обратной связи (внизу страницы) для решения проблемы, мы с Вами свяжемся.</div>
+                    </div>
+                </div>
+
+                <div class="pr-review-reply-main-item">
+                    <div class="pr-review-title">
+                        <div class="pr-review-title-name">Тарас Білий</div>
+                        <div class="pr-review-title-date">26 ноября 2019</div>
+                    </div>
+                    <div class="pr-review-comment-wrap">
+                        <div class="pr-review-comment">Добрый день, Тарас! Спасибо за обращение, Ваш отзыв передан ответственному сотруднику через форму обратной связи (внизу страницы) для решения проблемы, мы с Вами свяжемся.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="review_reply"></div>
+
+        </div>
+    </div>
+
+    <div class="pr-review">
+        <div class="pr-review-title">
+
+
+            <div class="pr-review-title-img">
+                <img src="catalog/view/theme/4tv/image/icons-bg/review-author-1.png" alt="" class="img-responsive">
+            </div>
+
+            <div class="pr-review-title-name-rating">
+                <div class="pr-review-title-name">Сергій Анатолійович</div>
+                <div class="pr-review-title-rating">
+                    <div class="rating">
+                        <p>
+                            {% for i in 1..5 %}
+                                {% if rating < i %}
+                                    <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i></span>
+                                {% else %}
+                                    <span class="fa fa-stack"><i class="fa fa-star fa-stack-1x"></i><i class="fa fa-star-o fa-stack-1x"></i></span>
+                                {% endif %}
+                            {% endfor %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="pr-review-title-buy"><span>Купил этот товар</span></div>
+            <div class="pr-review-title-date">26 ноября 2019</div>
+        </div>
+        <div class="pr-review-comment-wrap">
+            <div class="pr-review-comment">Додатково придбав ще три датчика руху кімнатних і один зовнішній. Все синхронізувалось без проблем і працює. Поки що налаштував інтернет тільки від клмплектної сімкарти Лайф. Датчиками руху перекрив всі кімнати-коридори. Датчик відкриття дверей трохи понапрягав. Використовував з малим магнітом і таки налаштував (в них надто мала зона взаємодії і перш ніж фіксувати остаточно треба цю зону виявити). Покупкою задоволений, сервісом теж.</div>
+            <div class="pr-review-comment-adv"><strong>Достоинства: </strong>Все налаштувалось правильно, працює. Дзвінок і смс приходять з затримкою 2–3 секунди.</div>
+            <div class="pr-review-comment-disadv pr-review-comment-adv"><strong>Недостатки: </strong>Поки що не виявлено.</div>
+        </div>
+        <div class="pr-review-reply-like">
+
+            <div class="pr-review-reply-like-wrapper">
+                <div class="pr-review-reply-wrap">
+                    <div class="pr-review-reply pr-review-reply-only" onclick="review_reply(this)"><span class="pr-review-reply-icon"></span><span class="pr-review-reply-text">Ответить</span></div>
+                    <div class="pr-review-reply-see pr-review-reply" onclick="see_all_reply(this)"><span class="pr-review-reply-icon"></span><span class="pr-review-reply-text">4 ответа</span></div>
+                    <span class="review-see-reply-black" style="display: none;"></span>
+                </div>
+                <div class="pr-review-like-wrap">
+                    <div class="pr-review-like"><span class="pr-review-like-icon"></span><span class="pr-review-like-text">32</span></div>
+                    <div class="pr-review-like pr-review-dislike"><span class="pr-review-like-icon"></span><span class="pr-review-like-text">2</span></div>
+                </div>
+            </div>
+
+            <div class="pr-review-reply-main" style="display: none;">
+                <div class="pr-review-reply-main-item">
+                    <div class="pr-review-title">
+                        <div class="pr-review-reply-main-logo">
+                            <img src="catalog/view/theme/4tv/image/icons-bg/review-admin.png" alt="" class="img-responsive">
+                        </div>
+                        <div class="pr-review-title-date">26 ноября 2019</div>
+                    </div>
+                    <div class="pr-review-comment-wrap">
+                        <div class="pr-review-comment">Добрый день, Тарас! Спасибо за обращение, Ваш отзыв передан ответственному сотруднику через форму обратной связи (внизу страницы) для решения проблемы, мы с Вами свяжемся.</div>
+                    </div>
+                </div>
+
+                <div class="pr-review-reply-main-item">
+                    <div class="pr-review-title">
+                        <div class="pr-review-title-name">Тарас Білий</div>
+                        <div class="pr-review-title-date">26 ноября 2019</div>
+                    </div>
+                    <div class="pr-review-comment-wrap">
+                        <div class="pr-review-comment">Добрый день, Тарас! Спасибо за обращение, Ваш отзыв передан ответственному сотруднику через форму обратной связи (внизу страницы) для решения проблемы, мы с Вами свяжемся.</div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="review_reply"></div>
+
+
+
+        </div>
+    </div>
+
+</div>
+
+<div id="product-more-button" class="review-more-btn"> <!-- По аналогу с каталогом, когда грузится добавляется класс animation чтобы вращалась картинка -->
+    <div class="product-more-button-text">Посмотреть еще 30 комментариев</div>
+    <div class="product-more-button-icon">
+        <img src="catalog/view/theme/4tv/image/icons-bg/product-more-icon.svg" alt="" class="img-responsive">
+    </div>
+</div>

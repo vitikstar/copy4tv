@@ -1,0 +1,1429 @@
+{{ header }}
+<style>
+    @media print {
+        /*современные браузеры умеют удалять  ненужные элементы при печати, однако это не всегда требуется.
+         В Firefox пользователь может сам контролировать внешний вид результата, в Chrome и Safari можно использовать код,
+         приведенный ниже для отображения исходного стиля:*/
+        * {
+            -webkit-print-color-adjust: exact;
+        }
+
+        /*-------------------------------------*/
+        .product-image-info {
+            width: 100% !important;
+            display: flex;
+        }
+
+        .product-image {
+            width: 400px !important;
+        }
+
+        .product-info-left-right {
+        }
+
+        .image-main-wrap {
+            overflow: hidden !important;
+        }
+
+        .container {
+            width: 100%;
+            padding: 0px !important;
+            margin: 0px !important;
+        }
+
+        #product-product h1 {
+            font-size: 25px !important;
+            text-align: center !important;
+        }
+
+        #pr-price {
+            margin-top: 0px !important;
+            text-align: center !important;
+        }
+
+        .pr-model {
+            margin-right: 50px !important;
+            background-color: transparent !important;
+        }
+
+        /*.product-info-left{*/
+        /*    width: 66.66666667%;*/
+        /*}*/
+        /*.product-info-right{*/
+        /*    width: 33.33333333%;*/
+        /*}*/
+        #tab-review, .product-info-right, .header-mob, #top, header, footer, #tab-video, #pii-scroll-top, .breadcrumb-product-wrap, .pii-scroll-wrap, .pr-products-compare-wish-btn,
+        .pr-social-wrap, .pr-quantity-block, .pr-review-sort-create-wrap, .pr-model-wrap-mobile, .modal-custom, .modal, .pr-rating,
+        .pr-quantity-inf-wrap, .pr-product-buy-wrap, .image-additional-wrap, .buy-width-product-block-wrap, .pr-available-wrapper, .pr-nav-tabs, .pr-nav-tabs {
+            display: none !important;
+        }
+        .thumbnail img{
+            width: 100% !important;
+        }
+    }
+
+    /*@media print {*/
+
+    /*    .product-info-right {*/
+    /*        page-break-before: always;*/
+    /*    }*/
+    /*    #tab-specification {*/
+    /*        page-break-before: always;*/
+    /*    }*/
+    /*    #tab-description {*/
+    /*        page-break-before: always;*/
+    /*    }*/
+    /*}*/
+</style>
+<div id="product-product" class="container {% if isMobile %}product-mobile{% endif %}">
+    <div class="breadcrumb-product-wrap">
+            {{ column_megamenu }}
+        <ul class="breadcrumb">
+            {% set total = breadcrumbs|length %}
+            {% set counter = 0 %}
+            {% for breadcrumb in breadcrumbs %}
+                {{ breadcrumb['separator'] }}
+                {% set counter = counter + 1 %}
+                {% if (counter == total) %}
+                    <li>{{ breadcrumb['text'] }}</li>
+                {% else %}
+                    <li><a href="{{ breadcrumb['href'] }}">{{ breadcrumb['text'] }}</a></li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+
+    {% if isMobile %}
+        <h1>{{ product_name }}</h1>
+    {% endif %}
+
+    {% if sku %}
+        <div class="pr-model-wrap pr-model-wrap-mobile" style="display: none;">
+            <div class="pr-model">{{ text_model }} <span>{{ sku }}</span></div>
+        </div>
+    {% endif %}
+
+    <div class="row">
+        <div id="content" class="col-sm-12">
+            {{ content_top }}
+            <div class="row product-image-info">
+
+
+                {####################### Компьютерная версия #}
+                {% if not isMobile %}
+
+                    <div class="col-sm-6 product-image">
+                        {% if thumb or images %}
+                            <div class="product-image-inner">
+                                <ul class="thumbnails image-main-wrap">
+                                    {% if thumb %}
+                                        <li>
+                                            {% if(metka_id=='top') %} <div class="product-sticker" style="background: #347ad9;">Топ продаж</div>{% endif %}
+                                            {% if(metka_id=='new') %}<div class="product-sticker" style="background: #ffc001;">Новинка</div>{% endif %}
+                                            {% if(metka_id=='super_price') %}<div class="product-sticker" style="background: #ff6e19;">Суперцена</div>{% endif %}
+                                            <a class="thumbnail" data-index="0" href="{{ popup }}"
+                                               title="{{ product_name }}"><img src="{{ thumb }}"
+                                                                               title="{{ product_name }}"
+                                                                               alt="{{ product_name }}"
+                                                                               class="img-responsive"/></a></li>
+                                    {% endif %}
+
+                                    {% if product_video %}
+                                        <li class="image-main-wrap-video" style="display: none;">
+                                            <a class="thumbnail" data-index="{{ product_video_index }}"
+                                               href="javascript:void(0)">
+                                                <iframe class="img-responsive" width="560" height="315"
+                                                        src="{{ product_video }}" frameborder="0"
+                                                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                                                        allowfullscreen></iframe>
+                                            </a>
+                                        </li>
+                                    {% endif %}
+
+                                </ul>
+
+                                <div class="image-additional-wrap">
+                                    <ul class="thumbnails thumbnails-images {% if thumbnails_images_slider %}thumbnails-images-slider{% endif %}">
+                                        {% if images %}
+                                            {% for image in images %}
+                                                <li class="image-additional {% if image.index == 0 %}active{% endif %}">
+                                                    <a class="thumbnail" href="javascript:void(0)"
+                                                       title="{{ product_name }}" data-index="{{ image.index }}"
+                                                       data-main-popup="{{ image.popup_main }}"
+                                                       data-main-img="{{ image.thumb_main }}"> <img
+                                                                src="{{ image.thumb }}" title="{{ product_name }}"
+                                                                alt="{{ product_name }}" class="img-responsive"/></a>
+                                                </li>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </ul>
+                                    {% if product_video %}
+                                        <ul class="thumbnails thumbnails-video">
+                                            <li class="image-additional">
+                                                <a class="thumbnail" href="javascript:void(0)" title=""
+                                                   data-index="{{ product_video_index }}" data-main-popup=""
+                                                   data-main-img="">
+                                        <span class="thumbnails-video-icon">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="16"
+                                                 viewBox="0 0 13 16"><defs><clipPath id="sg6za"><path fill="#fff"
+                                                                                                      d="M0-.001l13 8-13 8z"/></clipPath></defs><g><g><path
+                                                                fill="none" stroke="#019fff" stroke-miterlimit="50"
+                                                                stroke-width="2" d="M0-.001v0l13 8v0l-13 8v0z"
+                                                                clip-path="url(&quot;#sg6za&quot;)"/></g></g></svg>
+                                        </span>
+                                                    <span class="thumbnails-video-title">Видео</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endif %}
+
+
+                        <!-- появляется при прокрутке -->
+                        <div class="pii-scroll-wrapper-main" style="display: none; padding-bottom: 10px">
+                            <div class="pii-scroll-wrap">
+
+                                <ul class="nav nav-tabs pr-nav-tabs">
+                                    <li class="active"><a href="javascript:void(0);"
+                                                          onclick="nav_tabs_all(this);">{{ all_about_product }}</a></li>
+                                    <li><a href="#tab-description" data-toggle="tab">{{ tab_description }}</a></li>
+                                    {% if attribute_groups %}
+                                        <li><a href="#tab-specification" data-toggle="tab">{{ tab_attribute }}</a></li>
+                                    {% endif %}
+                                    {% if product_video %}
+                                        <li><a href="#tab-video" data-toggle="tab">{{ video_review }}</a></li>
+                                    {% endif %}
+                                    {% if review_status %}
+                                        <li><a class="tab-review" href="#tab-review"
+                                               data-toggle="tab">{{ tab_review }}</a></li>
+                                    {% endif %}
+                                </ul>
+
+                                <div class="pii-scroll-info left-block-quantity">
+                                    <input type="hidden" name="product_id" value="{{ product_id }}"/>
+                                    {% if sku %}
+                                        <div class="pr-model-wrap">
+                                            <div class="pr-model">{{ text_model }} <span>{{ sku }}</span></div>
+                                        </div>
+                                    {% endif %}
+                                    {% if price %}
+                                        <div class="pr-price-wrap{% if special %} pr-price-special-wrap{% endif %}">
+                                            {#{% if not special %}#}
+                                            {#<div class="pr-price">{{ price }}</div>#}
+                                            {#{% else %}#}
+                                            {#<div class="pr-price-not-special"><span class="pr-price-not-special-inner">{{ price }}</span></div>#}
+                                            {#<div class="pr-price">{{ special }}</div>#}
+                                            {#{% endif %}#}
+                                            <div class="pr-price">{{ site_price }}</div>
+                                        </div>
+                                    {% endif %}
+                                    <div class="pr-quantity-inf-wrap">
+                                        <div class="pr-quantity-block-wrap">
+                                            <div class="pr-quantity-inf-title">{{ text_quantity }}</div>
+                                            <div class="pr-quantity-block">
+                                                <div>
+                                                    <input name="pr_product_id_q" value="" style="display: none;"
+                                                           hidden="">
+                                                    <input name="pr_product_id" value="1" style="display: none;"
+                                                           hidden="">
+                                                    <button id="pr-increase-quantity"
+                                                            onclick="$(this).next().val(~~$(this).next().val()+1);">+
+                                                    </button>
+                                                    <input type="text" name="quantity" value="1" class="input-quantity">
+                                                    <button id="pr-decrease-quantity"
+                                                            onclick="$(this).prev().val(~~$(this).prev().val()-1); update_input(this)">
+                                                        -
+                                                    </button>
+                                                    {#                                        <button id="pr-increase-quantity">+</button>#}
+                                                    {#                                        <input type="text" name="pr_quantity" value="1" class="input-quantity">#}
+                                                    {#                                        <button id="pr-decrease-quantity">-</button>#}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {#                            <div class="pr-quantity-opt-block">#}
+                                        {#                                <div class="pr-quantity-opt-block-1">{{ buying_from }}</div>#}
+                                        {#                                <div class="pr-quantity-opt-block-2">#}
+                                        {#                                    <div class="pr-price">100<span class="symbol-right"> грн</span></div>#}
+                                        {#                                </div>#}
+                                        {#                            </div>#}
+                                    </div>
+                                </div>
+
+                                <div class="pr-is-available pr-available-wrapper">
+                                    <div class="pr-available-wrap">
+                                        <div class="pr-available">
+                                            <!-- Товар в наличии -->
+                                            {% if product_in_stock %}
+                                                <div class="pr-available-icon">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                         viewBox="0 0 24 24">
+                                                        <path d="M12 2c5.514 0 10 4.486 10 10s-4.486 10-10 10-10-4.486-10-10 4.486-10 10-10zm0-2c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm6.25 8.891l-1.421-1.409-6.105 6.218-3.078-2.937-1.396 1.436 4.5 4.319 7.5-7.627z"/>
+                                                    </svg>
+                                                </div>
+                                                <div class="pr-available-text">{{ text_product_in_stock }}</div>
+                                            {% endif %}
+
+                                            <!-- Нет в наличии -->
+                                            {% if out_of_stock %}
+                                                <div class="pr-available-wrap">
+                                                    <div class="pr-available">
+                                                        <div class="pr-available-text">{{ text_not_available }}</div>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                            {% if delivery_expected %}
+                                                <div class="pr-wait-available">
+                                                    <div class="pr-available-wrap">
+                                                        <div class="pr-available">
+                                                            <div class="pr-available-icon">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                                     height="24" viewBox="0 0 24 24">
+                                                                    <path d="M12 2c5.514 0 10 4.486 10 10s-4.486 10-10 10-10-4.486-10-10 4.486-10 10-10zm0-2c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-1 6h2v8h-2v-8zm1 12.25c-.69 0-1.25-.56-1.25-1.25s.56-1.25 1.25-1.25 1.25.56 1.25 1.25-.56 1.25-1.25 1.25z"/>
+                                                                </svg>
+                                                            </div>
+                                                            <div class="pr-available-text">{{ text_delivery_expected }}</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="pr-product-buy-wrap">
+                                        <input type="hidden" name="product_id" value="{{ product_id }}"/>
+                                        <!-- Товар в наличии -->
+                                        {% if product_in_stock %}
+                                            <div id="left-btn-buy">
+                                            </div>
+                                            <div>
+                                                <button type="button"
+                                                        class="pr-product-buy-one-click btn btn-default btn-lg btn-block"
+                                                        data-toggle="modal" data-target="#pr-one-click-modal"><span
+                                                            class="pr-product-buy-one-click-icon"></span>{{ text_buy_one_click }}
+                                                </button>
+                                            </div>
+                                        {% endif %}
+                                        <!-- Ожидается -->
+                                        {% if delivery_expected %}
+                                            <div class="pr-no-available">
+                                                <div class="pr-product-buy-wrap">
+                                                    <input type="hidden" name="product_id" value="{{ product_id }}"/>
+                                                    <button type="button" data-loading-text="{{ text_loading }}"
+                                                            class="pr-product-buy btn btn-default btn-lg btn-block">
+                                                        <span class="pr-product-buy-icon"></span>{{ text_pre_order }}
+                                                    </button>
+                                                    <button type="button"
+                                                            class="pr-product-buy-one-click btn btn-default btn-lg btn-block"
+                                                            data-toggle="modal"
+                                                            data-target="#pr-report-appearance-modal"><span
+                                                                class="pr-product-buy-one-click-icon"></span>{{ text_report_appearance_header }}
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                        <!-- Нет в наличии -->
+                                        {% if out_of_stock %}
+                                            <div class="pr-no-available">
+                                                <input type="hidden" name="product_id" value="{{ product_id }}"/>
+                                                <button type="button"
+                                                        class="pr-product-buy-one-click btn btn-default btn-lg btn-block"
+                                                        data-toggle="modal" data-target="#pr-report-appearance-modal">
+                                                    <span class="pr-product-buy-one-click-icon"></span>{{ text_report_appearance_header }}
+                                                </button>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <script>
+                            $(window).on('load scroll', function () {
+                                pii_scroll();
+                            });
+
+                            function pii_scroll() {
+
+                                if (window.innerWidth >= 1200) {
+                                    var pii_scroll_block = $('#pii-scroll-top').offset().top;
+                                    var pii_scroll_current = $(window).scrollTop();
+                                    if (pii_scroll_current > pii_scroll_block) {
+                                        $('.pii-scroll-wrapper-main').fadeIn(0);
+
+                                        $('#button-cart').appendTo('#left-btn-buy');
+                                        $('.center-block-quantity').removeAttr('id');
+                                        $('.left-block-quantity').attr('id', 'product');
+
+                                    } else {
+                                        $('.pii-scroll-wrapper-main').fadeOut(0);
+
+                                        $('#button-cart').appendTo('#center-btn-buy');
+                                        $('.left-block-quantity').removeAttr('id');
+                                        $('.center-block-quantity').attr('id', 'product');
+
+                                    }
+                                }
+
+                            }
+
+                            $(document).ready(function () {
+
+                                if (window.innerWidth >= 1200) {
+                                    $('.pr-nav-tabs a').click(function () {
+                                        var attr_href = $(this).attr('href');
+                                        setTimeout(function () {
+                                            $('.pr-nav-tabs a[href="' + attr_href + '"]').parent().addClass('active').siblings().removeClass('active');
+                                        });
+                                    });
+                                }
+
+                            });
+
+                        </script>
+                        <!-- end появляется при прокрутке -->
+
+
+                        <script>
+                            $(document).ready(function () {
+
+                                $('.image-additional-wrap .thumbnails-images a').click(function (e) {
+                                    e.preventDefault();
+
+                                    $('.image-additional-wrap li').removeClass('active');
+                                    $(this).parent().addClass('active');
+
+                                    var index = $(this).attr('data-index');
+                                    var main_popup = $(this).attr('data-main-popup');
+                                    var main_img = $(this).attr('data-main-img');
+
+                                    $('.image-main-wrap a').attr('data-index', index);
+                                    $('.image-main-wrap a').attr('href', main_popup);
+                                    $('.image-main-wrap a img').attr('src', main_img);
+                                });
+
+
+                                $('.image-main-wrap a, .thumbnails-video a').click(function (e) {
+                                    e.preventDefault();
+                                    var index = $(this).attr('data-index');
+
+                                    $('#product-image-popup .swiper-container').css({'opacity': '0'});
+                                    $('#product-image-popup').modal('show');
+
+                                    setTimeout(function () {
+                                        gallery_swiper_initialize(index);
+                                        $('#product-image-popup .swiper-container').css({'opacity': '1'});
+                                    }, 350);
+
+                                    //                      $('#image-popup').modal('hide');
+                                });
+                            });
+                        </script>
+                        <script>
+                            function gallery_swiper_initialize(index) {
+                                var galleryTop = new Swiper('.gallery-top', {
+                                    nextButton: '.swiper-button-next',
+                                    prevButton: '.swiper-button-prev',
+                                    direction: 'horizontal',
+                                    loop: false
+                                });
+                                var galleryThumbs = new Swiper('.gallery-thumbs', {
+                                    spaceBetween: 10,
+                                    centeredSlides: true,
+                                    slidesPerView: 'auto',
+                                    touchRatio: 0.2,
+                                    slideToClickedSlide: true,
+                                    direction: 'horizontal',
+                                    loop: false
+                                });
+
+                                galleryTop.params.control = galleryThumbs;
+                                galleryThumbs.params.control = galleryTop;
+
+                                if (index === '0') {
+                                    $('.gallery-top .swiper-wrapper').css({'transform': 'translate3d(0px, 0px, 0px)'});
+                                    galleryTop.slideTo(0, false, false);
+                                    galleryThumbs.slideTo(0, false, false);
+                                } else {
+                                    galleryTop.slideTo(index, false, false);
+                                    galleryThumbs.slideTo(index, false, false);
+                                }
+
+                                var swiper_slide_video = $('.swiper-slide-video').prev().height();
+                                $('.swiper-slide-video').height(swiper_slide_video);
+                                $('.swiper-slide-video iframe').height(swiper_slide_video);
+
+                            }
+                        </script>
+                        {% if thumbnails_images_slider %}
+                            <script>
+                                $('.thumbnails-images').slick({
+                                    arrows: true,
+                                    slidesToShow: 2,
+                                    slidesToScroll: 1,
+                                    vertical: true,
+                                    verticalSwiping: true,
+                                    dots: false,
+                                    infinite: false,
+                                    responsive: [
+                                        {
+                                            breakpoint: 1800,
+                                            settings: {
+                                                slidesToShow: 5,
+                                                slidesToScroll: 1,
+                                                dots: true
+                                            }
+                                        },
+                                        {
+                                            breakpoint: 1365,
+                                            settings: {
+                                                arrows: true,
+                                                slidesToShow: 4,
+                                                slidesToScroll: 4,
+                                                dots: true
+                                            }
+                                        },
+                                        {
+                                            breakpoint: 1200,
+                                            settings: {
+                                                arrows: true,
+                                                slidesToShow: 3,
+                                                slidesToScroll: 3,
+                                                dots: true
+                                            }
+                                        },
+                                        {
+                                            breakpoint: 991,
+                                            settings: {
+                                                arrows: true,
+                                                slidesToShow: 2,
+                                                slidesToScroll: 2,
+                                                dots: true
+                                            }
+                                        },
+                                        {
+                                            breakpoint: 745,
+                                            settings: {
+                                                dots: true,
+                                                slidesToShow: 1,
+                                                slidesToScroll: 1
+                                            }
+                                        }
+                                    ]
+                                });
+                            </script>
+                        {% endif %}
+                    </div>
+
+                    <div class="modal fade modal-custom" id="product-image-popup">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    <div class="modal-title">{{ product_name }}</div>
+                                </div>
+                                <div class="modal-body">
+
+                                    <div class="swiper-container gallery-top">
+                                        <div class="swiper-wrapper">
+                                            {% if images %}
+                                                {% for image in images %}
+                                                    <div class="swiper-slide">
+                                                        <img src="{{ image.thumb_main }}" alt="" class="img-responsive">
+                                                    </div>
+                                                {% endfor %}
+                                            {% endif %}
+                                            {% if product_video %}
+                                                <div class="swiper-slide swiper-slide-video">
+                                                    <iframe class="img-responsive" width="100%" height="500"
+                                                            src="{{ product_video }}" frameborder="0"
+                                                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                                                            allowfullscreen></iframe>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                        <!-- Add Arrows -->
+                                        <div class="swiper-button-prev swiper-button-white">
+                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                 xmlns:xlink="http://www.w3.org/1999/xlink" width="29" height="54"
+                                                 viewBox="0 0 29 54">
+                                                <g>
+                                                    <g>
+                                                        <image width="29" height="54"
+                                                               xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB0AAAA2CAYAAAA7+JL6AAAB1UlEQVRYR8XZPWsVQRQG4CeKhQipDBbaiJJKK4v0VoJipQgaLOwUG7FItNFCUBvBRgUrBS1ELfwAUUws9C8loPjByA4Ml7vsze7Oyf6Bh3funJkz586J+xbwEXfmgswEruEIvkegB/AVi/iBk7XRBH7DIazjFDZqogfxZRJMP2ct9HCTcD/e4xw28/6pgU6CZ/Cz3LBjo0ebJd2HNzg/CY69vAlMZbEXL3ERv6eV5FhJj+HTLOBYSZfwGfN4gqttCcfaSJPgFfztOuWGLO9xvMMePMS1WcAhy5vAD9iN+1jtSje0ZE7gbV+wT9LTeI1duIm7W0nYZyOV4A3c6wNuJekFPMNOXMeDvuCsaAKfYwdSSTweAs6CXsLTMcEu9DIe4U9zjr4YmrBrI1UD25KmQk+l8AvLeDVWwrakJZgu33TMjf6VZ+9t3Gou3bO1wHJ5U6GvNH1M6tjSZVztS0lDwZx0W9CEh8LbupHypgkvmWlwyOGQ4fBjsDrc1Q2GX205cfglXsKh7UqGwxuzaXBIC5rh8GY7w+HPihIOfUBlOPyp2AZXfxRnOPz5n+HwQUcJpylZ2Egnw+HDqza4+pguw+EDyQyHj15LOHTInOHwcXoJ///j4B+DjYx3cImhCQAAAABJRU5ErkJggg=="/>
+                                                    </g>
+                                                </g>
+                                            </svg>
+                                        </div>
+                                        <div class="swiper-button-next swiper-button-white">
+                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                 xmlns:xlink="http://www.w3.org/1999/xlink" width="29" height="54"
+                                                 viewBox="0 0 29 54">
+                                                <g>
+                                                    <g>
+                                                        <image width="29" height="54"
+                                                               xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB0AAAA2CAYAAAA7+JL6AAAB20lEQVRYR93Zv49MURQA4G8JCY0/iMISIrGrQBQroZKg2USDREHjRyEaoVOIlQiVkKg0KoWKakM0FEIlEYXsRk7ynowxu29m3r1nE6+dyf3mvNxz7rlnZnAIl3AQXyU8M3iFXXiHPRlwoDvwHDuxjL34VDPgQOPZjmeYxQfsrgm36Ch4Hz7WiHgQjfW34RHm8bmJ+H1peBiN9bfiSU14FNrCD3EEXxCv+m2piNdCY/3NuI8FfGvSqQi8HjoKPoA3fSPuQlv4Nk7jO/bjdR94HDTWj+/dKQWPi7bwLSziR1OzX04T8SRou/51nMdPzGFieBo08EH4MF5MEvG0aBgXcRW/cBRPx4X7oGFcwLVJ4b5owOdwEys4iaWuiEugYZxpUmoVJ7rgUugwfAr31oq4JBrG8aZeb8JZ3B0Fl0bHgmugAR/DA2xpUivy+s9TCw0gWttoBv6Ba6It/LjpRq7gclvEu9Kq7+fRS0enGf3XjSgotSNtf/Bf8H+Lpr/e2MGpGyk9ZdKLQ2f9Lb17O8HSxWHwTE052tIP8fR2Jb0xS29B05vt1GtF5HTqBSr9qhhjgNRL8fDcofr1P33QEbOk1JFO+vAqfUw3PAmtPpBMH71uyJB5Q8bp6X8c/AYaBZFHwtyEwwAAAABJRU5ErkJggg=="/>
+                                                    </g>
+                                                </g>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div class="swiper-container gallery-thumbs">
+                                        <div class="swiper-wrapper">
+                                            {% if images %}
+                                                {% for image in images %}
+                                                    <div class="swiper-slide">
+                                                        <img src="{{ image.thumb }}" alt="" class="img-responsive">
+                                                    </div>
+                                                {% endfor %}
+                                            {% endif %}
+                                            {% if product_video %}
+                                                <div class="swiper-slide swiper-slide-video-thumbs">
+                                                    <div class="swiper-slide-video-thumbs-inner">
+                                                  <span class="thumbnails-video-icon">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="16"
+                                                             viewBox="0 0 13 16"><defs><clipPath id="sg6za"><path
+                                                                            fill="#fff"
+                                                                            d="M0-.001l13 8-13 8z"/></clipPath></defs><g><g><path
+                                                                            fill="none" stroke="#019fff"
+                                                                            stroke-miterlimit="50" stroke-width="2"
+                                                                            d="M0-.001v0l13 8v0l-13 8v0z"
+                                                                            clip-path="url(&quot;#sg6za&quot;)"/></g></g></svg>
+                                                  </span>
+                                                        <span class="thumbnails-video-title">Видео</span>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                {####################### end Компьютерная версия #}
+
+
+
+
+                {####################### Мобильная версия #}
+                {% if isMobile %}
+                    <div class="col-sm-6 product-image">
+                        <div class="product-image-mobile">
+                            {% if images %}
+                                {% for image in images %}
+                                    <div class="product-image-mobile-item">
+                                        <img src="{{ image.thumb_main }}" alt="" class="img-responsive">
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                            {% if product_video %}
+                                <div class="product-image-mobile-item">
+                                    <iframe class="img-responsive" height="500" src="{{ product_video }}"
+                                            frameborder="0"
+                                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                                            allowfullscreen></iframe>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <script>
+                            $(document).ready(function () {
+                                $('.product-image-mobile').slick({
+                                    slidesToShow: 1,
+                                    slidesToScroll: 1,
+                                    arrows: true,
+                                    dots: true,
+                                    infinite: false
+                                });
+                            });
+                        </script>
+                    </div>
+                {% endif %}
+                {####################### end Мобильная версия #}
+
+
+                <div class="col-sm-6 product-info">
+
+                    <div class="row product-info-left-right">
+                        <div class="col-sm-8 product-info-left">
+                            {% if sku %}
+                                <div class="pr-model-wrap">
+                                    <div class="pr-model">{{ text_model }} <span>{{ sku }}</span></div>
+                                </div>
+                            {% endif %}
+                            {% if not isMobile %}
+                                <h1>{{ product_name }}</h1>
+                            {% endif %}
+                            {% if review_status %}
+                                <div class="rating pr-rating">
+                                    <p>
+                                        {% for i in 1..5 %}
+                                            {% if rating < i %}
+                                                <span class="fa fa-stack"><i
+                                                            class="fa fa-star-o fa-stack-1x"></i></span>
+                                            {% else %}
+                                                <span class="fa fa-stack"><i class="fa fa-star fa-stack-1x"></i><i
+                                                            class="fa fa-star-o fa-stack-1x"></i></span>
+                                            {% endif %}
+                                        {% endfor %}
+                                        {#                                <a href="" onclick="$('a[href=\'#tab-review\']').trigger('click'); return false;">{{ reviews }}</a> / <a href="" onclick="$('a[href=\'#tab-review\']').trigger('click'); return false;">{{ text_write }}</a>#}
+                                        {{ reviews }}
+                                    </p>
+                                </div>
+                            {% endif %}
+
+                            <ul class="nav nav-tabs pr-nav-tabs">
+                                <li class="active"><a href="javascript:void(0);" onclick="nav_tabs_all(this);">Все о
+                                        товаре</a></li>
+                                <li><a href="#tab-description" data-toggle="tab">{{ tab_description }}</a></li>
+                                {% if attribute_groups %}
+                                    <li><a href="#tab-specification" data-toggle="tab">{{ tab_attribute }}</a></li>
+                                {% endif %}
+                                {% if product_video %}
+                                    <li><a href="#tab-video" data-toggle="tab">{{ text_video_review }}</a></li>
+                                {% endif %}
+                                {% if review_status %}
+                                    <li><a class="tab-review" href="#tab-review" data-toggle="tab">{{ tab_review }}</a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                            <script>
+                                function nav_tabs_all(el) {
+                                    $(el).parent().siblings().removeClass('active');
+                                    $(el).parent().addClass('active');
+                                    $('.pr-tab-content > .tab-pane').addClass('active');
+                                }
+                            </script>
+
+
+                            {% if price %}
+                                <div class="pr-price-wrap{% if special %} pr-price-special-wrap{% endif %}">
+                                    {#{% if not special %}#}
+                                    {#<div class="pr-price">{{ price }}</div>#}
+                                    {#{% else %}#}
+                                    {#<div class="pr-price-not-special"><span class="pr-price-not-special-inner">{{ price }}</span></div>#}
+                                    {#<div class="pr-price">{{ special }}</div>#}
+                                    {#{% endif %}#}
+                                    <div class="pr-price">{{ site_price }}</div>
+                                </div>
+                            {% endif %}
+
+
+                            <div class="pr-quantity-inf-wrap center-block-quantity" id="product">
+                                <input type="hidden" name="product_id" value="{{ product_id }}"/>
+                                <div class="pr-quantity-block-wrap">
+                                    <div class="pr-quantity-inf-title">{{ text_short_quantity }}</div>
+                                    <div class="pr-quantity-block">
+                                        <div>
+                                            <input name="pr_product_id_q" value="" style="display: none;" hidden="">
+                                            <input name="pr_product_id" value="1" style="display: none;" hidden="">
+                                            <button id="pr-increase-quantity"
+                                                    onclick="$(this).next().val(~~$(this).next().val()+1);">+
+                                            </button>
+                                            <input type="text" name="quantity" value="1" class="input-quantity">
+                                            <button id="pr-decrease-quantity"
+                                                    onclick="$(this).prev().val(~~$(this).prev().val()-1); update_input(this)">
+                                                -
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                {#                        <div class="pr-quantity-opt-block">#}
+                                {#                            <div class="pr-quantity-opt-block-1">При покупке от 8 шт.</div>#}
+                                {#                            <div class="pr-quantity-opt-block-2">#}
+                                {#                                <div class="pr-price">100<span class="symbol-right"> грн</span></div>#}
+                                {#                            </div>#}
+                                {#                        </div>#}
+                                {% if(options_color) %}
+                                    <div class="pr-quantity-color-wrap">
+                                        <div class="pr-quantity-inf-title">{{ options_color['name'] }}:</div>
+                                        <div class="pr-quantity-color">
+                                            {% set i = 1 %}
+                                            {% for product_option_value in options_color['product_option_value'] %}
+                                                <label for="option_{{ product_option_value['product_option_value_id'] }}"
+                                                       class="pr-quantity-color-inner {% if(i==1) %}active{% endif %}">
+                                                    <div class="pr-quantity-color-in"
+                                                         style="background-image: url('{{ product_option_value['image'] }}'); background-size: contain;">
+                                                        <input type="radio" class="option-product"
+                                                               id="option_{{ product_option_value['product_option_value_id'] }}"
+                                                               {% if(i==1) %}checked{% endif %}
+                                                               name="option[{{ options_color['product_option_id'] }}]"
+                                                               value="{{ product_option_value['product_option_value_id'] }}"
+                                                               option_id="{{ product_option_value['product_option_value_id'] }}"/>
+
+                                                        <svg style="fill: {{ product_option_value['for_color'] }};"
+                                                             xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                             viewBox="0 0 24 24">
+                                                            <path d="M9 21.035l-9-8.638 2.791-2.87 6.156 5.874 12.21-12.436 2.843 2.817z"/>
+                                                        </svg>
+
+                                                    </div>
+                                                </label>
+                                                {% set i = i + 1 %}
+                                            {% endfor %}
+                                            {#                                <div class="pr-quantity-color-inner pr-quantity-color-inner-1 active">#}
+                                            {#                                    <div class="pr-quantity-color-in pr-quantity-color-in-1" style="background: #333;">#}
+                                            {#                                        <svg style="fill: #fff;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M9 21.035l-9-8.638 2.791-2.87 6.156 5.874 12.21-12.436 2.843 2.817z"/></svg>#}
+                                            {#                                    </div>#}
+                                            {#                                </div>#}
+                                            {#                                <div class="pr-quantity-color-inner pr-quantity-color-inner-2">#}
+                                            {#                                    <div class="pr-quantity-color-in pr-quantity-color-in-2" style="background: #ededed;">#}
+                                            {#                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M9 21.035l-9-8.638 2.791-2.87 6.156 5.874 12.21-12.436 2.843 2.817z"/></svg>#}
+                                            {#                                    </div>#}
+                                            {#                                </div>#}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                {% if(options and 0) %}
+                                    <table>
+                                        {% for item in options %}
+                                            <tr>
+                                                <td>{{ item['name'] }}:</td>
+                                                <td>
+                                                    {% set i = 1 %}
+                                                    {% for product_option_value in item['product_option_value'] %}
+                                                        <input type="radio"
+                                                               id="option_{{ product_option_value['product_option_value_id'] }}"
+                                                               {% if(i==1) %}checked{% endif %}
+                                                               name="option[{{ item['product_option_id'] }}]"
+                                                               value="{{ product_option_value['product_option_value_id'] }}"
+                                                               option_id="{{ product_option_value['product_option_value_id'] }}"/>
+                                                        {{ product_option_value['name'] }}
+                                                        {% set i = i + 1 %}
+                                                    {% endfor %}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </table>
+                                {% endif %}
+                            </div>
+
+                            <!-- Товар в наличии -->
+                            {% if product_in_stock %}
+                                <div class="pr-is-available pr-available-wrapper">
+                                    <div class="pr-available-wrap">
+                                        <div class="pr-available">
+                                            <div class="pr-available-icon">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                     viewBox="0 0 24 24">
+                                                    <path d="M12 2c5.514 0 10 4.486 10 10s-4.486 10-10 10-10-4.486-10-10 4.486-10 10-10zm0-2c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm6.25 8.891l-1.421-1.409-6.105 6.218-3.078-2.937-1.396 1.436 4.5 4.319 7.5-7.627z"/>
+                                                </svg>
+                                            </div>
+                                            <div class="pr-available-text">{{ text_product_in_stock }}</div>
+                                        </div>
+                                    </div>
+                                    <div class="pr-product-buy-wrap">
+                                        <div id="center-btn-buy">
+                                            <button type="button" id="button-cart"
+                                                    data-loading-text="{{ text_loading }}"
+                                                    class="pr-product-buy btn btn-default btn-lg btn-block"
+                                                    onclick="cart.add('{{ product_id }}');"><span
+                                                        class="pr-product-buy-icon"></span>Добавить в корзину
+                                            </button>
+                                        </div>
+                                        <button type="button"
+                                                class="pr-product-buy-one-click btn btn-default btn-lg btn-block"
+                                                data-toggle="modal" data-target="#pr-one-click-modal">
+                                            <span class="pr-product-buy-one-click-icon"></span>Купить в 1 клик
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="modal fade modal-custom modal-vertical-center" id="pr-one-click-modal">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                <div class="modal-title"><span>{{ one_click_fast_order_text }}</span></div>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="pr-one-click-modal-form">
+                                                    <div class="pr-one-click-modal-text">{{ one_click_modal_text }}</div>
+                                                    <div class="form-group">
+                                                        <input type="text" name="one_click_name" class="form-control"
+                                                               placeholder="{{ text_one_click_name_customer }}" value="{{ text_one_click_placeholder }}">
+                                                        <input type="hidden" name="product_id" value="{{ product_id }}">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <input type="tel" name="telephone" class="form-control"
+                                                               placeholder="+38 (ХХХ) ХХХ-ХХ-ХХ" value="{{ text_one_click_mask }}">
+                                                    </div>
+                                                    <input type="button" id="one-click-form-go"
+                                                           class="one-click-form-go btn btn-default" value="{{ text_zakazat }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <script>
+                                    $('#one-click-form-go').on('click', function () {
+                                        $.ajax({
+                                            url: 'index.php?route=checkout/one_click/add',
+                                            type: 'post',
+                                            data: $('#pr-one-click-modal input[type=\'text\'],#pr-one-click-modal input[type=\'tel\'],#pr-one-click-modal input[type=\'hidden\']'),
+                                            dataType: 'json',
+                                            beforeSend: function () {
+                                                $('#one-click-form-go').button('loading');
+                                            },
+                                            complete: function () {
+                                                $('#one-click-form-go').button('reset');
+                                            },
+                                            success: function (json) {
+                                                // $('.alert, .text-danger').remove();
+                                                $('.form-control').removeClass('has-error');
+                                                if (json['error']) {
+                                                    if (json['error']['telephone']) {
+                                                        $('.pr-one-click-modal-form input[name="telephone"]').addClass("has-error");
+                                                        // $('.breadcrumb').after('<div class="alert alert-danger text-danger">' + json['error']['telephone'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                                                        // $('html, body').animate({ scrollTop: 0 }, 'slow');
+                                                    }
+                                                    if (json['error']['one_click_name']) {
+                                                        $('.pr-one-click-modal-form input[name="one_click_name"]').addClass("has-error");
+                                                        // $('.breadcrumb').after('<div class="alert alert-danger text-danger">' + json['error']['telephone'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                                                        // $('html, body').animate({ scrollTop: 0 }, 'slow');
+                                                    }
+                                                    if (json['error']['product']) {
+                                                        // $('.breadcrumb').after('<div class="alert alert-danger text-danger">' + json['error']['product'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                                                        // $('html, body').animate({ scrollTop: 0 }, 'slow');
+                                                    }
+                                                    if (json['error']['order']) {
+                                                        // $('.breadcrumb').after('<div class="alert alert-danger text-danger">' + json['error']['order'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                                                        // $('html, body').animate({ scrollTop: 0 }, 'slow');
+                                                    }
+                                                }
+
+                                                if (json['success']) {
+                                                    $('.breadcrumb').after('<div class="alert alert-success">' + json['success'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                                                    $('html, body').animate({scrollTop: 0}, 'slow');
+
+                                                    //незнав як правильно модалку закрити то пока так залишив
+                                                    setTimeout(
+                                                        $('.modal-backdrop').fadeOut(), 2000
+                                                    );
+                                                    setTimeout(
+                                                        $('#pr-one-click-modal').fadeOut(), 2500
+                                                    );
+                                                }
+                                            }
+                                        });
+                                    });
+
+                                </script>
+                            {% endif %}
+                            <!-- Ожидается -->
+                            {% if delivery_expected %}
+                                <div class="pr-wait-available pr-available-wrapper">
+                                    <div class="pr-available-wrap">
+                                        <div class="pr-available">
+                                            <div class="pr-available-icon">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                     viewBox="0 0 24 24">
+                                                    <path d="M12 2c5.514 0 10 4.486 10 10s-4.486 10-10 10-10-4.486-10-10 4.486-10 10-10zm0-2c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-1 6h2v8h-2v-8zm1 12.25c-.69 0-1.25-.56-1.25-1.25s.56-1.25 1.25-1.25 1.25.56 1.25 1.25-.56 1.25-1.25 1.25z"/>
+                                                </svg>
+                                            </div>
+                                            <div class="pr-available-text">{{ text_delivery_expected }}</div>
+                                        </div>
+                                    </div>
+                                    <div id="product" class="pr-product-buy-wrap">
+                                        <input type="hidden" name="product_id" value="{{ product_id }}"/>
+                                        <button type="button" data-loading-text="{{ text_loading }}"
+                                                class="pr-product-buy btn btn-default btn-lg btn-block"
+                                                data-toggle="modal" data-target="#pr-report-appearance-modal"><span
+                                                    class="pr-product-buy-icon"></span>{{ text_pre_order }}</button>
+                                        <button type="button"
+                                                class="pr-product-buy-one-click btn btn-default btn-lg btn-block"
+                                                data-toggle="modal" data-target="#pr-report-appearance-modal"><span
+                                                    class="pr-product-buy-one-click-icon"></span>{{ text_report_appearance_header }}
+                                        </button>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            <!-- Нет в наличии -->
+                            {% if out_of_stock %}
+                                <div class="pr-no-available pr-available-wrapper">
+                                    <div class="pr-available-wrap">
+                                        <div class="pr-available">
+                                            <div class="pr-available-text">{{ text_not_available }}</div>
+                                        </div>
+                                    </div>
+                                    <div id="product" class="pr-product-buy-wrap">
+                                        <input type="hidden" name="product_id" value="{{ product_id }}"/>
+                                        <button type="button"
+                                                class="pr-product-buy-one-click btn btn-default btn-lg btn-block"
+                                                data-toggle="modal" data-target="#pr-report-appearance-modal"><span
+                                                    class="pr-product-buy-one-click-icon"></span>{{ text_report_appearance_header }}
+                                        </button>
+                                    </div>
+                                </div>
+
+                            {% endif %}
+                            <div id="pii-scroll-top"></div>
+                            <div class="pr-products-compare-wish-btn">
+                                <div class="pr-compare-block pr-wish-compare-block {% if add_compare_active %}active{% endif %}"
+                                     id="compare_button">
+                    <span class="pr-compare-btn" onclick="compare.add('{{ product_id }}','product');">
+                       <span class="pr-wish-compare-active-icon"></span>
+                    </span>
+                                    <div class="pr-compare-text" id="compare_text">
+                                        <span>{{ add_compare_text }}</span>
+                                    </div>
+                                </div>
+                                <div class="pr-wish-block pr-wish-compare-block {% if add_wishlist_active %}active{% endif %}"
+                                     id="wishlist_button">
+                                    <!-- когда товар добавлен в закладки добавляается класс active -->
+                                    <span class="pr-wishlist-btn" onclick="wishlist.add('{{ product_id }}','product');">
+                        <span class="pr-wish-compare-active-icon"></span>
+                    </span>
+                                    <div class="pr-compare-text" id="wishlist_text">
+                                        <span>{{ add_wishlist_text }}</span>
+                                        <!-- когда товар добавлен в закладки "Добавить товар" меняется на "Товар добавлен" -->
+                                    </div>
+                                </div>
+                                <span class="pr-wishlist-btn-h" style="display: none;"></span>
+                                <span class="pr-compare-btn-h" style="display: none;"></span>
+                            </div>
+                            <div class="pr-social-wrap">
+                                <script>
+                                    Share = {
+                                        // vkontakte: function(ptitle="{{ product_name }}", pimg="{{ thumb }}", text="",purl=location.href) {
+                                        //   url  = 'http://vkontakte.ru/share.php?';
+                                        // url += 'url='          + encodeURIComponent(purl);
+                                        //  url += '&title='       + encodeURIComponent(ptitle);
+                                        //   url += '&description=' + encodeURIComponent(text);
+                                        // url += '&image='       + encodeURIComponent(pimg);
+                                        //  url += '&noparse=true';
+                                        // Share.popup(url);
+                                        // },
+                                        facebook: function (ptitle = "{{ product_name }}", pimg = "{{ thumb }}", text = "", purl = location.href) {
+                                            FB.ui(
+                                                {
+                                                    method: 'feed',
+                                                    name: ptitle,
+                                                    link: purl,
+                                                    picture: pimg,
+                                                    caption: 'Мне нравится этот товар!',
+                                                    message: ''
+                                                });
+                                        },
+                                        twitter: function (ptitle = "{{ product_name }}", purl = location.href) {
+                                            url = 'http://twitter.com/share?';
+                                            url += 'text=' + encodeURIComponent(ptitle);
+                                            url += '&url=' + encodeURIComponent(purl);
+                                            url += '&counturl=' + encodeURIComponent(purl);
+                                            Share.popupwindow(url);
+                                        },
+
+                                        popup: function (url) {
+                                            window.open(url, '', 626,436);
+                                        },
+
+                                        popupwindow: function (url, title, w, h) {
+                                            var left = (screen.width/2)-(w/2);
+                                            var top = (screen.height/2)-(h/2);
+                                            return window.open(url, '', 'toolbar=no, status=no, width='+w+', height='+h+', top='+top+', left='+left);
+                                        }
+                                    };
+                                </script>
+                                <div class="pr-social">
+                                    <div class="pr-social-text">{{ text_share }}:</div>
+                                    <div class="pr-social-icons">
+                                        <a href="javascript:void(0)" onclick="Share.facebook()"
+                                           class="pr-social-icon-1 pr-social-icon"></a>
+                                        <!--<a href="javascript:void(0)"  onclick="Share.vkontakte()" class="pr-social-icon-2 pr-social-icon"></a>-->
+                                        <a href="javascript:void(0)" onclick="Share.twitter()"
+                                           class="pr-social-icon-3 pr-social-icon"></a>
+                                        <!-- <a href="javascript:void(0)" class="pr-social-icon-4 pr-social-icon"></a>
+                                         <a href="javascript:void(0)" class="pr-social-icon-5 pr-social-icon"></a>
+                                         <a href="javascript:void(0)" class="pr-social-icon-6 pr-social-icon"></a>-->
+                                    </div>
+
+                                    <script type="text/javascript">
+                                        $(document).ready(function () {
+                                            $('#share').popupWindow({
+                                                width: 550,
+                                                height: 400,
+                                                centerBrowser: 1
+                                            });
+                                        })
+                                    </script>
+                                </div>
+                                <div class="pr-social-print">
+                                    <div class="pr-social-text">{{ text_print }}:</div>
+                                    <div class="pr-social-icons">
+                                        <a href="javascript:window.print()" class="pr-social-icon-1 pr-social-icon"></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 product-info-right">
+                            {{ info_product }}
+                        </div>
+                    </div>
+                    <div class="tab-content pr-tab-content">
+                        <div class="tab-pane active" id="tab-description">
+                            <div class="pr-tab-content-title">{{ tab_description }} <span>{{ product_name }}</span>
+                            </div>
+                            <div class="pr-description">
+                                {{ description }}
+                            </div>
+                        </div>
+
+                        {% if attribute_groups %}
+                            <div class="tab-pane active" id="tab-specification">
+                                <div class="pr-tab-content-title">{{ tab_attribute }} <span>{{ product_name }}</span>
+                                </div>
+                                <table class="table table-bordered">
+                                    <tbody>
+                                    {% for attribute_group in attribute_groups %}
+                                        {% for attribute in attribute_group.attribute %}
+                                            <tr>
+                                                <td>{{ attribute.name }}</td>
+                                                <td>{{ attribute.text }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% endif %}
+
+                        {% if product_video %}
+                            <div class="tab-pane active" id="tab-video">
+                                <div class="pr-tab-content-title">{{ text_video_review}} <span>{{ product_name }}</span></div>
+                                <iframe width="100%" height="500" src="{{ product_video }}" frameborder="0"
+                                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                                        allowfullscreen></iframe>
+                            </div>
+                        {% endif %}
+
+                        <style>
+                            #oneclick {
+                                display: none;
+                            }
+                        </style>
+
+                        {% if review_status %}
+                            <div class="tab-pane active" id="tab-review">
+
+                            </div>
+                        {% endif %}
+                        <div class="modal fade modal-custom modal-vertical-center" id="pr-report-appearance-modal">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        <div class="modal-title"><span>{{ text_report_appearance_header }}</span></div>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="pr-report-appearance-modal-form">
+                                            <div class="pr-report-appearance-text">{{ text_product_in_stock_messages }}
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="text" name="report_appearance_name" class="form-control" value="{{ report_appearance_name }}"
+                                                       placeholder="Ваше имя">
+                                                <input type="hidden" name="product_id" value="{{ product_id }}">
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="tel" name="telephone" class="form-control" value="{{ report_appearance_telephone }}"
+                                                       placeholder="+38 (ХХХ) ХХХ-ХХ-ХХ">
+                                            </div>
+                                            <input type="button" id="report-appearance-form-go"
+                                                   class="report-appearance-form-go btn btn-default" value="{{ text_zakazat }}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <script>
+                            $('#report-appearance-form-go').on('click', function () {
+                                $.ajax({
+                                    url: 'index.php?route=checkout/report_appearance/add',
+                                    type: 'post',
+                                    data: $('#pr-report-appearance-modal input[type=\'text\'],#pr-report-appearance-modal input[type=\'tel\'],#pr-report-appearance-modal input[type=\'hidden\']'),
+                                    dataType: 'json',
+                                    beforeSend: function () {
+                                        $('#report-appearance-form-go').button('loading');
+                                    },
+                                    complete: function () {
+                                        $('#report-appearance-form-go').button('reset');
+                                    },
+                                    success: function (json) {
+                                        // $('.alert, .text-danger').remove();
+                                        $('.form-control').removeClass('has-error');
+                                        if (json['error']) {
+                                            if (json['error']['telephone']) {
+                                                $('.pr-report-appearance-modal-form input[name="telephone"]').addClass("has-error");
+                                                // $('.breadcrumb').after('<div class="alert alert-danger text-danger">' + json['error']['telephone'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                                                // $('html, body').animate({ scrollTop: 0 }, 'slow');
+                                            }
+                                            if (json['error']['report_appearance_name']) {
+                                                $('.pr-report-appearance-modal-form input[name="report_appearance_name"]').addClass("has-error");
+                                                // $('.breadcrumb').after('<div class="alert alert-danger text-danger">' + json['error']['telephone'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                                                // $('html, body').animate({ scrollTop: 0 }, 'slow');
+                                            }
+                                            if (json['error']['product']) {
+                                                // $('.breadcrumb').after('<div class="alert alert-danger text-danger">' + json['error']['product'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                                                // $('html, body').animate({ scrollTop: 0 }, 'slow');
+                                            }
+                                            if (json['error']['order']) {
+                                                // $('.breadcrumb').after('<div class="alert alert-danger text-danger">' + json['error']['order'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                                                // $('html, body').animate({ scrollTop: 0 }, 'slow');
+                                            }
+                                        }
+
+                                        if (json['success']) {
+                                            $('.breadcrumb').after('<div class="alert alert-success">' + json['success'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                                            $('html, body').animate({scrollTop: 0}, 'slow');
+
+                                            //незнав як правильно модалку закрити то пока так залишив
+                                            setTimeout(
+                                                $('.modal-backdrop').fadeOut(), 2000
+                                            );
+                                            setTimeout(
+                                                $('#pr-report-appearance-modal').fadeOut(), 2500
+                                            );
+                                        }
+                                    }
+                                });
+                            });
+                        </script>
+                        <script>
+                            function review_reply(e) {
+                                var el = $(e);
+
+                                if (el.closest('.pr-review-reply-like').find('#review_reply').length) {
+                                    $('#review_reply').remove();
+                                } else if (el.closest('.pr-review-reply-like').find('#review_reply').length === 0) {
+                                    $('#review_reply').remove();
+                                    var html = '';
+                                    html += '<div id="review_reply" class="pr-create-review-new-block">';
+                                    html += '<div class="pr-create-review-body">';
+                                    html += '<div class="row">';
+                                    html += '<div class="col-sm-12">';
+                                    html += '<div class="pr-create-review-comment form-group">';
+                                    html += '<div class="pr-create-review-label">{{ comment_review }}</div>';
+                                    html += '<textarea name="" id="" class="pr-create-review-comment-input form-control" placeholder=""></textarea>';
+                                    html += '</div>';
+                                    html += '</div>';
+                                    html += '<div class="col-sm-6">';
+                                    html += '<div class="pr-create-review-name form-group">';
+                                    html += '<div class="pr-create-review-label">{{ name_surname_review }}</div>';
+                                    html += '<input type="text" value="" name="" class="pr-create-review-name-input form-control" id="" placeholder="">';
+                                    html += '</div>';
+                                    html += '</div>';
+                                    html += '<div class="col-sm-6">';
+                                    html += '<div class="pr-create-review-email form-group">';
+                                    html += '<div class="pr-create-review-label">{{ email_review }}</div>';
+                                    html += '<input type="email" value="" name="" class="pr-create-review-email-input form-control" id="" placeholder="">';
+                                    html += '</div>';
+                                    html += '</div>';
+                                    html += '</div>';
+                                    html += '<div class="pr-create-review-send-wrap">';
+                                    html += '<div class="pr-create-review-send-political">';
+                                    html += '<input type="checkbox" class="checkbox-input-mod" checked>';
+                                    html += '<div class="pr-create-review-send-political-text">{{ register_review }}</div>';
+                                    html += '</div>';
+                                    html += '<div class="pr-create-review-send">';
+                                    html += '<span class="pr-create-review-send-cancel" onclick="remove_review_reply(this)">{{ cancel_review }}</span>';
+                                    html += '<button type="button" class="pr-create-review-send-btn btn btn-default">{{ add_review }}/button>';
+                                    html += '</div>';
+                                    html += '</div>';
+                                    html += '</div>';
+                                    html += '</div>';
+
+                                    el.closest('.pr-review-reply-like').find('.review_reply').html(html);
+                                }
+
+                                el.toggleClass('active');
+                            }
+
+
+                            function remove_review_reply(e) {
+                                var el = $(e);
+                                el.closest('.pr-review-reply-like').find('.pr-review-reply-only').toggleClass('active');
+                                $('#review_reply').remove();
+                            }
+
+                            function see_all_reply(e) {
+                                var el = $(e);
+                                el.closest('.pr-review-reply-like').toggleClass('active');
+
+//                        $('#review_reply').remove();
+
+                            }
+
+                            $(document).ready(function () {
+                                $('.pr-review-create').click(function () {
+                                    $('#tab-review .pr-tab-content-title').css({'display': 'none'});
+                                    $('#pr-create-review').show();
+                                });
+
+                                $('#pr-create-review .close, #pr-create-review .pr-create-review-send-cancel').click(function () {
+                                    $('#pr-create-review').hide();
+                                    $('#tab-review .pr-tab-content-title').css({'display': 'flex'});
+                                });
+                            });
+                        </script>
+
+
+                    </div>
+                    <script>
+                        $(document).ready(function () {
+                            /* scroll anchor */
+                            $('.pr-nav-tabs a').click(function () {
+                                var id = $('.pr-tab-content');
+                                var top = $(id).offset().top - 40;
+                                $('html, body').animate({scrollTop: top}, 300);
+                            });
+                        });
+                    </script>
+                </div>
+            </div>
+            {{ buy_width_product }}
+            {{ content_bottom }}
+        </div>
+        {{ column_right }}</div>
+</div>
+<script type="text/javascript"><!--
+    $('select[name=\'recurring_id\'], input[name="quantity"]').change(function () {
+        $.ajax({
+            url: 'index.php?route=product/product/getRecurringDescription',
+            type: 'post',
+            data: $('input[name=\'product_id\'], input[name=\'quantity\'], select[name=\'recurring_id\']'),
+            dataType: 'json',
+            beforeSend: function () {
+                $('#recurring-description').html('');
+            },
+            success: function (json) {
+                $('.alert-dismissible, .text-danger').remove();
+
+                if (json['success']) {
+                    $('#recurring-description').html(json['success']);
+                }
+            }
+        });
+    });
+    //--></script>
+
+<script type="text/javascript">
+    $('button[id^=\'button-upload\']').on('click', function () {
+        var node = this;
+
+        $('#form-upload').remove();
+
+        $('body').prepend('<form enctype="multipart/form-data" id="form-upload" style="display: none;"><input type="file" name="file" /></form>');
+
+        $('#form-upload input[name=\'file\']').trigger('click');
+
+        if (typeof timer != 'undefined') {
+            clearInterval(timer);
+        }
+
+        timer = setInterval(function () {
+            if ($('#form-upload input[name=\'file\']').val() != '') {
+                clearInterval(timer);
+
+                $.ajax({
+                    url: 'index.php?route=tool/upload',
+                    type: 'post',
+                    dataType: 'json',
+                    data: new FormData($('#form-upload')[0]),
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    beforeSend: function () {
+                        $(node).button('loading');
+                    },
+                    complete: function () {
+                        $(node).button('reset');
+                    },
+                    success: function (json) {
+                        $('.text-danger').remove();
+
+                        if (json['error']) {
+                            $(node).parent().find('input').after('<div class="text-danger">' + json['error'] + '</div>');
+                        }
+
+                        if (json['success']) {
+                            alert(json['success']);
+
+                            $(node).parent().find('input').val(json['code']);
+                        }
+                    }
+                });
+            }
+        }, 500);
+    });
+</script>
+<script type="text/javascript"><!--
+    $('#review').delegate('.pagination a', 'click', function (e) {
+        e.preventDefault();
+
+        $('#review').fadeOut('slow');
+
+        $('#review').load(this.href);
+
+        $('#review').fadeIn('slow');
+    });
+
+    $('#review').load('index.php?route=product/product/review&product_id={{ product_id }}');
+
+    $('#button-review').on('click', function () {
+        $.ajax({
+            url: 'index.php?route=product/product/write&product_id={{ product_id }}',
+            type: 'post',
+            dataType: 'json',
+            data: $("#form-review").serialize(),
+            beforeSend: function () {
+                $('#button-review').button('loading');
+            },
+            complete: function () {
+                $('#button-review').button('reset');
+            },
+            success: function (json) {
+                $('.alert-dismissible').remove();
+
+                if (json['error']) {
+                    $('#review').after('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> ' + json['error'] + '</div>');
+                }
+
+                if (json['success']) {
+                    $('#review').after('<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> ' + json['success'] + '</div>');
+
+                    $('input[name=\'name\']').val('');
+                    $('textarea[name=\'text\']').val('');
+                    $('input[name=\'rating\']:checked').prop('checked', false);
+                }
+            }
+        });
+    });
+
+
+    //$(document).ready(function() {
+    //	$('.thumbnails').magnificPopup({
+    //		type:'image',
+    //		delegate: 'a',
+    //		gallery: {
+    //			enabled: true
+    //		}
+    //	});
+    //});
+    //--></script>
+<script>
+    function update_input(target) {
+        var input_val = $(target).parent().children('input[name=quantity]').val(),
+            quantity = parseInt(input_val);
+
+        if (quantity == 0 || (isNaN(quantity))) {
+            $(target).parent().children('input[name=quantity]').val(1);
+            return;
+        }
+    }
+</script>
+
+
+{{ footer }}

@@ -1,0 +1,581 @@
+/*=Font size */
+.ocfilter-option .ocf-option-name,
+.ocfilter-option .ocf-option-values,
+.ocfilter-option .ocf-option-description,
+.ocfilter-option .fields-price {
+	font-size: 12px;
+}
+
+.ocfilter-option .ocf-option-name {
+	font-size: 12px;
+	font-weight: 600;
+	margin-bottom: 10px;
+}
+
+.ocfilter-option .ocf-option-values {
+	overflow: visible;
+}
+
+.list-group-item {
+	overflow: visible!important;
+}
+
+.ocfilter-option .ocf-option-values .dropdown-menu {
+	min-width: 100%;
+	max-height: 250px;
+	overflow: auto;
+	padding: 10px;
+}
+
+.ocfilter-option .ocf-color {
+	border-radius: 3px 3px 3px 3px;
+	float: left;
+	height: 19px;
+	margin: 1px -16px 0 -3px;
+	width: 19px;
+}
+
+.ocfilter-option .ocf-image {
+	background-repeat: no-repeat;
+	background-position: 0 0;
+	float: left;
+	height: 19px;
+	margin: 1px -16px 0 -3px;
+	position: relative;
+	width: 19px;
+	z-index: 10;
+}
+
+.ocfilter-option label {
+	cursor: pointer;
+	display: block;
+	font-size: 12px;
+	font-weight: normal;
+	line-height: 1.2;
+	white-space: normal;
+	padding: 4px 0;
+	width: 100%;
+}
+
+.ocfilter-option .dropdown-menu label{
+	white-space: nowrap;
+}
+
+.ocfilter-option label input {
+	display: inline-block;
+	margin: 0 5px 0 0;
+	vertical-align: top;
+}
+
+.ocfilter-option label small {
+	background-color: #DBEAF9;
+	color: #0E6A93;
+	font-weight: 200;
+	font-size: 10px;
+	margin-left: 5px;
+}
+
+.ocfilter-option label.disabled {
+	color: #999999;
+}
+
+.ocfilter-option label.disabled small {
+	background-color: #EFEFEF;
+	color: #999999;
+}
+
+.ocfilter-option label {
+	color: #444;
+	text-decoration: none;
+}
+
+.ocfilter-option label.ocf-selected {
+	color: #E56101;
+}
+
+.ocfilter-option label.ocf-selected small {
+	opacity: 0;
+}
+
+/*=Collapse Options */
+button[data-target="#ocfilter-hidden-options"] {
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
+}
+
+button[data-target="#ocfilter-hidden-options"] .fa:before {
+	content: "\f078";
+}
+
+button[data-target="#ocfilter-hidden-options"][aria-expanded="true"] {
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+}
+
+button[data-target="#ocfilter-hidden-options"][aria-expanded="true"] .fa:before {
+	content: "\f077";
+}
+
+/*=Collapse Values */
+.collapse-value {
+	margin-bottom: 10px;
+}
+
+.collapse-value > button, .collapse-value > button:focus, .collapse-value > button:active, .collapse-value > button:active:focus {
+	text-align: left;
+	background: transparent;
+	border: none;
+	box-shadow: none;
+	padding: 0;
+	font-size: 12px;
+	text-decoration: underline;
+	outline: none;
+}
+
+.collapse-value > button .fa:before {
+	content: "\f107";
+}
+
+.collapse-value > button[aria-expanded="true"] {
+}
+
+.collapse-value > button[aria-expanded="true"] .fa:before {
+	content: "\f106";
+}
+
+/*=Selected Options */
+.selected-options {
+	color: #333333;
+	padding: 0;
+}
+
+.selected-options .ocfilter-option {
+	background-color: #F8F8F8;
+	font-size: 10px;
+	padding: 4px 5px;
+}
+
+/*=Price filtering */
+#ocfilter-price .ocf-option-values {
+	padding: 10px 10px 5px;
+}
+
+.trackbar, .trackbar .left-block, .trackbar .right-block {
+	height: 4px;
+}
+
+.popover-content .form-inline {
+	white-space: nowrap;
+}
+
+.popover-content .form-inline .form-group {
+	display: inline-block;
+	margin-bottom: 0;
+	vertical-align: middle;
+}
+
+.scale {
+	margin-bottom: 35px;
+	margin-left: 15px;
+	margin-right: 15px;
+}
+
+.ocfilter .popover .form-inline .form-control {
+	width: 100px;
+}
+
+/* Position center style */
+.ocfilter-content-top, .ocfilter-content-bottom {
+}
+
+.ocfilter-content-top .box-content, .ocfilter-content-bottom .box-content {
+	font-size: 0;
+}
+
+.ocfilter-content-top .ocfilter-option, .ocfilter-content-bottom .ocfilter-option {
+	display: inline-block;
+	vertical-align: top;
+	width: 33%;
+}
+
+.ocfilter-content-top .ocfilter-option + .ocfilter-option, .ocfilter-content-bottom .ocfilter-option + .ocfilter-option {
+	border-top: none;
+}
+
+/*=Mobile */
+.ocf-offcanvas{
+	position: fixed;
+	top: 0;
+	background-color: #fff;
+	bottom: 0;
+	left: -300px;
+	z-index: 1000;
+	height: 100%;
+	width: 300px;
+	padding: 0;
+
+	-webkit-transition: left 250ms ease;
+	-moz-transition: left 250ms ease;
+	-ms-transition: left 250ms ease;
+	-o-transition: left 250ms ease;
+	transition: left 250ms ease;
+}
+.ocf-offcanvas.active{left:0;}
+.ocf-offcanvas .ocfilter-mobile-handle{position: absolute; left: 100%; top: 88px;}
+.ocf-offcanvas .ocfilter-mobile-handle .btn{border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+}
+.ocf-offcanvas .ocf-offcanvas-body{
+	overflow-x: hidden;
+	overflow-y: auto;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+}
+.ocf-offcanvas .panel{}
+.ocf-offcanvas{}
+.ocf-offcanvas{}
+
+
+
+
+
+
+
+
+/* ocfilter */
+#ocfilter {
+	border: none;
+}
+#ocfilter .panel-heading {
+	display: none;
+}
+#ocfilter .noUi-background {
+	height: 3px;
+	box-shadow: none;
+	border: none;
+}
+#ocfilter .noUi-horizontal .noUi-handle {
+	width: 16px;
+	height: 16px;
+	left: -8px;
+	top: -7.5px;
+	border-radius: 50%;
+	border: none;
+	box-shadow: inset 0 0 0 3px #333;
+	background: #fff;
+	cursor: pointer;
+}
+#ocfilter .noUi-horizontal .noUi-handle:before,
+#ocfilter .noUi-horizontal .noUi-handle:after {
+	display: none;
+}
+#ocfilter .noUi-connect {
+	background: #019fff;
+	box-shadow: none !important;
+	border: none !important;
+}
+#ocfilter .noUi-background {
+	background: #f2f2f2;
+}
+
+#ocfilter .ocfilter-option[data-toggle="popover-price"] .ocf-option-name {
+	color: #333;
+	font-size: 16px;
+	font-weight: 700;
+	margin-bottom:20px;
+	padding-left: 7px;
+}
+#ocfilter .ocfilter-option[data-toggle="popover-price"] {
+	border: none;
+	padding-right: 35px;
+	margin-left: -7px;
+}
+#ocfilter .list-group-item {
+	padding-left: 0;
+}
+#ocfilter .btn.btn-primary {
+	background: #019fff;
+	border: none;
+	box-shadow: none;
+	border-radius: 2px;
+	line-height: 1.25;
+	color: #fff;
+	font-size: 14px;
+	outline: none;
+}
+#ocfilter .btn.btn-primary:hover,
+#ocfilter .btn.btn-primary:active {
+	background: #0090e8;
+}
+
+#ocfilter .ocfilter-option .ocf-option-name {
+	color: #333;
+	font-size: 16px;
+	font-weight: 700;
+}
+
+#ocfilter .list-group > .ocfilter-option {
+	padding-top: 25px;
+}
+
+#ocfilter .ocf-option-values label input {
+	width: 0;
+	height: 0;
+	position: relative;
+	margin-right: 20px;
+	margin-top: -1px;
+}
+#ocfilter .ocf-option-values label input:before {
+	position: absolute;
+	content: "";
+	left: 0;
+	top: 0;
+	width: 16px;
+	height: 16px;
+	background: #fff;
+	border: 1px solid #e1e1e1;
+	border-radius: 2px;
+}
+#ocfilter .ocf-option-values label input:checked:before {
+	background: #307eff;
+	border-color: #307eff;
+}
+#ocfilter .ocf-option-values label input:checked:after {
+	position: absolute;
+	content: "";
+	color: #fff;
+	top: 3px;
+	left: 3px;
+	width: 10px;
+	height: 10px;
+	background: url(/catalog/view/theme/4tv/image/icons-bg/iconmonstr-check-mark-15.svg) no-repeat;
+	background-size: contain;
+}
+#ocfilter .ocf-option-values .badge {
+	/* 	display: none; */
+	margin-top: -4px;
+}
+#ocfilter .ocfilter-option label {
+	font-size: 14px;
+	color: #333;
+}
+#ocfilter .badge-new {
+	color: #838181;
+}
+
+
+
+
+#ocfilter .fa-times-circle:before,
+#ocfilter .fa-times:before,
+.oc-filter-selected-wrap .fa-times-circle:before,
+.oc-filter-selected-wrap .fa-times:before {
+	content: "";
+	color: #fff;
+	width: 16px;
+	height: 16px;
+	background: url(/catalog/view/theme/4tv/image/icons-bg/iconmonstr-x-mark-11-gray.svg) no-repeat;
+	background-size: contain;
+	display: block;
+}
+#ocfilter .fa-times-circle:before,
+.oc-filter-selected-wrap .fa-times-circle:before {
+	width: 13px;
+	height: 13px;
+}
+#ocfilter .fa-times-circle:before,
+.oc-filter-selected-wrap .fa-times-circle:before {
+	background-image: url(/catalog/view/theme/4tv/image/icons-bg/iconmonstr-x-mark-10-white.svg);
+}
+.oc-filter-selected-wrap .fa-times-circle {
+	display: none;
+}
+#ocfilter .btn-danger,
+.oc-filter-selected-wrap .btn-danger {
+	background: #ec0000;
+	box-shadow: none !important;
+	border: none;
+	outline: none;
+	border-radius: 2px;
+	text-shadow: none;
+}
+#ocfilter .btn-danger:hover,
+#ocfilter .btn-danger:active,
+.oc-filter-selected-wrap .btn-danger:hover,
+.oc-filter-selected-wrap .btn-danger:active {
+	/* 	background: #d30000; */
+}
+#ocfilter .btn-danger.btn-xs,
+.oc-filter-selected-wrap .btn-danger.btn-xs{
+	/* 	font-size: 12px;
+        padding-top: 3px !important; */
+}
+#ocfilter .btn-danger .fa,
+.oc-filter-selected-wrap .btn-danger .fa {
+	/* 	position: relative;
+        top: 1px; */
+}
+#ocfilter .btn-danger .fa-times-circle,
+.oc-filter-selected-wrap .btn-danger .fa-times-circle{
+	/* 	position: relative;
+        top: 2px; */
+}
+
+.selected-options .ocfilter-option {
+	background: none;
+	font-size: 10px;
+	padding: 0;
+}
+
+.oc-filter-selected-wrap  .selected-options .ocfilter-option {
+	display: flex;
+	flex-flow: wrap;
+	margin-bottom: 5px;
+}
+.oc-filter-selected-wrap  .selected-options .ocfilter-option button {
+	margin-right: 5px !important;
+	margin-bottom: 5px;
+}
+
+
+.oc-filter-selected-wrap  .selected-options > button {
+
+}
+#ocfilter .selected-options .ocfilter-option > span,
+.oc-filter-selected-wrap .selected-options .ocfilter-option > span{
+	font-size: 12px !important;
+	font-weight: 700;
+	text-shadow: none;
+	margin-right: 5px;
+}
+#ocfilter .selected-options > button,
+.oc-filter-selected-wrap .selected-options > button {
+	/* 	margin-top: 10px; */
+	width: auto;
+}
+#ocfilter .selected-options,
+.oc-filter-selected-wrap .selected-options {
+	margin-bottom: 5px;
+}
+.oc-filter-selected-wrap .selected-options {
+	display: flex;
+	flex-flow: wrap;
+	align-items: center;
+	border: none;
+	margin-bottom: 0;
+}
+.oc-filter-selected-wrap .ocfilter-option > span {
+	display: none;
+}
+.oc-filter-selected-wrap .ocfilter-option button,
+.oc-filter-selected-wrap .selected-options > button {
+	background: #fff;
+	color: #333 !important;
+	font-size: 13px !important;
+	font-weight: 400;
+	display: flex;
+	justify-content: center;
+	padding: 0 !important;
+	border: 1px solid #e1e1e1 !important;
+	border-radius: 13px !important;
+	align-items: center;
+	line-height: 1 !important;
+	padding: 5px 12px !important;
+	outline: none !important;
+	background: none !important;
+	height: 28px !important;
+}
+.oc-filter-selected-wrap .ocfilter-option button:hover,
+.oc-filter-selected-wrap .ocfilter-option button:active {
+	border-color: #333 !important;
+}
+.oc-filter-selected-wrap .selected-options > button {
+	color: #838181 !important;
+	border-color: #ff7878 !important;
+	margin-bottom: 10px;
+}
+.oc-filter-selected-wrap .selected-options > button:hover,
+.oc-filter-selected-wrap .selected-options > button:active {
+	color: #333 !important;
+	border-color: red !important;
+}
+.oc-filter-selected-wrap .ocfilter-option button .fa {
+	order: 1;
+	margin-left: 6px;
+}
+
+.ocfilter-option[id^="option-"] .ocf-option-name {
+	position: relative;
+	margin-bottom: 15px;
+}
+.ocfilter-option[id^="option-"] .ocf-option-name:before {
+	content: "\f107";
+	font-family: fontAwesome;
+	color: #019fff;
+	margin-right: 5px;
+}
+.ocf-option-values .collapse-value button {
+	color: #019fff;
+	font-size: 14px !important;
+	font-weight: 400;
+	text-decoration: none !important;
+	margin-top: 15px;
+}
+.ocf-option-values .collapse-value button .fa {
+	font-size: 14px;
+	color: #838181;
+}
+#ocfilter .list-group-item {
+	border-color: #f0f0f0;
+}
+#ocfilter .list-group > .ocfilter-option {
+	padding-top: 20px;
+}
+#ocfilter .selected-options {
+	display: none;
+}
+
+
+#ocfilter > .list-group > button:last-of-type {
+	margin: 10px auto !important;
+	display: block !important;
+	border: none !important;
+	box-shadow: none;
+}
+#ocfilter > .list-group {
+	border-bottom: 1px solid #fff;
+}
+.ocfilter-selected-total  {
+	margin-left: 10px;
+	margin-bottom: 10px;
+}
+.ocfilter-selected-total span {
+	color: #838181;
+}
+
+.ocf-option-values .collapse-value button .fa:before {
+	content: "\f106";
+}
+.ocf-option-values .collapse-value button.collapsed .fa:before {
+	content: "\f107";
+}
+.ocf-option-values .collapse-value button {
+	margin-top: 0;
+}
+/*.ocf-option-values > label:last-of-type {*/
+/*margin-bottom: 15px;*/
+/*}*/
+.ocf-option-values .collapse-value {
+	padding-top: 15px;
+}
+#ocfilter .ocfilter-option label {
+	position: relative;
+	padding-left: 24px;
+}
+#ocfilter .ocfilter-option label input {
+	position: absolute;
+	left: 0;
+}

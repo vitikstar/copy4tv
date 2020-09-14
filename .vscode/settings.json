@@ -1,0 +1,19 @@
+{
+    "sqltools.connections": [
+        {
+            "askForPassword": false,
+            "database": "tvfree_test",
+            "driver": "MySQL",
+            "group": "tvfree_test",
+            "mysqlOptions": {
+                "authProtocol": "default"
+            },
+            "name": "tvfree",
+            "password": "K;u52E3th(",
+            "port": 3306,
+            "previewLimit": 50,
+            "server": "tvfree.mysql.tools",
+            "username": "tvfree_test"
+        }
+    ]
+}

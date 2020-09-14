@@ -1,0 +1,46 @@
+<div class="ac-banner-question">
+    <div class="ac-banner-question-title-mini">Опрос</div>
+    {% if polling_possible %}
+        {% for key,polling in polling_possible %}
+    <div class="ac-banner-question-title">{{ polling.question }}</div>
+    <div class="ac-banner-question-items">
+
+                {% for key,answer in polling.polling_possible %}
+                    <div class="ac-banner-question-item">
+                        <label>
+                            <input type="checkbox" name="ac_banner_question" class="checkbox-input-mod" value="{{ key }}" onclick="check_only_this(this)">
+                            <span>{{ answer }}</span>
+                        </label>
+                    </div>
+                {% endfor %}
+
+    </div>
+            <div class="ac-banner-btn-wrap">
+                <input type="button" value="Отправить" class="btn btn-default ac-btn-default polling-question" id="polling{{ key }}" data-question-id="{{  key  }}">
+            </div>
+            {% endfor %}
+    {% endif %}
+
+</div>
+<script>
+    function check_only_this(e){
+        $('.ac-banner-question').find('input').prop('checked', false);
+        $(e).prop('checked', true);
+    }
+    $('.polling-question').on('click',function () {
+        var polling_id = $(this).attr('data-question-id');
+        var answer_id = $("input[name='ac_banner_question']:checked").val();
+        $.ajax({
+            url: 'index.php?route=extension/module/polling_possible/polling',
+            data: {
+                'polling_id'  :    polling_id,
+                'answer_id' :    answer_id,
+            },
+            type: 'post',
+            dataType: 'json',
+            success: function(json) {
+                $('.ac-banner-question').remove();
+            }
+        });
+    })
+</script>

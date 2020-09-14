@@ -1,0 +1,189 @@
+
+            {% for order in orders %}
+                <div class="ac-order-item">
+                    <div class="ac-order-item-small active" onclick="ac_order_item_big_toggle(this)">
+                        <div class="ac-order-col-1 ac-order-col">
+                            <div class="ac-order-date">{{ order['date_added'] }}{#2 января 2020#}</div>
+                        </div>
+                        <div class="ac-order-col-2 ac-order-col">
+                            <div class="ac-order-number"><span>{{ order['order_id'] }}</span><i class="fa fa-angle-down"></i></div>
+                        </div>
+                        <div class="ac-order-col-3 ac-order-col">
+                            <div class="ac-order-pr-images">
+                                {% for img_mini in order['products_img_small'] %}
+                                    <div class="ac-order-pr-image">
+                                        <img src="{{ img_mini }}" alt="" class="img-responsive">
+                                    </div>
+                                {% endfor %}
+                                {% if(order['additional_products_mini_image_total']>0) %}
+                                    <div class="ac-order-pr-image">
+                                        <div class="ac-order-pr-image-text">+{{ order['additional_products_mini_image_total'] }}</div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="ac-order-col-4 ac-order-col">
+                            <p class="price">{{ order['total'] }}</p>
+                        </div>
+                        <div class="ac-order-col-5 ac-order-col">
+                            <div class="ac-order-status-{{ order['status_id'] }}">{{ order['status'] }}</div>
+                        </div>
+                    </div>
+                    <div class="ac-order-item-big">
+
+                        <div class="ac-order-item-big-left">
+                            <div class="ac-order-product-wrap">
+                                <div class="ac-order-product-title">
+                                    <div class="ac-order-product-col-1 ac-order-product-col">
+                                        <div class="ac-order-product-checkbox-all">
+                                            <input type="checkbox" class="checkbox-input-mod" onclick="$('.order_id{{ order['order_id'] }}:enabled').prop('checked', this.checked);">
+                                        </div>
+                                    </div>
+                                    <div class="ac-order-product-col-2 ac-order-product-col"></div>
+                                    <div class="ac-order-product-col-3 ac-order-product-col">Товар (цена)</div>
+                                    <div class="ac-order-product-col-4 ac-order-product-col">Кол-во</div>
+                                    <div class="ac-order-product-col-5 ac-order-product-col">Стоимость</div>
+                                </div>
+
+                                {% if order['product_list'] %}
+                                    <div class="ac-order-products" id="order_id{{ order['order_id'] }}">
+                                        {% for product in order['product_list'] %}
+                                            <div class="ac-order-product {% if product['ac_order_product_no_available'] %}ac-order-product-no-available{% endif %}"> <!-- Если нет в наличии, то добавляется класс ac-order-product-no-available -->
+                                                <div class="ac-order-product-col-1 ac-order-product-col">
+                                                    <div class="ac-order-product-checkbox">
+                                                        <input type="checkbox" name="order_product[]" class="checkbox-input-mod  order_id{{ order['order_id'] }}" value="{{ product['product_id'] }}" {% if product['ac_order_product_no_available'] %}disabled{% endif %}>
+                                                    </div>
+                                                </div>
+                                                <div class="ac-order-product-col-2 ac-order-product-col">
+                                                    <div class="ac-order-product-image">
+                                                        <a href="{{ product['href'] }}">
+                                                            <img src="{{ product['big'] }}" alt="{{ product['name'] }}" class="img-responsive">
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="ac-order-product-col-3 ac-order-product-col">
+                                                    <div class="ac-order-product-name-wrap">
+                                                        <a href="{{ product['href'] }}" class="ac-order-product-name">{{ product['name'] }}</a>
+                                                        <div class="ac-order-product-model">{{ product['available_text'] }}</div>
+                                                        <p class="price">{{ product['price'] }}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="ac-order-product-col-4 ac-order-product-col">
+                                                    <div class="ac-order-product-quantity">{{ product['quantity'] }} <span>шт.</span></div>
+                                                </div>
+                                                <div class="ac-order-product-col-5 ac-order-product-col">
+                                                    <div class="ac-order-product-total">
+                                                        <p class="price">{{ product['total'] }}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+
+                                    <div class="ac-order-product-bottom">
+                                        <div class="ac-order-product-col-1 ac-order-product-col"></div>
+                                        <div class="ac-order-product-col-2 ac-order-product-col"></div>
+                                        <div class="ac-order-product-col-3 ac-order-product-col"></div>
+                                        <div class="ac-order-product-col-4 ac-order-product-col">
+                                            <div class="ac-order-product-bottom-total-title">Итого к оплате:</div>
+                                        </div>
+                                        <div class="ac-order-product-col-5 ac-order-product-col">
+                                            <div class="ac-order-product-bottom-total-text"><p class="price">{{ order['total'] }}</p></div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="ac-order-item-big-right ac-order-col-5 ac-order-col">
+                            <div class="ac-order-item-big-status-title">Статус заказа:</div>
+                            <div class="ac-order-item-big-status ac-order-status-{{ order['status_id'] }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#fff"><path d="M9 22l-10-10.598 2.798-2.859 7.149 7.473 13.144-14.016 2.909 2.806z"/></svg>
+                                <span>{{ order['status'] }}</span>
+                            </div>
+                            <div class="ac-order-item-big-right-line"></div>
+                            <div class="ac-order-big-detail-wrap">
+                                <div class="ac-order-big-detail-title-main" onclick="ac_order_big_detail_wrap_toggle(this)"><span>Детали заказа</span> <i class="fa fa-angle-up"></i></div>
+                                <div class="ac-order-big-detail-items">
+                                    <div class="ac-order-big-detail-item">
+                                        <div class="ac-order-big-detail-title">Способы оплаты</div>
+                                        <div class="ac-order-big-detail-text">{{ order['payment_method_name'] }}</div>
+                                    </div>
+                                    <div class="ac-order-big-detail-item">
+                                        <div class="ac-order-big-detail-title">Служба доставки</div>
+                                        <div class="ac-order-big-detail-text">{{ order['service_delivery_name'] }}</div>
+                                    </div>
+                                    <div class="ac-order-big-detail-item">
+                                        <div class="ac-order-big-detail-title">Способ доставки</div>
+                                        <div class="ac-order-big-detail-text">{{ order['type_delivery_name'] }}</div>
+                                    </div>
+                                    <div class="ac-order-big-detail-item">
+                                        <div class="ac-order-big-detail-title">Отледение</div>
+                                        <div class="ac-order-big-detail-text">{{ order['branch_new_post'] }}</div>
+                                    </div>
+                                    <div class="ac-order-big-detail-item">
+                                        <div class="ac-order-big-detail-title">Номер ТТН</div>
+                                        <div class="ac-order-big-detail-text">20400113183825</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ac-order-item-big-right-line"></div>
+                            <div class="ac-order-big-detail-action-wrap">
+                                {% if order['status_id']==1 %}
+                                    <div class="ac-order-big-detail-title-main">Действия:</div>
+                                    <div class="ac-order-big-detail-action-1 ac-order-big-detail-action">
+                                        <span class="ac-order-big-detail-action-icon"></span>
+                                        <span><a href="{{ order['reorder'] }}">Сформировать и оформить этот заказ повторно</a></span>
+                                    </div>
+                                    <div class="ac-order-big-detail-action-2 ac-order-big-detail-action">
+                                        <span class="ac-order-big-detail-action-icon"></span>
+                                        <span  onclick="addToCart({{ order['order_id'] }})">Добавить выбранные товары в корзину</span>
+                                    </div>
+                                {% elseif order['status_id']==2 %}
+                                    <div class="ac-order-big-detail-title-main">Действия:</div>
+                                    <div class="ac-order-big-detail-action-cancel-order ac-order-big-detail-action">
+                                        <span class="ac-order-big-detail-action-icon"></span>
+                                        <span onclick="cancel_order('0','{{ order['order_id'] }}')" 'order_status_id'='{{ order['status_id'] }}'>Отменить заказ</span>
+                                    </div>
+                                {% else %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    function addToCart(order_id){
+                        $.ajax({
+                            url: 'index.php?route=account/order/addToCart&order_id='+order_id,
+                            dataType: 'json',
+                            type:'post',
+                            data:$("input[name='order_product[]']:checked"),
+                            success: function(json) {
+                                location.href=json['redirect'];
+                            }
+                        });
+                    }
+                </script>
+            {% endfor %}
+
+<script>
+
+    var text_show_limit_order = '{{ text_show_limit_order }}';
+    if(text_show_limit_order!=0){
+        $('.product-more-button-text').html(text_show_limit_order);
+        $('.ac-order-item-show-more').css('display','flex');
+    }else{
+        $('.ac-order-item-show-more').css('display','none');
+    }
+
+    function ac_order_item_big_toggle(e) {
+        var el = $(e);
+        el.closest('.ac-order-item').find('.ac-order-item-big').toggleClass('active');
+        el.closest('.ac-order-item').find('.ac-order-item-small').toggleClass('active');
+    }
+    function ac_order_big_detail_wrap_toggle(e) {
+        var el = $(e);
+        el.closest('.ac-order-big-detail-wrap').toggleClass('active');
+    }
+
+</script>

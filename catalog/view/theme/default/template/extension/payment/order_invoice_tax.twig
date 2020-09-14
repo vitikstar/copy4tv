@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Видаткова накладна</title>
+		<link rel="stylesheet" type="text/css" href="{{ style }}" />
+	</head>
+	<body>
+		<div class="print-buttons" style="width: 700px; text-align: center">
+			<button class="button" onclick="javascript:print();">Роздрукувати</button><br><br>
+		</div>
+		<div style="width: 700px">
+			<table>
+				<tbody>
+					<tr>
+						<th align="left" valign="top">Постачальник:</th>
+						<td>{{ supplier_info }}</td>
+					</tr>
+					<tr>
+						<th align="left" valign="top">Одержувач:</th>
+						<td>{{ name }}<br />тел. {{ telephone }}</td>
+					</tr>
+					<tr>
+						<th align="left" valign="top">Платник:</th>
+						<td>той самий</td>
+					</tr>
+					<tr>
+						<th align="left" valign="top">Валюта:</th>
+						<td>Гривня</td>
+					</tr>
+					<tr>
+						<th align="left" valign="top">Пiдстава:</th>
+						<td>Рахунок-фактура № {{ invoice }} від {{ date_added }}р.</td>
+					</tr>
+				</tbody>
+			</table>
+			<br />
+			<br />
+			<div style="text-align:center;">
+				<h3>Видаткова накладна № {{ invoice }}<br />від {{ date_added }}р.</h3>
+			</div>
+			<br />
+			<br />
+			<table class="product">
+				<tbody>
+				<tr class="heading">
+					<td>№</td>
+					<td style="width:50%">Товар</td>
+					<td>Од. виміру</td>
+					<td>Кількість (об'єм, обсяг)</td>
+					<td>Цiна без ПДВ</td>
+					<td>Сума без ПДВ</td>
+				</tr>
+					{% set i = 0 %}
+					{% for row in products %} 
+					<tr>
+						<td>{{ i }}</td>
+						<td style="text-align:left">{{ row.name }}</td>
+						<td>шт.</td>
+						<td>{{ row.quantity }}</td>
+						<td>{{ row.price|number_format(2, '.', '') }}</td>
+						<td>{{ row.total|number_format(2, '.', '') }}</td>
+					</tr>
+					{% set i = i + 1  %}
+					{% endfor %} 
+					{% set break = false %}
+					{% for total in totals if not break %} 
+						<tr>
+						  <td colspan="5" style="text-align:right;border-left:1px solid #fff;border-bottom:1px solid #fff;font-weight:bold;">{% if percent >= 0 %}{{ 'Всього без ПДВ' }}{% else %}{{ total.title }}{% endif %} :</td>
+						  <td class="text-right">{{ total.text }}</td>
+						</tr>
+						{% if percent == -2 or percent >= 0 %}
+							{% set break = true %}
+						{% endif %}
+					{% endfor %} 
+					{% if percent >= 0 %}
+						<tr>
+						  <td colspan="5" style="text-align:right;border-left:1px solid #fff;border-bottom:1px solid #fff;font-weight:bold;">ПДВ :</td>
+						  <td class="text-right">{{ total_tax }}</td>
+						</tr>
+						<tr>
+						  <td colspan="5" style="text-align:right;border-left:1px solid #fff;border-bottom:1px solid #fff;font-weight:bold;">Всього з ПДВ :</td>
+						  <td class="text-right">{{ total_price }}</td>
+						</tr>
+					{% endif %}
+				</tbody>
+			</table>
+			<p>Всього на суму: <strong>{{ sum_str }}</strong></p>
+			{% if percent >= 0 %}
+				<p>ПДВ: <strong>{{ total_tax }} грн</strong></p>
+			{% endif %}
+			<table>
+				<tr>
+					<td width="40%">
+						<div style="position:relative;">
+							<p style="text-align:right;padding-top:80px">Вiдвантажив(ла): ___________________</p>
+							{% if image %}
+								<img style="position:absolute;left:100px;top:0;max-width:100%" src="{{ image }}" />
+							{% endif %}
+							{% if sign %}
+								<img style="position:absolute;left:90px;top:10px;max-width:100%" src="{{ sign }}" />
+							{% endif %}
+						</div>
+					</td>
+					<td width="20%"></td>
+					<td width="40%">
+						<p style="text-align:right;padding-top:80px">Отримав(ла): ___________________</p>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</body>
+</html>

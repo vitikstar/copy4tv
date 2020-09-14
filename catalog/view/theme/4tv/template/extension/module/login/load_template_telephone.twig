@@ -1,0 +1,133 @@
+
+<!-- tel-03 -->
+<div class="lr-tel ch-block">
+    <div class="form-group">
+        <input type="tel" name="telephone" class="lr-tel-input-complete lr-tel-input form-control" placeholder="+38 (ХХХ) ХХХ - ХХ - ХХ" value="">
+        <p class="text-danger error-telephone"></p>
+    </div>
+
+    <div class="lr-code-activation-wrap row" style="display: none">
+        <div class="col-sm-6 col-xs-12">
+            <div class="form-group">
+                <label>Код подтверждения:</label>
+                <input type="text" name="code-v-tel" maxlength="4" class="lr-code-activation form-control" placeholder="" value="">
+            </div>
+        </div>
+        <div class="col-sm-6 col-xs-12">
+            <div class="form-group">
+                <label></label>
+                <div class="lr-code-activation-text"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="ch-block-btn-wrap">
+        <input type="button" value="Далее" id="" class="lr-btn-next btn btn-default">
+        <input type="button" value="Вход" id="lr-btn-go" class="lr-btn-go btn btn-default" style="display:none;">
+    </div>
+    <div class="regular-customer-remember-forgot">
+        <label class="regular-customer-remember">
+            <input type="checkbox" name="" class="checkbox-input-mod">
+            <span>Запомнить меня</span>
+        </label>
+    </div>
+</div>
+<!-- end tel-03 -->
+<script>
+    $('.lr-btn-next').on('click',function () {
+        $('.error-telephone').html('');
+        $.ajax({
+            url: 'index.php?route=extension/module/sirius_auth_register_popup/validateTelephone',
+            dataType: 'json',
+            type: 'post',
+            data:{
+                'telephone' : $('.lr-tel input[name="telephone"]').val()
+            },
+            success: function (json) {
+                console.log(json);
+                if(json['error']['user_telephone_exists']){
+                    $('.error-telephone').html(json['user_telephone_exists']);
+                }else{
+                    $('.error-telephone').html('');
+                    $('.lr-code-activation-wrap').css('display','block');
+                    $('.lr-btn-next').css('display','none');
+                    $('#lr-btn-go').css('display','block');
+                    setTimeout(function () {
+                        $('.lr-code-activation-text').html(json['lr-code-activation-text']);
+                            $('.lr-code-activation-text-repeat').on('click',function () {
+                                $('.lr-code-activation-text').html('');
+                                $.ajax({
+                                    url: 'index.php?route=extension/module/sirius_auth_register_popup/reSendCode',
+                                    dataType: 'json',
+                                    type: 'post',
+                                    data:{
+                                    },
+                                    success: function (json) {
+                                            $('.error-telephone').html('');
+                                            setTimeout(function () {
+                                                $('.lr-code-activation-text').html(json['lr-code-activation-text']);
+                                                $('.lr-code-activation-text-repeat').on('click',function () {
+                                                    $('.lr-code-activation-text').html('');
+                                                    $.ajax({
+                                                        url: 'index.php?route=extension/module/sirius_auth_register_popup/reSendCode',
+                                                        dataType: 'json',
+                                                        type: 'post',
+                                                        data:{
+                                                        },
+                                                        success: function (json) {
+                                                            $('.error-telephone').html('');
+                                                            setTimeout(function () {
+                                                                $('.lr-code-activation-text').html(json['lr-code-activation-text']);
+                                                            },10000);
+                                                        }
+                                                    });
+                                                })
+                                            },10000);
+                                    }
+                                });
+                            })
+                    },10000);
+                }
+            }
+        });
+    })
+
+function send_code_repeat_ajax(){
+
+}
+
+    $('input[name="code-v-tel"]').on('keyup',function () {
+                    var length = $(this).val().length;
+                    $('#lr-btn-go').removeClass('lr-btn-go').removeClass('lr-btn-go-active');
+                if(length!=4){
+                    $('#lr-btn-go').addClass('lr-btn-go').addClass('lr-btn-go-active');
+                }
+    });
+
+
+    $('.lr-btn-go').on('click',function () {
+        $.ajax({
+            url: 'index.php?route=extension/module/sirius_auth_register_popup/validateTelephoneCode',
+            dataType: 'json',
+            type: 'post',
+            data:{
+                'code-v-tel' : $('input[name="code-v-tel"]').val(),
+                'lr-code-activation-text' : $('.lr-code-activation-text').html()
+            },
+            success: function (json) {
+                $('.lr-code-activation-text').html(json['code-activation-text']);
+                if(json['error']['code-activation']){
+                    var html = json['lr-code-activation-text'];
+                    setTimeout(function () {
+                        $('.lr-code-activation-text').html(html);
+                    },3000);
+                }else{
+                    setTimeout(function () {
+                        location.reload();
+                    },3000);
+                }
+            }
+        });
+    })
+    $('input[name="telephone"]').mask("+38 (099) 999-99-99");
+</script>

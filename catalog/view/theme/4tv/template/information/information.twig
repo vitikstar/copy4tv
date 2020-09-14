@@ -1,0 +1,51 @@
+{{ header }}
+<div id="news-article" class="container category-1">
+      <div class="breadcrumb-product-wrap">
+              {{ column_megamenu }}
+          <ul class="breadcrumb">
+              {% set total = breadcrumbs|length %}
+              {% set counter = 0 %}
+              {% for breadcrumb in breadcrumbs %}
+                  {{ breadcrumb['separator'] }}
+                  {% set counter = counter + 1 %}
+                  {% if (counter == total) %}
+                      <li>{{ breadcrumb['text'] }}</li>
+                  {% else %}
+                      <li><a href="{{ breadcrumb['href'] }}">{{ breadcrumb['text'] }}</a></li>
+                  {% endif %}
+              {% endfor %}
+          </ul>
+      </div>
+      {% if success %}
+          <div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> {{ success }}</div>
+      {% endif %}
+      <div class="ac-row row">
+          <div class="ac-col-left">
+              {{ column_left }}
+          </div>
+          {% if column_left and column_right %}
+              {% set class = 'col-sm-6' %}
+          {% elseif column_left or column_right %}
+              {% set class = 'col-sm-9' %}
+          {% else %}
+              {% set class = 'col-sm-12' %}
+          {% endif %}
+     <div id="content" class="{{ class }}">{{ content_top }}
+        <div class="news-article-wrap">
+            <div class="news-article-header">
+                <h1 class="ac-personal-title">{{ heading_title }}</h1>
+            </div>
+            <div class="news-article-body">{{ description }}</div>
+        </div>
+     </div>
+    <div class="ac-col-right">
+        <div class="ac-banner">
+            <aside id="column-right" class="col-sm-3 hidden-xs">
+                {{ column_right }}
+            </aside>
+        </div>
+    </div>
+     </div>
+    {{ content_bottom }}
+</div>
+{{ footer }}

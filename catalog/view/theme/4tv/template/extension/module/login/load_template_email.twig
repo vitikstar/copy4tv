@@ -1,0 +1,224 @@
+<div class="lr-email ch-block">
+    <div class="form-group">
+        <input type="email" name="email-popup" class="lr-email-input lr-tel-input form-control" placeholder="Эл. почта">
+        <input type="email" name="email-forgot-input" class="lr-email-input lr-tel-input form-control" placeholder="Введите адрес электронной почты" style="display: none" value="{{ email }}">
+        <input type="hidden" name="email-forgot" class="lr-email-input lr-tel-input form-control" placeholder="Введите адрес электронной почты" style="display: none" value="{{ email }}">
+        <p class="text-danger error-email"></p>
+    </div>
+    <div class="form-group main-password" id="login-password-wrap">
+        <label>Пароль</label>
+        <input type="password" name="password-popup" value="" placeholder="" class="lr-password-input form-control">
+        <p class="text-danger error-password"></p>
+    </div>
+
+<div id="verefication-wrap" style="display: none">
+<div id="code_email_container">
+    <div class="lr-code-activation-wrap row">
+        <div class="lr-code-activation-block col-sm-5 col-xs-12">
+            <div class="form-group">
+                <label>Код подтверждения:</label>
+                <input type="text" name="code-v-mail" class="lr-code-activation form-control" placeholder="" value="">
+            </div>
+        </div>
+        <div class="col-sm-7 col-xs-12">
+            <div class="form-group">
+                <label></label>
+                <div class="lr-code-activation-text"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="ch-block-btn-wrap">
+        <input type="button" value="Дальше" id="success-button-login" class="lr-btn-go btn btn-default">
+    </div>
+</div>
+
+                <div id="password_container" style="display:none">
+                    <div class="lr-code-activation-wrap row">
+                        <div class="lr-code-activation-block col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label>Пароль:</label>
+                                <input type="text" name="new_password" class="lr-code-activation form-control" placeholder="" value="">
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label>Пароль повторно:</label>
+                                <input type="text" name="new_password_repeat" class="lr-code-activation form-control" placeholder="" value="">
+                            </div>
+                        </div>
+                        <div class="error"></div>
+                    </div>
+
+                    <div class="ch-block-btn-wrap">
+                        <input type="button" value="Войти" id="pass-button-login" class="lr-btn-go btn btn-default">
+                    </div>
+                </div>
+</div>
+    <div class="ch-block-btn-wrap"  id="forgot-wrap" style="display: none">
+        <input type="button" value="Далее"  id="forgot-login-button" class="lr-btn-go-blue btn btn-default">
+    </div>
+
+    <div class="lr-email-remember-with-text regular-customer-remember-forgot"   id="forgot-remember-wrap" style="display:none;">
+        <div class="col-sm-5 col-xs-12">
+            <label class="regular-customer-remember">
+                <input type="checkbox" name="" class="checkbox-input-mod">
+                <span>Запомнить меня</span>
+            </label>
+        </div>
+        <div class="col-sm-7 col-xs-12">
+            <div class="regular-customer-forgot">
+                <div class="lr-email-add-text"><span>У вас нет персонального аккаунта?</span> <span class="lr-code-activation-text-repeat">Зарегистрируйтесь прямо сейчас</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="regular-customer-remember-forgot"  id="login-remember-wrap">
+        <label class="regular-customer-remember">
+            <input type="checkbox" name="" class="checkbox-input-mod">
+            <span>Запомнить меня</span>
+        </label>
+        <div class="regular-customer-forgot">
+            <a href="javascript:void(0)">Забыли пароль?</a>
+        </div>
+    </div>
+
+    <div class="ch-block-btn-wrap" id="login-wrap">
+        <div class="col-sm-5 col-xs-12">
+        <input type="button" value="Войти"  class="lr-btn-go-blue btn btn-default" id="login-button">
+        </div>
+        <div class="col-sm-7 col-xs-12">
+        <div class="lr-email-add-text"><span>У вас нет персонального аккаунта?</span> <span class="lr-code-activation-text-repeat">Зарегистрируйтесь прямо сейчас</span></div>
+        </div>
+    </div>
+</div>
+<script>
+    $('.regular-customer-forgot a').on('click',function () {
+        $('#login-password-wrap').css('display','none');
+        $('input[name="email-popup"]').css('display','none');
+        $('input[name="email-forgot-input"]').css('display','block');
+        $('#login-remember-wrap').css('display','none');
+        $('#login-wrap').css('display','none');
+        $('#forgot-wrap').css('display','block');
+        $('#forgot-remember-wrap').css('display','block');
+    })
+    $('#forgot-login-button').on('click',function () {
+        $('.error-email').html('');
+        $.ajax({
+            url: 'index.php?route=extension/module/sirius_auth_register_popup/validateEmail',
+            dataType: 'json',
+            type: 'post',
+            data:{
+                'email-forgot' : $('input[name="email-forgot"]').val()
+            },
+            success: function (json) {
+                console.log(json);
+                if(json['error']['user_email_exists']){
+                    $('.error-email').html(json['error']['user_email_exists']);
+                }else{
+                    $('.error-email').html('');
+                    $('#forgot-wrap').css('display','none');
+                    $('#verefication-wrap').css('display','block');
+                    setTimeout(function () {
+                        $('.lr-code-activation-text').html(json['lr-code-activation-text']);
+                    },7000);
+                }
+
+            }
+        });
+    })
+        $('input[name="code-v-mail"]').on('keyup',function () {
+                    var length = $(this).val().length;
+                    $('#success-button-login').removeClass('lr-btn-go').removeClass('lr-btn-go-active');
+                if(length!=4){
+                    $('#success-button-login').addClass('lr-btn-go');
+                }else{
+                    $('#success-button-login').addClass('lr-btn-go-active');
+                }
+    });
+
+    setInterval(function(){
+                            var length_new_password          = $('input[name="new_password"]').val().length;
+                            var length_new_password_repeat   = $('input[name="new_password_repeat"]').val().length;
+                                $('#pass-button-login').removeClass('lr-btn-go').removeClass('lr-btn-go-active');
+                            if(length_new_password<4 && length_new_password_repeat<4){
+                                $('#pass-button-login').addClass('lr-btn-go');
+                            }else{
+                                                            if(length_new_password != length_new_password_repeat){
+                                $('#pass-button-login').addClass('lr-btn-go');
+                            }else{
+                                $('#pass-button-login').addClass('lr-btn-go-active');
+                            }
+                            }
+    },1);
+    $('#success-button-login').on('click',function () {
+        $.ajax({
+            url: 'index.php?route=extension/module/sirius_auth_register_popup/validateEmailCode',
+            dataType: 'json',
+            type: 'post',
+            data:{
+                'code-v-mail' : $('input[name="code-v-mail"]').val()
+            },
+            success: function (json) {
+                $('.lr-code-activation-text').html(json['code-activation-text']);
+                if(json['error']['code-activation']){
+
+                }else{
+                    $('#code_email_container').css('display','none');
+                    $('#password_container').css('display','block');
+                }
+            }
+        });
+    })
+    
+    $('#pass-button-login').on('click',function () {//////////////////////////////////////////доробити зміну пароля
+        $.ajax({
+            url: 'index.php?route=extension/module/sirius_auth_register_popup/emailPasswordReminder',
+            dataType: 'json',
+            type: 'post',
+            data:{
+                'email' : $('input[name="email-forgot"]').val(),
+                'new_password' : $('input[name="new_password"]').val(),
+                'new_password_repeat' : $('input[name="new_password_repeat"]').val()
+            },
+            success: function (json) {
+              //  $('#password_container').css('display','none');
+                if(json['error']){
+                    $('#password_container .lr-code-activation-wrap .error').html(json['error']);
+                }else{
+                    setTimeout(function () {
+                        location.href = json['redirect']
+                    },1000);
+                }
+            }
+        });
+    })
+    $('#login-button').on('click',function () {
+        $('.error-password').html('');
+        $('.error-email').html('');
+        $.ajax({
+            url: 'index.php?route=extension/module/sirius_auth_register_popup/emailAuthorization',
+            dataType: 'json',
+            type: 'post',
+            data:{
+                'email' : $('input[name="email-popup"]').val(),
+                'password' : $('input[name="password-popup"]').val()
+            },
+            success: function (json) {
+                $('.error-password').html('');
+                $('.error-email').html('');
+                if(json['error']['email_exists']){
+                    console.log(json['error']['email_exists']);
+                    $('.error-email').html(json['error']['email_exists']);
+                }else if(json['error']['password']){
+                    $('.error-password').html(json['error']['password']);
+                }else{
+                    setTimeout(function () {
+                        location.href = json['redirect']
+                    },1000);
+                }
+            }
+        });
+    })
+
+</script>

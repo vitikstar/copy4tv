@@ -1,0 +1,15 @@
+        {% for product in products %}
+            <div class="ch-product">
+                <a href="{{ product.href }}" class="ch-product-img">
+                    <img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}">
+                </a>
+                <div class="ch-product-info">
+                    <a href="{{ product.href }}" class="ch-product-name">{{ product.name }}</a>
+                    <div class="ch-product-model"><span>{{ column_model }}: </span>{{ product.model }}</div>
+                    <div class="ch-product-quantity"><span>{{ column_quantity }}: </span>{{ product.quantity }} шт</div>
+                </div>
+                <div class="ch-product-price">
+                    <div class="price">{{ product.price }}<!--<span class="symbol-right"></span>--></div>
+                </div>
+            </div>
+        {% endfor %}

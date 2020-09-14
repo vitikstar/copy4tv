@@ -1,0 +1,381 @@
+<script>
+	function writeRattingRewiews(p_review_id,like_or_dislike) {
+		$.ajax({
+			url: 'index.php?route=extension/module/p_review/writeRattingReviews',
+			type: 'post',
+			dataType: 'json',
+			data: {
+				'like_or_dislike':like_or_dislike,
+				'p_review_id':p_review_id
+			},
+			success: function(json) {
+
+				if (json['error']) {
+
+				}
+
+				if (json['like'] || json['dislike']) {
+					if(json['like']){
+						$('#like-'+p_review_id).text(parseInt($('#like-'+p_review_id).text())+1);
+						var dislike_num = parseInt($('#dislike-'+p_review_id).text());
+						if(dislike_num) $('#dislike-'+p_review_id).text(dislike_num-1);
+					}else if(json['dislike']){
+						$('#dislike-'+p_review_id).text(parseInt($('#dislike-'+p_review_id).text())+1);
+						var like_num = parseInt($('#like-'+p_review_id).text());
+						if(like_num) $('#like-'+p_review_id).text(like_num-1);
+					}
+
+				}
+			}
+		});
+	}
+	function showMoreReview(limit={{ module_p_review_limit }},product_id,rendering=0) { //якщо rendering true то це значить що сортування
+		if({{ total_reviews }}==0) $('#product-more-button').css('display','none');
+		var sort_order = $('#sort_order').val();
+		var start = $('.pr-review').length;
+		$('#product-more-button').addClass('active');
+		$.ajax({
+			url: 'index.php?route=extension/module/p_review/showMore',
+			type: 'post',
+			data: {'product_id':product_id,'limit':limit,'start':start,'sort_order':sort_order,'rendering':rendering},
+			dataType: 'json',
+			success: function(json) {
+				console.log(json);
+				if(rendering){
+					$('.pr-reviews').empty();
+					$('.pr-reviews').html(json['reviews']);
+				} else{
+					$('.pr-reviews').append(json['reviews']);
+				}
+				$('#product-more-button').html(json['more_button']);
+				if(json['more_button']=='') $('#product-more-button').css('display','none');
+				$('#product-more-button').removeClass('active');
+			}
+		})
+	}
+</script>
+<div class="pr-tab-content-title">
+	<div class="pr-tab-content-title-text">{{ consumer_review }}</div>
+	<div class="pr-review-sort-create-wrap">
+		<select class="pr-review-sort-select form-control">
+			<option value="pr.rating~DESC">По популярности</option>
+			<option value="pr.date_added~DESC" selected="selected">Начиная с новых</option>
+			<option value="pr.date_added~ASC">Начиная с старых</option>
+			<option value="pr.rating~DESC">Рейтинг (начиная с высокого)</option>
+			<option value="pr.rating~ASC">Рейтинг (начиная с низкого)</option>
+		</select>
+		<button type="button" class="pr-review-create btn btn-default"><span class="pr-review-create-icon"></span>Написать отзыв</button>
+	</div>
+	<input type="hidden" id="sort_order" value="pr.date_added~DESC">
+	<input type="hidden" id="product_id_sort_order" value="{{ product_id }}">
+</div>
+<div class="tab-pane" id="tab-p-review">
+  <div id="p-review-form">
+    {% if p_review['form']['form'] %}
+    <form {% if not p_review['form']['form'] %}style="display: none;" {% endif %}class="" enctype="multipart/form-data" method="post">
+		<div id="pr-create-review" class="pr-create-review-new-block" style="display: none;">
+			<div class="modal-custom">
+				<div class="close"></div>
+			</div>
+			<div class="pr-create-review-title">{{ p_review['text_write'] }}</div>
+
+			<div class="pr-create-review-body">
+				{% if p_review['form']['field_rating'] %}
+					<div class="pr-create-review-rating rating">
+						<p>
+							{% for i in 1..5 %}
+									<span data-rating-value="{{ i }}" onclick="setRating('{{ i }}')"  class="fa fa-stack pr-create-review-rating-item" id="pr-create-review-rating-item{{ i }}">
+										<i class="fa fa-star-o fa-stack-1x"></i>
+										<span class="fa-stack-text">
+											{% if i == 1 %}{{ bad_review }}{% endif %}
+											{% if i == 2 %}{{ so_so_review }}{% endif %}
+											{% if i == 3 %}{{ good_review }}{% endif %}
+											{% if i == 4 %}{{ nice_review }}{% endif %}
+											{% if i == 5 %}{{ great_review }}{% endif %}
+										</span>
+									</span>
+									<input id="input-rating" type="hidden" name="rating" value="0" />
+							{% endfor %}
+						</p>
+					</div>
+					<script>
+						// Rating
+						function setRating(rating) {
+							$('#p-review-form form .rating input[name=\'rating\']').val(rating);
+
+							$('.pr-create-review-rating-item .fa-star').remove();
+							var html = '<i class="fa fa-star fa-stack-1x"></i>';
+							$('.pr-create-review-rating-item').each(function() {
+								var data_rating_value = $(this).attr('data-rating-value');
+								if (data_rating_value <= rating) {
+									$(this).prepend(html);
+								}
+							});
+						}
+					</script>
+				{% endif %}
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="pr-create-review-comment form-group">
+							<div class="pr-create-review-label">{{ p_review['entry_text'] }}</div>
+							<textarea name="text" id="input-text" class="pr-create-review-comment-input form-control" placeholder=""></textarea>
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div class="pr-create-review-adv form-group">
+							<div class="pr-create-review-label">{{ p_review['entry_good'] }}</div>
+							<input type="text" value="" name="good" class="pr-create-review-adv-input form-control"  id="input-good" placeholder="">
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div class="pr-create-review-disadv form-group">
+							<div class="pr-create-review-label">{{ p_review['entry_bad'] }}</div>
+							<input type="text" value="" name="bad" class="pr-create-review-disadv-input form-control" id="input-bad" placeholder="">
+						</div>
+					</div>
+				</div>
+				<div class="pr-create-review-line"></div>
+				<div class="row">
+					<div class="col-sm-6">
+						<div class="pr-create-review-name form-group">
+							<div class="pr-create-review-label">{{ p_review['entry_name'] }}</div>
+							<input type="text" value="{{ p_review['form']['name'] }}" name="name" class="pr-create-review-name-input form-control" id="input-name" placeholder="">
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div class="pr-create-review-email form-group">
+							<div class="pr-create-review-label">{{ p_review['entry_email'] }}</div>
+							<input type="text"  name="email" value="{{ p_review['form']['email'] }}" id="input-email" class="pr-create-review-email-input form-control" placeholder="">
+						</div>
+					</div>
+				</div>
+				<div class="pr-create-review-send-wrap">
+					<div class="pr-create-review-send-political">
+						<input type="checkbox" class="checkbox-input-mod" checked>
+						<div class="pr-create-review-send-political-text">{{ register_review }}.</div>
+					</div>
+					<div class="pr-create-review-send">
+						<span class="pr-create-review-send-cancel">{{ cancel_review }}</span>
+						<button type="button" id="button-p-review" class="pr-create-review-send-btn btn btn-default">{{ add_review }}</button>
+					</div>
+				</div>
+			</div>
+		</div>
+    </form>
+  {% endif %}
+  </div>
+		<div class="pr-reviews">
+				<!--сюда будуть відгуки підгружатись-->
+		</div>
+	</div>
+
+<div id="product-more-button" class="review-more-btn"> <!-- По аналогу с каталогом, когда грузится добавляется класс animation чтобы вращалась картинка -->
+
+</div>
+
+<script>
+	showMoreReview({{ module_p_review_limit }},{{ product_id }})
+</script>
+
+
+<script type="text/javascript"><!--
+// Filter
+$('#input-sort, #input-filter-rating, #input-limit').on('change', function() {
+	$('#p-review').load('index.php?route=extension/module/p_review/p_review&product_id={{ product_id }}' + $('#input-sort').val() + {% if p_review['form']['field_rating'] %}$('#input-filter-rating').val() + {% endif %}$('#input-limit').val());
+});
+--></script>
+
+<script type="text/javascript"><!--
+// Open form
+$(document).ready(function () {
+	$('#p-review-total + button').on('click', function() {
+		$('a[href=\'#tab-p-review\']').trigger('click');
+		{% if not p_review['form']['form'] %}
+		$('#p-review-form form').slideDown();
+		$('#button-form-toggle i').removeClass('fa-chevron-down').addClass('fa-chevron-up');
+		{% endif %}
+		setTimeout(function () {
+			$('html, body').animate({ scrollTop: $('#p-review-form').offset().top }, 'slow');
+		}, 100);
+	});
+});
+//--></script>
+<script type="text/javascript"><!--
+{% if p_review['form']['field_avatar'] > 1 %}
+$('#input-avatar').on('change', function() {
+	$('#label-avatar').html(this.files[0].name);
+	$('#button-clear').show();
+});
+$('#button-clear').on('click', function() {
+	$('#input-avatar').val('');
+	$('#button-clear').hide();
+	$('#label-avatar').empty();
+});
+{% endif %}
+{% if p_review['form']['field_image'] > 1 %}
+
+var row = 0;
+
+$('#button-add-image').on('click', function() {
+	if ($('#p-review-form form .image-list .image-row').length < '{{ p_review['form']['image_limit'] }}') {
+		html = '<div class="image-row image-row' + row + '"><label class="btn btn-primary btn-sm" for="input-image' + row + '"><input id="input-image' + row + '" type="file" name="image[]" onchange="$(\'#label-image' + row + '\').html(this.files[0].name);" accept="image/jpeg,image/png"><i class="fa fa-upload"></i> <span class="hidden-xs hidden-sm hidden-md">{{ p_review['button_upload'] }}</span></label> <button type="button" data-toggle="tooltip" rel="tooltip" title="{{ p_review['button_remove'] }}" onclick="$(this).tooltip(\'destroy\'); $(\'.image-row' + row + '\').remove(); $(\'#button-add-image\').removeAttr(\'disabled\');" class="btn btn-danger btn-sm"><i class="fa fa-remove"></i></button> <span class="label label-info" id="label-image' + row + '"></span></div>';
+
+		$('#p-review-form form .image-list').append(html);
+		$('[rel=tooltip]').tooltip();
+
+		row++;
+	}
+
+	if ($('#p-review-form form .image-list .image-row').length == '{{ p_review['image_limit'] }}') {
+		$('#button-add-image').attr('disabled', 'disabled');
+	}
+});
+{% endif %}
+{% if not p_review['form']['form'] %}
+$('#button-form-toggle').on('click', function() {
+	if ($('#button-form-toggle i').hasClass('fa-chevron-down')) {
+		$('#button-form-toggle i').removeClass('fa-chevron-down').addClass('fa-chevron-up');
+	} else {
+		$('#button-form-toggle i').removeClass('fa-chevron-up').addClass('fa-chevron-down');
+	}
+	$('#p-review-form form').slideToggle();
+});
+{% endif %}
+{% if p_review['form']['field_rating'] %}
+
+
+
+$('.pr-review-sort-select').on('change',function () {
+	$('#sort_order').val($('.pr-review-sort-select option:selected').val());
+	var product_id = $('#product_id_sort_order').val();
+	showMoreReview({{ module_p_review_limit }},product_id,1)
+})
+
+$('#p-review-form form .rating span').mouseover(function() {
+
+	var rating = $(this).data('rating-value');
+
+	for (var i = 1; i <= 5; i++) {
+		if (rating >= i) {
+			$('#p-review-form form .rating .fa-star-' + i).addClass('fa-star');
+		} else {
+			$('#p-review-form form .rating .fa-star-' + i).removeClass('fa-star');
+		}
+	}
+});
+
+$('#p-review-form form .rating').mouseout(function() {
+
+	var rating = $('#p-review-form form .rating input[name=\'rating\']').val();
+
+	for (var i = 1; i <= 5; i++) {
+		if (rating >= i) {
+			$('#p-review-form form .rating .fa-star-' + i).addClass('fa-star');
+		} else {
+			$('#p-review-form form .rating .fa-star-' + i).removeClass('fa-star');
+		}
+	}
+});
+{% endif %}
+$(document).ready(function() {
+	{% if p_review['form']['editor'] %}
+	var wbbOpt = {
+		buttons: 'bold,italic,underline,strike,fontcolor,fontsize,|,bullist,numlist,|,video,link,smilebox',
+		lang: '{{ p_review['wysibb_language'] }}',
+		smileList: [
+			{% if p_review['form']['smiles'] %}
+			{% for smile in p_review['form']['smiles'] %}
+			{title: '', img: '<img src="{{ smile['url'] }}" class="smile">', bbcode:":{{ smile['name'] }}:"},
+			{% endfor %}
+			{% endif %}
+		]
+	}
+
+	$("#p-review-form form textarea").wysibb(wbbOpt);
+	{% endif %}
+});
+
+$('#p-review').on('click', '.pagination a', function(e) {
+	var sort = $('#input-sort').val();
+	e.preventDefault();
+	$('#p-review').load(this.href + '&sort=' + sort);
+});
+
+
+
+
+$('#button-p-review').on('click', function() {
+	{% if p_review['form']['editor'] %}
+	{% if p_review['form']['field_text'] %}
+	$("#input-text").sync();
+	{% endif %}
+	{% if p_review['form']['field_good'] %}
+	$("#input-good").sync();
+	{% endif %}
+	{% if p_review['form']['field_bad'] %}
+	$("#input-bad").sync();
+	{% endif %}
+	{% endif %}
+	$.ajax({
+		url: 'index.php?route=extension/module/p_review/write&product_id={{ product_id }}',
+		type: 'post',
+		dataType: 'json',
+		data: new FormData($('#p-review-form form').get(0)),
+		cache: false,
+		contentType: false,
+		processData: false,
+		beforeSend: function() {
+			$('#button-p-review').button('loading');
+		},
+		complete: function() {
+			$('#button-p-review').button('reset');
+		},
+		success: function(json) {
+			$('.alert-success, .alert-danger').remove();
+
+			if (json['error']) {
+				$('#p-review-form form').before('<div class="alert alert-danger p-review-alert"><i class="fa fa-check-circle"></i> ' + json['error'] + ' <button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+
+				setTimeout(function () {
+					$('.p-review-alert').fadeOut();
+				}, 3000);
+			}
+
+			if (json['success']) {
+				$('#p-review-form form').before('<div class="alert alert-success p-review-alert"><i class="fa fa-check-circle"></i> ' + json['success'] + ' <button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+
+				setTimeout(function () {
+					$('.p-review-alert').fadeOut();
+				}, 3000);
+				{% if not p_review['form']['moderation'] %}
+				$('#p-review').load('index.php?route=extension/module/p_review/p_review&product_id={{ product_id }}' + $('#input-sort').val() + $('#input-filter-rating').val() + $('#input-limit').val());
+				$('#p-review-total').load('index.php?route=extension/module/p_review/total&product_id={{ product_id }}');
+				p_review_total = $('input[name=\'p_review_total\']').val() * 1;
+				$('#tab-p-review-total').html(p_review_total + 1);
+				{% endif %}
+				// Clear form
+				$('#p-review-form form').get(0).reset();
+				{% if p_review['form']['field_rating'] %}
+				$('#p-review-form form .rating span i').removeClass('fa-star');
+				$('#p-review-form form input[name=\'rating\']').val('');
+				{% endif %}
+				{% if (p_review['form']['field_avatar'] > 1) or (p_review['form']['field_image'] > 1) %}
+				$('#p-review-form form .label-info').empty();
+				{% endif %}
+				{% if p_review['form']['field_avatar'] > 1 %}
+				$('#button-clear').hide();
+				{% endif %}
+				{% if p_review['form']['field_image'] > 1 %}
+				$("#p-review-form form .image-row").remove();
+				$('#button-add-image').removeAttr('disabled');
+				{% endif %}
+				{% if p_review['form']['editor'] %}
+				$('#p-review-form form .wysibb-text-editor').empty();
+				{% endif %}
+			}
+		}
+	});
+});
+
+
+//--></script>

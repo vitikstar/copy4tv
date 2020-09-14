@@ -1,0 +1,315 @@
+<div class="ch-block-2 ch-block active">
+    <div class="ch-del-pay-items" id="delivery_method_form">
+        <div class="ch-del-pay-item active" id="ch-del-1">
+            <div class="ch-del-pay-item-title-wrap">
+                <label for="ch-del-input-1" class="ch-del-pay-label">
+                    <input type="checkbox" id="ch-del-input-1" name="ch-del-input-1" class="checkbox-input-mod"
+                           value="1">
+                    <span class="ch-del-pay-item-title">{{ text_delivery_service_label }}</span>
+                </label>
+                <div class="ch-del-pay-item-text">{{ text_delivery_service_text }}</div>
+            </div>
+            <div class="ch-del-item-main-wrap ch-del-pay-item-main-wrap active" id="ch-del-2-1">
+                <div class="row">
+                    <div class="col-sm-5 col-xs-12">
+                        <div class="form-group">
+                            <label>{{ text_delivery_services }}</label>
+                            <select class="form-control" name="delivery_service_samov">
+                                {% if(service_deliverys) %}
+                                    <option value="0">{{ form_option_select }}</option>
+                                    {% for service_delivery in service_deliverys %}
+                                        <option value="{{ service_delivery['service_delivery_id'] }}">{{ service_delivery['name'] }}</option>
+                                    {% endfor %}
+                                {% endif %}
+                            </select>
+                        </div>
+                        <div class="form-group" id="ukrposhtaCheckbox"></div>
+                    </div>
+                    <div class="col-sm-4 col-xs-12">
+                        <div class="form-group">
+                            <label>{{ text_region }}</label>
+                            <select class="form-control" name="region-samov" id="inputRegionSamov">
+                                <option value="0">{{ form_option_select }}</option>
+                                {% for key, name_item in regions %}
+                                    <option value="{{ key }}" {% if(row['region_id']==key) %} selected {% endif %}>{{ name_item }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-xs-12">
+                        <div class="form-group">
+                            <label>{{ text_zone }}</label>
+                            <select class="form-control" name="city-samov" id="inputCitySamov">
+                                {#{% if(row) %}#}
+                                {#{% for key, name_item in zones %}#}
+                                {#<option value="{{ key }}" {% if(row['zone_id']==key) %} selected {% endif %}>{{name_item}}</option>#}
+                                {#{% endfor %}#}
+                                {#{% endif %}#}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xs-12">
+                        <div class="form-group">
+                            <label>{{ text_delivery_type }}</label>
+                            <select class="form-control delivery_type_select_change">
+                                {% for name_item in type_delivery_all %}
+                                    <option value="{{ name_item['type_delivery_id'] }}" {% if(row['type_delivery_id']==name_item['type_delivery_id']) %} selected {% endif %}
+                                            data-type="ch-del-2-{{ name_item['type_delivery_id'] }}">{{ name_item['name'] }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xs-12 service_delivery" id="novaposhtaCheckbox" style="display: none">
+                        <div class="form-group">
+                            <label>{{ text_delivery_branch_label }}</label>
+                            <select class="form-control" name="delivery" id="inputNovaPoshta"></select>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xs-12 address_delivery" style="display: none">
+                        <div class="row">
+                            <div class="col-xs-6 col-sm-6">
+                                <div class="form-group">
+                                    <label>{{ text_street }}</label>
+                                    <input type="text" name="street_delivery"
+                                           placeholder="" {% if(row['street']) %} value="{{ row['street'] }}" {% endif %}
+                                           class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-xs-3 col-sm-3">
+                                <div class="form-group">
+                                    <label>{{ text_house }}</label>
+                                    <input type="text" name="house_delivery"
+                                           placeholder="" {% if(row['house']) %} value="{{ row['house'] }}" {% endif %}
+                                           class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-xs-3 col-sm-3">
+                                <div class="form-group">
+                                    <label>{{ text_flat }}</label>
+                                    <input type="text" name="flat_delivery" placeholder=""
+                                           id="" {% if(row['flat']) %} value="{{ row['flat'] }}" {% endif %}
+                                           class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-xs-12 address_delivery" style="display: none">
+                        <div class="form-group">
+                            <label>{{ text_delivery_features }}</label>
+                            <textarea class="form-control" name="text_delivery_feature" id=""
+                                      placeholder="">{{ row['text_delivery_feature'] }}</textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="ch-block-btn-wrap">
+                    <input type="button" class="ch-block-btn btn btn-default btn-delivery-save"
+                           onclick="ac_personal_data_2_save({{ row['customer_address_delivery_id'] }});"
+                           value="{{ text_save }}">
+                </div>
+            </div>
+        </div>
+        <div class="ch-del-pay-item" id="ch-del-1">
+            <div class="ch-del-pay-item-title-wrap">
+                <label for="ch-del-input-2" class="ch-del-pay-label">
+                    <input type="checkbox" id="ch-del-input-2" name="" class="checkbox-input-mod" value="2">
+                    <span class="ch-del-pay-item-title">{{ text_delivery_from_department_label }}</span>
+                </label>
+                <div class="ch-del-pay-item-text">{{ text_delivery_from_department_text }}</div>
+            </div>
+            <div class="ch-pay-item-main-wrap ch-del-pay-item-main-wrap active">
+                <div class="row">
+                    <div class="col-sm-8 col-xs-12">
+                        <div class="form-group">
+                            <label>{{ text_address_shop }}</label>
+                            <select class="form-control" name="text_address_shop">
+                                {% for location in locations %}
+                                    <option value="{{ location['location_id'] }}" {% if(row['address_shop_id']==location['location_id']) %} selected {% endif %}>{{ location['address'] }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="ch-block-btn-wrap">
+                    <input type="button" class="ch-block-btn btn btn-default btn-delivery-save"
+                           onclick="ac_personal_data_2_save({{ row['customer_address_delivery_id'] }});"
+                           value="{{ text_save }}">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="ac-btn-cancel-wrap"><span class="ac-btn-cancel"
+                                          onclick="ac_personal_data_2_cancel({{ row['customer_address_delivery_id'] }});">{{ text_cancel }}</span>
+    </div>
+</div>
+<script>
+    function ac_personal_data_2_cancel(customer_address_delivery_id) {
+        if (customer_address_delivery_id) {
+            $('#ch-block-append-template_' + customer_address_delivery_id).html('');
+            $("#ch-block-personal-data_" + customer_address_delivery_id).css('display', 'flex');
+        } else {
+            $('.ch-block-append-template').html('')
+        }
+    }
+
+
+
+    function ac_personal_data_2_save(customer_address_delivery_id) {
+        $.ajax({
+            url: 'index.php?route=account/account/editAddressDelivery',
+            data: {
+                'poshtomat_address': $("input[name='poshtomat_address']").val(),
+                'shipping_address': $('textarea[name="shipping_address"]').val(),
+                'shape_delivery_id': $('.checkbox-input-mod:checked').val(),
+                'type_delivery_id': $(".delivery_type_select_change").find('option:selected').val(),
+                'service_delivery_id': $("select[name='delivery_service_samov']").find('option:selected').val(),
+                'branch_new_post': $("#inputNovaPoshta").find('option:selected').text(),
+                'SiteKey': $("#inputNovaPoshta").find('option:selected').val(),
+                'region_id': $("#inputRegionSamov").find('option:selected').val(),
+                'zone_id': $("#inputCitySamov").find('option:selected').val(),
+                'region_name': $("#inputRegionSamov").find('option:selected').text(),
+                'zone_name': $("#inputCitySamov").find('option:selected').text(),
+                'service_delivery_name': $("select[name='delivery_service_samov']").find('option:selected').text(),
+                'street': $("input[name='street_delivery']").val(),
+                'house': $("input[name='house_delivery']").val(),
+                'address_shop_id': $("select[name='text_address_shop']").find('option:selected').val(),
+                'text_delivery_feature': $("textarea[name='text_delivery_feature']").val(),
+                'customer_address_delivery_id': customer_address_delivery_id,
+                'flat': $("input[name='flat_delivery']").val()
+            },
+            type: 'post',
+            dataType: 'json',
+            success: function (json) {
+                console.log(json);
+                $('#ch-del-2-1 .form-control').removeClass('is-invalid');
+                if (json['error'] && $('#ch-del-input-1').is(':checked')) {
+
+
+                    $.each(json['error'], function (item) {
+                        $(item).addClass('is-invalid');
+                    });
+                    // $('#ch-block-append-template_'+customer_address_delivery_id).html('')
+                    // $("#ch-block-personal-data_"+customer_address_delivery_id).css('display','flex');
+                }else{
+                    location.reload();
+                }
+            }
+        });
+
+    }
+
+
+    $($('select[name="delivery_service_samov"]')).on('change', function () {
+        var service = $('select[name="delivery_service_samov"] option:selected').attr('value');
+        var region_id = $('#inputRegionSamov').val();
+        var city = $('#inputCitySamov option:selected').attr('value');
+        detectByService(service, region_id, city);
+        editAddressDelivery(0);
+    });
+
+    $(document).ready(function () {
+
+        $('.ch-block-2 .ch-del-pay-label').click(function () {
+
+            $('.ch-block-2 .ch-del-pay-item').removeClass('active');
+            var wrapper = $(this).closest('.ch-del-pay-item');
+            wrapper.siblings().find('.checkbox-input-mod').prop('checked', false);
+
+            if ($(this).find('input').is(':checked')) {
+                wrapper.addClass('active');
+            } else {
+                wrapper.removeClass('active');
+            }
+        });
+    });
+
+    {% if row['region_id']>0 and row['zone_id']>0 %} getCityByRegionSamov({{ row['region_id'] }},{{ row['zone_id'] }}); {% endif %}
+    {% if row['region_id']>0 and row['zone_id']>0 and row['SiteKey']>0 %} getListNewPost({{ row['region_id'] }},{{ row['zone_id'] }},{{ row['SiteKey'] }}); {% endif %}
+    {% if row['region_id']>0 and row['zone_id']>0 %} getListNewPost({{ row['region_id'] }},{{ row['zone_id'] }}); {% endif %}
+    {% if row['type_delivery_id']>0 and row['shape_delivery_id']==1 %} service_delivery({{ row['type_delivery_id'] }}); {% endif %}
+
+    function cancel_add_delivery_address(e) {
+        $('.ac-personal-data-2-items').remove();
+    }
+
+
+
+
+    $('#inputRegionSamov').on('change', function () {
+        getCityByRegionSamov($(this).val());
+        editAddressDelivery(0);
+    });
+
+    $('#inputRegionAdres').on('change', function () {
+        getCityByRegionAdres($(this).val());
+    });
+
+    $('.delivery_type_select_change').on('change', function () {
+        service_delivery($(this).val())
+    });
+
+    function service_delivery(delivery_type_id) {
+        {% if row['region_id']>0 and row['zone_id']>0 %} getListNewPost({{ row['region_id'] }},{{ row['zone_id'] }}); {% endif %}
+        if (delivery_type_id == 2) {
+            $('.service_delivery').css('display', 'none');
+            $('.address_delivery').css('display', 'block');
+        } else {
+            $('.address_delivery').css('display', 'none');
+            $('.service_delivery').css('display', 'block');
+        }
+    }
+
+    function getCityByRegionSamov(region_id, city_id_default = 0) {
+        $('#inputCitySamov').html('<option>Loading....</option>');
+      //  $('#inputCitySamov').attr('disabled', 'disabled');
+        $.ajax({
+            url: 'index.php?route=account/account/getListSities',
+            data: 'region_id=' + region_id + '&city_selected=' + city_id_default,
+            type: 'post',
+            dataType: 'html',
+            success: function (html) {
+                if (html) {
+                    $('#inputCitySamov').html(html);
+                    $('#inputCitySamov').removeAttr('disabled');
+                }
+            }
+        });
+    }
+
+    function getListNewPost(region_id, city, site_key) {
+        $('#inputNovaPoshta').html('<option>Loading....</option>');
+        $('#inputNovaPoshta').attr('disabled', 'disabled');
+        $.ajax({
+            url: 'index.php?route=account/account/getListServiceAddress',
+            data: 'city=' + city + '&region_id=' + region_id + '&site_key=' + site_key,
+            type: 'post',
+            dataType: 'html',
+            success: function (html) {
+                $('#inputNovaPoshta').html(html);
+                $('#inputNovaPoshta').removeAttr('disabled');
+            }
+        });
+    }
+
+    $('#inputCitySamov').on('change', function () {
+        getListNewPost($('#inputRegionSamov').val(), $('#inputCitySamov option:selected').attr('value'));
+    });
+    function detectByService(service, region_id, city) {
+        if (service == 'ukrposhta' || service==2) {
+            $.ajax({
+                url: 'index.php?route=account/account/getDeliveryUkrposhta',
+                data: 'city=' + city + '&region_id=' + region_id + '&delivery_selected={{ delivery_val }}',
+                type: 'post',
+                dataType: 'html',
+                success: function (html) {
+                    $('#ukrposhtaCheckbox').html(html);
+                    $('#inputNovaPoshta').attr('disabled', true);
+                    $('#novaposhtaCheckbox').css('display', 'none');
+                }
+            });
+        } else if (service == 'novaposhta' || service==1) {
+            $('#ukrposhtaCheckbox').html('');
+            $('#inputNovaPoshta').removeAttr('disabled');
+            $('#novaposhtaCheckbox').css('display', 'block');
+        }
+    }
+</script>

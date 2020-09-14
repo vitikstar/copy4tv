@@ -1,0 +1,68 @@
+ {% for key,payment_method in payment_methods %}
+        <div class="ch-del-pay-item" id="ch-pay-{{ key }}">
+            <div class="ch-del-pay-item-title-wrap">
+                <label for="ch-pay-input-{{ key }}" class="ch-del-pay-label">
+                    <input type="checkbox" id="ch-pay-input-{{ key }}" value="{{ payment_method.code }}"  class="checkbox-input-mod payment_method">
+                    <span class="ch-del-pay-item-title">{{ payment_method.title }}</span>
+                </label>
+                {% if(payment_method.text) %}
+                <div class="ch-del-pay-item-text">{{ payment_method.text }}</div>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+    <script>
+        $(document).ready(function() {
+          //  $('#checkbox-input-mod').on('change',function (e) {
+               // if($(this).is(':checked')){
+                    // var destination = $("header").offset().top;
+                    // $("html, body").animate({ scrollTop: destination }, 1100);
+              //  }else{
+               //     $("#order-confirmed").attr('disabled','disabled');
+               // }
+           // })
+
+            $('.ch-block-2 .ch-del-pay-label').click(function() {
+                $('.ch-block-2 .ch-del-pay-item').removeClass('active');
+                var wrapper = $(this).closest('.ch-del-pay-item');
+                wrapper.siblings().find('.checkbox-input-mod').prop('checked', false);
+                if ($(this).find('input').is(':checked')) {
+                    wrapper.addClass('active');
+                } else {
+                    wrapper.removeClass('active');
+                }
+            });
+
+            $('.ch-block-3 .ch-del-pay-label').click(function() {
+                $('.ch-block-3 .ch-del-pay-item').removeClass('active');
+                var wrapper = $(this).closest('.ch-del-pay-item');
+                wrapper.siblings().find('.checkbox-input-mod').prop('checked', false);
+                if ($(this).find('input').is(':checked')) {
+                    wrapper.addClass('active');
+                } else {
+                    wrapper.removeClass('active');
+                }
+            });
+        });
+         $('.payment_method').on('change',function () {
+             console.log($(this).val());
+             //loadingAjax(true);
+             $.ajax({
+                 url: 'index.php?route=checkout/component/payment_method_form/save',
+                 data: {
+                     'payment_method_val': $(this).val(),
+                     'comment_val': $("#comment-order").text(),
+                     'payment_address_1': $("#payment_address_1").text(),
+                 },
+                 type: 'post',
+                 dataType: 'json',
+                 success: function(json) {
+                    // loadingAjax(false);
+                    //  var destination = $(".ch-block-4").offset().top - 130;
+                    //  $("html, body").animate({scrollTop: destination}, 1100);
+                     paymentFormShow($('#checkbox-input-mod'));
+                     //$("#checkbox-input-mod").removeAttr("disabled");
+                 }
+             });
+         })
+    </script>

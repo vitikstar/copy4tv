@@ -1,0 +1,24 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+
+<link href="/catalog/view/javascript/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen"/>
+<script src="/catalog/view/javascript/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+
+<div class="login-wrap" style="display:none">
+	<div
+		class="l-r-main-block">
+		<!-- tel-03 -->
+		<div class="lr-tel ch-block">
+			<div class="ch-block-btn-wrap">
+				<input type="button" value="Далее" id="close_popup_fb_auth" class="lr-btn-next btn btn-default">
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	window.close();
+window.opener.location = '{{ redirect_uri }}'
+$('#close_popup_fb_auth').on('click', function () {
+window.close();
+window.opener.location = '{{ redirect_uri }}'
+});
+</script>

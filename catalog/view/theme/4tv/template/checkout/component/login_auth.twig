@@ -1,0 +1,35 @@
+<div class="ac-personal-data-1-wrapper">
+    <div class="ac-personal-data-1 ac-personal-data-1-main active">
+        <div class="ac-personal-data-left">
+            <div class="ac-personal-img-wrap">
+                <div class="ac-personal-img">
+                    <img src="{{ avatar }}" alt="" class="img-responsive">
+                </div>
+            </div>
+        </div>
+        <div class="ac-personal-data-right-1">
+            <div class="ac-personal-data-right-1-block">
+                <div class="ac-personal-data-right-1-title">{{ text_firstname_and_lastname }}</div>
+                <div class="ac-personal-data-right-1-text">{{ firstname }} {{ lastname }}</div>
+            </div>
+            <div class="ac-personal-data-right-1-block">
+                <div class="ac-personal-data-right-1-title">{{ text_full_address }}</div>
+                <div class="ac-personal-data-right-1-text" id="payment_address_1">
+                    {{ address }}
+                </div>
+            </div>
+            <div class="ac-personal-data-right-1-block">
+                <div class="ac-personal-data-right-1-title">{{ text_email }}</div>
+                <div class="ac-personal-data-right-1-text">{{ email }}</div>
+            </div>
+            <div class="ac-personal-data-right-1-block">
+                <div class="ac-personal-data-right-1-title">{{ text_telephone }}</div>
+                <div class="ac-personal-data-right-1-text">
+                {% if telephone %}
+					{{ telephone }}
+                {%  endif  %}
+                </div>							
+            </div>
+        </div>
+    </div>
+</div>

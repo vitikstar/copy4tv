@@ -1,0 +1,21 @@
+{% if product_question is not empty %}
+<div id="art_aqa_product_questions">
+	<div class="art_aqa_product_questions">
+	{% for question in product_question %}
+		<div class="art_aqa_product_info">
+			<div class="art_aqa_product_question">
+				<div class="art_question_header"><span class="art_question_title">{{ question.name }}<time class="art_question_date">{{ question.date_added }}</time></span></div>
+				<div class="art_question_body"><p>{{ question.question }}</p></div>
+			</div>
+			{% if question.answer|striptags is not empty %}
+				<div class="art_aqa_product_answer">
+					<div class="art_question_header"><span class="art_question_title">{% if question.logo %}<img src="{{ question['logo'] }}" title="{{ question['answer_name'] }}" alt="{{ question.answer_name }}"> {% endif %} {{ question.answer_name }}<time class="art_question_date">{{ question.date_answer }}</time></span></div>
+					<div class="art_question_body">{{ question.answer }}</div>
+				</div>
+			{% endif %}
+		</div>
+	{% endfor %}
+	</div>
+	<div class="text-right">{{ pagination }}</div>
+</div>
+{% endif %}

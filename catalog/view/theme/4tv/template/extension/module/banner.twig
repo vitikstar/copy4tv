@@ -1,0 +1,67 @@
+{% if banners_top %}
+
+  <div class="banners-top-slider-banner">
+    {% if banners_top.slider %}
+        <div class="banners-top-slider">
+          <div class="swiper-viewport">
+            <div id="banners_top_slider" class="swiper-container">
+              <div class="swiper-wrapper">
+                  {% for banner in banners_top.slider %}
+                    <div class="swiper-slide">{% if banner.link %}<a href="{{ banner.link }}"><img src="{{ banner.image }}" alt="{{ banner.title }}" class="img-responsive" /></a>{% else %}<img src="{{ banner.image }}" alt="{{ banner.title }}" class="img-responsive" />{% endif %}</div>
+                  {% endfor %}
+              </div>
+              <div class="swiper-pagination"></div>
+              <div class="swiper-button-prev"></div>
+              <div class="swiper-button-next"></div>
+            </div>
+          </div>
+        </div>
+    {% endif %}
+    <div class="banners-top-banner-1-2">
+        {% if banners_top.banner_1 %}
+          <div class="banners-top-banner-1">
+              {% if banners_top.banner_1.link %}<a href="{{ banners_top.banner_1.link }}"><img src="{{ banners_top.banner_1.image }}" alt="{{ banners_top.banner_1.title }}" class="img-responsive" /></a>{% else %}<img src="{{ banners_top.banner_1.image }}" alt="{{ banners_top.banner_1.title }}" class="img-responsive" />{% endif %}
+          </div>
+        {% endif %}
+        {% if banners_top.banner_2 %}
+          <div class="banners-top-banner-2">
+              {% if banners_top.banner_2.link %}<a href="{{ banners_top.banner_2.link }}"><img src="{{ banners_top.banner_2.image }}" alt="{{ banners_top.banner_2.title }}" class="img-responsive" /></a>{% else %}<img src="{{ banners_top.banner_2.image }}" alt="{{ banners_top.banner_2.title }}" class="img-responsive" />{% endif %}
+          </div>
+        {% endif %}
+    </div>
+  </div>
+
+  <script type="text/javascript">
+      $(document).ready(function () {
+          $('#banners_top_slider').swiper({
+              mode: 'horizontal',
+              slidesPerView: 1,
+              pagination: '.banners-top-slider-banner .swiper-pagination',
+              paginationClickable: true,
+              nextButton: '.banners-top-slider-banner .swiper-button-next',
+              prevButton: '.banners-top-slider-banner .swiper-button-prev',
+//          autoplay: 3500,
+              loop: true
+          });
+      })
+  </script>
+
+
+{% else %}
+
+<div class="swiper-viewport">
+  <div id="banner{{ module }}" class="swiper-container">
+    <div class="swiper-wrapper">{% for banner in banners %}
+      <div class="swiper-slide">{% if banner.link %}<a href="{{ banner.link }}"><img src="{{ banner.image }}" alt="{{ banner.title }}" class="img-responsive" /></a>{% else %}<img src="{{ banner.image }}" alt="{{ banner.title }}" class="img-responsive" />{% endif %}</div>
+      {% endfor %}</div>
+  </div>
+</div>
+<script type="text/javascript"><!--
+$('#banner{{ module }}').swiper({
+	effect: 'fade',
+	autoplay: 2500,
+    autoplayDisableOnInteraction: false
+});
+--></script>
+
+{% endif %}

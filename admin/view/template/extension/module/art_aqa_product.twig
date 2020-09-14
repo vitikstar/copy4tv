@@ -1,0 +1,787 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        <button type="button" id="button-delete" data-submit="{{ delete }}" data-toggle="tooltip" title="{{ button_delete }}" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
+        <button onclick="$('#input-apply').attr('value', '1'); $('#form-art_aqa_product').submit();" data-toggle="tooltip" title="{{ button_apply }}" class="btn btn-success"><i class="fa fa-check"></i></button>
+        <button type="submit" form="form-featured" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+        <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if success %}
+    <div class="alert alert-success"><i class="fa fa-check-circle"></i> {{ success }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
+      </div>
+      <div class="panel-body">
+        <ul class="nav nav-tabs nav-justified">
+          <li class="active"><a href="#tab-art_aqa" data-toggle="tab">{{ tab_aqa }}</a></li>
+          <li><a href="#tab-setting_main" data-toggle="tab">{{ tab_setting_main }}</a></li>
+          <li><a href="#tab-setting_form" data-toggle="tab">{{ tab_setting_form }}</a></li>
+          <li><a href="#tab-setting_mail" data-toggle="tab">{{ tab_setting_mail }}</a></li>
+          <li><a href="#tab-support" data-toggle="tab">{{ tab_support }}</a></li>
+        </ul>
+        <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-art_aqa_product" class="form-horizontal">
+          <div class="tab-content">
+            <div class="tab-pane active" id="tab-art_aqa">
+              <div class="well">
+                <div class="row">
+                  {# <div class="col-sm-4">
+                    <label class="control-label" >{{ text_filter_name }}</label>
+                    <input type="text" name="filter_product_name" value="" placeholder="Название товара:" class="form-control">
+                    <input type="hidden" name="filter_product_id" value="{{ filter_product_id }}">
+                  </div> #}
+                  <div class="col-sm-4">
+                    <label class="control-label">{{ text_filter_status }}</label>
+                    <select name="filter_status" class="form-control">
+                      <option value="*"></option>
+                      <option value="0" {{ filter_status == 0 ? 'selected' }} style="background:#f00;color:#fff;">{{ text_in_processing }}</option>
+                      <option value="1" {{ filter_status == 1 ? 'selected' }} style="background:#000;color:#fff;">{{ text_processed }}</option>
+                      <option value="2" {{ filter_status == 2 ? 'selected' }} style="background:#8fbb6c;color:#fff;">{{ text_publish }}</option>
+                    </select>
+                  </div>
+                  <div class="col-sm-4">
+                    <label class="control-label" style="display: block;"></label>
+                    <br>
+                    <button type="button" id="art_button-filter" class="btn btn-primary"><i class="fa fa-search"></i> {{ button_filter }}</button>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="panel-body">
+                  <div class="row">
+                    <div class="col-sm-6 text-left">{{ pagination }}</div>
+                    <div class="col-sm-6 text-right">{{ results }}</div>
+                  </div>
+                  <br>
+                  <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                      <thead>
+                        <tr>
+                          <td style="width: 1px;" class="text-center"><input type="checkbox" onclick="$('input[name*=\'selected\']').prop('checked', this.checked);" /></td>
+                          <td class="text-left">{% if sort == 'aqa.aqa_id' %}<a href="{{ sort_aqa_id }}" class="{{ order|lower }}">№</a>{% else %}<a href="{{ sort_aqa_id }}">№</a>{% endif %}</td>
+                          <td class="text-left" style="width: 140px">{% if sort == 'pd.name' %}<a href="{{ sort_theme }}" class="{{ order|lower }}">Тематика</a>{% else %}<a href="{{ sort_theme }}">Тематика</a>{% endif %}</td>
+                          {% if module_art_aqa_product_td_name == 0 and module_art_aqa_product_td_email == 0 and module_art_aqa_product_td_phone == 0 %}
+                            <td class="text-left">
+                            {% if module_art_aqa_product_td_name == 0 %}
+                              {% if sort == 'aqa.name' %}<a href="{{ sort_name }}" class="{{ order|lower }}">{{ column_user }}</a>{% else %}<a href="{{ sort_name }}">{{ column_user }}</a>{% endif %} /
+                            {% endif %}
+                            {% if module_art_aqa_product_td_email == 0 %}
+                              {% if sort == 'aqa.email' %}<a href="{{ sort_email }}" class="{{ order|lower }}">{{ column_email }}</a>{% else %}<a href="{{ sort_email }}">{{ column_email }}</a>{% endif %} / 
+                            {% endif %}
+                            {% if module_art_aqa_product_td_phone == 0 %}
+                              {% if sort == 'aqa.phone' %}<a href="{{ sort_phone }}" class="{{ order|lower }}">{{ column_phone }}</a>{% else %}<a href="{{ sort_phone }}">{{ column_phone }}</a>{% endif %}
+                            {% endif %}
+                            </td> 
+                          {% endif %}
+                          {% if module_art_aqa_product_td_name %}
+                            <td class="text-left">{% if sort == 'aqa.name' %}<a href="{{ sort_name }}" class="{{ order|lower }}">{{ column_user }}</a>{% else %}<a href="{{ sort_name }}">{{ column_user }}</a>{% endif %}</td> 
+                          {% endif %}
+                          {% if module_art_aqa_product_td_email %}
+                          <td class="text-left">{% if sort == 'aqa.email' %}<a href="{{ sort_email }}" class="{{ order|lower }}">{{ column_email }}</a>{% else %}<a href="{{ sort_email }}">{{ column_email }}</a>{% endif %}</td>
+                          {% endif %}
+                          {% if module_art_aqa_product_td_phone %}
+                          <td class="text-left">{% if sort == 'aqa.phone' %}<a href="{{ sort_phone }}" class="{{ order|lower }}">{{ column_phone }}</a>{% else %}<a href="{{ sort_phone }}">{{ column_phone }}</a>{% endif %}</td>
+                          {% endif %}
+                          {% if module_art_aqa_product_td_communication %} 
+                          <td class="text-left">{{ column_communication }}</td>
+                          {% endif %}
+                          {% if module_art_aqa_product_td_question %}
+                          <td class="text-left">{{ column_question }}</td>
+                          {% endif %}
+                          {% if module_art_aqa_product_td_answer %}
+                          <td class="text-left">{{ column_answer }}</td>
+                          {% endif %}
+                          {% if module_art_aqa_product_td_status %} 
+                          <td class="text-left" style="width: 105px">{% if sort == 'aqa.status' %}<a href="{{ sort_status }}" class="{{ order|lower }}">{{ column_status }}</a>{% else %}<a href="{{ sort_status }}">{{ column_status }}</a>{% endif %}</td>
+                          {% endif %}
+                          {% if module_art_aqa_product_td_ip %}
+                          <td class="text-left">{% if sort == 'aqa.ip' %}<a href="{{ sort_ip }}" class="{{ order|lower }}">{{ column_ip }}</a>{% else %}<a href="{{ sort_ip }}">{{ column_ip }}</a>{% endif %}</td>
+                          {% endif %}
+                          {% if module_art_aqa_product_td_date_added %} 
+                          <td class="text-left">{% if sort == 'aqa.date_added' %}<a href="{{ sort_date_added }}" class="{{ order|lower }}">{{ column_date_added }}</a>{% else %}<a href="{{ sort_date_added }}">{{ column_date_added }}</a>{% endif %}</td>
+                          {% endif %}
+                          {% if module_art_aqa_product_td_user_agent %} 
+                          <td class="text-left">{{ column_user_agent }}</td>
+                          {% endif %}
+                          {% if module_art_aqa_product_td_accept_language %} 
+                          <td class="text-left">{{ column_accept_language }}</td>
+                          {% endif %}
+                          {% if module_art_aqa_product_td_forwarded_ip %} 
+                          <td class="text-left">{{ column_forwarded_ip }}</td>
+                          {% endif %}
+                        <td></td>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% if art_aqa_products %}
+                        {% for art_aqa_product in art_aqa_products %}
+                        <tr>
+                          <td style="width: 1px;" class="text-center"><input type="checkbox" name="selected[]" value="{{ module_art_aqa_product['aqa_product_id'] }}" /></td>
+                          <td class="text-left">{{ art_aqa_product['aqa_product_id'] }}</td>
+                          <td class="text-left">{{ art_aqa_product['theme'] }}</td>
+                          <td class="text-left text-nowrap">
+                              {% if module_art_aqa_product_td_name %}
+                                {{ art_aqa_product['name'] }}
+                              {% endif %}
+                              {% if module_art_aqa_product_td_name == 0 %}
+                              <p><span data-toggle="tooltip" title="" class="btn btn-info btn-xs" data-original-title="{{ column_user }}"><i class="fa fa-user fa-fw"></i></span> {{ art_aqa_product['name'] }}</p>
+                              {% endif %}
+                              {% if module_art_aqa_product_td_email == 0 and art_aqa_product['email'] is not empty %}
+                              <p><span data-toggle="tooltip" title="" class="btn btn-info btn-xs" data-original-title="{{ column_email }}"><i class="fa fa-envelope-o fa-fw"></i></span><a href="mailto:{{ art_aqa_product['email'] }}"> {{ art_aqa_product['email'] }}</a></p>
+                              {% endif %}
+                              {% if module_art_aqa_product_td_phone == 0 and art_aqa_product['phone'] is not empty %}
+                              <p><span data-toggle="tooltip" title="" class="btn btn-info btn-xs" data-original-title="{{ column_phone }}"><i class="fa fa-phone fa-fw"></i></span><a href="tel:{{ art_aqa_product['phone'] }}"> {{ art_aqa_product['phone'] }}</a></p>
+                              {% endif %}
+                          </td>
+                        {% if module_art_aqa_product_td_email %}
+                          <td class="text-left"><a href="mailto:{{ art_aqa_product['email'] }}"> {{ art_aqa_product['email'] }}</a></td>
+                        {% endif %}
+                        {% if module_art_aqa_product_td_phone %}
+                          <td class="text-left"><a href="tel:{{ art_aqa_product['phone'] }}"> {{ art_aqa_product['phone'] }}</a></td>
+                        {% endif %}
+                        {% if module_art_aqa_product_td_communication %}
+                          <td class="text-left">{{ art_aqa_product['communication'] }}</td>
+                        {% endif %}
+                        {% if module_art_aqa_product_td_question %}
+                          <td class="text-left" style="width: 250px;">{{ art_aqa_product['question'] }}</td>
+                        {% endif %}
+                        {% if module_art_aqa_product_td_answer %}
+                          <td class="text-left" style="width: 250px;">{{ art_aqa_product['answer'] }}</td>
+                        {% endif %}
+                        {% if module_art_aqa_product_td_status %}
+                          <td class="text-left" style="white-space: nowrap;">{{ art_aqa_product['status'] }}</td>
+                        {% endif %}
+                        {% if module_art_aqa_product_td_ip %}
+                          <td class="text-left" style="white-space: nowrap;">{{ art_aqa_product['ip'] }}</td>
+                        {% endif %}
+                        {% if module_art_aqa_product_td_date_added %}
+                          <td class="text-left" style="white-space: nowrap;">{{ art_aqa_product['date_added'] }}</td>
+                        {% endif %}
+                        {% if module_art_aqa_product_td_user_agent %}
+                          <td class="text-left">{{ art_aqa_product['user_agent'] }}</td>
+                        {% endif %}
+                        {% if module_art_aqa_product_td_accept_language %} 
+                          <td class="text-left">{{ art_aqa_product['accept_language'] }}</td>
+                        {% endif %}
+                        {% if module_art_aqa_product_td_forwarded_ip %}
+                          <td class="text-left">{{ art_aqa_product['forwarded_ip'] }}</td>
+                        {% endif %}
+                          <td class="text-center"><a href="{{ art_aqa_product['edit'] }}" data-toggle="tooltip" title="" class="btn btn-primary" data-original-title="{{ button_edit }}"><i class="fa fa-pencil"></i></a> <a onclick="if (confirm('{{ text_confirm }}')) { return true; } else { return false; }" href="{{ art_aqa_product['delete'] }}" data-toggle="tooltip" title="" class="btn btn-danger" data-original-title="{{ button_delete }}"><i class="fa fa-trash-o"></i></a></td>
+                        </tr>
+                        {% endfor %}
+                        {% else %}
+                        <tr>
+                          <td class="text-center" colspan="20">{{ text_no_results }}</td>
+                        </tr>
+                        {% endif %}
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-6 text-left">{{ pagination }}</div>
+                    <div class="col-sm-6 text-right">{{ results }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane" id="tab-setting_main">
+              <input type="hidden" name="art_aqa_product_apply" id="input-apply" value="0" />
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
+                <div class="col-sm-10">
+                  <select name="module_art_aqa_product_status" id="input-status" class="form-control">
+                    {% if module_art_aqa_product_status %}
+                    <option value="1" selected="selected">{{ text_enabled }}</option>
+                    <option value="0">{{ text_disabled }}</option>
+                    {% else %}
+                    <option value="1">{{ text_enabled }}</option>
+                    <option value="0" selected="selected">{{ text_disabled }}</option>
+                    {% endif %}
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-token">{{ entry_token }}</label>
+                <div class="col-sm-10">
+                  <input type="text" name="module_art_aqa_product_token" value="{{ module_art_aqa_product_token }}" placeholder="{{ entry_token }}" id="input-token" class="form-control" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-id">{{ entry_id }}</label>
+                <div class="col-sm-10">
+                  <input type="text" name="module_art_aqa_product_id" value="{{ module_art_aqa_product_id }}" placeholder="{{ entry_id }}" id="input-id" class="form-control" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-email"><span data-toggle="tooltip" title="" data-original-title="{{ help_email }}">{{ entry_email }}</span></label>
+                <div class="col-sm-10">
+                  <input type="text" name="module_art_aqa_product_email" value="{{ module_art_aqa_product_email }}" placeholder="{{ entry_email }}" id="input-email" class="form-control" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-default_title">{{ entry_default_title }}</label>
+                <div class="col-sm-10">
+                  <input type="text" name="module_art_aqa_product_default_title" value="{{ module_art_aqa_product_default_title }}" placeholder="{{ entry_default_title }}" id="input-default_title" class="form-control" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-default_title">{{ entry_default_image }}</label>
+                <div class="col-sm-10">
+                  <div class="col-sm-8"><a href="" id="thumb-image" data-toggle="image" class="img-thumbnail"><img src="{{ module_art_aqa_product_default_image_cache }}" alt="" title="" data-placeholder="{{ placeholder }}" /></a><input type="hidden" name="module_art_aqa_product_default_image" value="{{ module_art_aqa_product_default_image }}" id="input-image" /></div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-send_success">{{ entry_send_success }}</label>
+                <div class="col-sm-10">
+                  {% for language in languages %}
+                    <img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" />
+                    <input style="width:calc(100% - 20px);display:inline-block;margin-bottom: 10px!important;" class="form-control" type="text" name="module_art_aqa_product_send_success[{{ language.language_id }}]" value="{{ module_art_aqa_product_send_success[language.language_id] ? module_art_aqa_product_send_success[language.language_id] }}" placeholder="{{ entry_send_success }}">
+                    <br>
+                  {% endfor %}
+                </div>
+              </div>  
+              <fieldset>
+                <legend>{{ tab_catalog }}</legend>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-title_tab">{{ entry_title_tab }}</label>
+                  <div class="col-sm-10">
+                    <input type="text" name="module_art_aqa_product_title_tab" value="{{ module_art_aqa_product_title_tab }}" placeholder="{{ entry_title_tab }}" id="input-title_tab" class="form-control" />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-limit">{{ entry_limit }}</label>
+                  <div class="col-sm-10">
+                    <input type="text" name="module_art_aqa_product_limit" value="{{ module_art_aqa_product_limit }}" placeholder="{{ entry_limit }}" id="input-limit" class="form-control" />
+                  </div>
+                </div> 
+                <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-form"><span data-toggle="tooltip" title="" data-original-title="{{ help_form }}">{{ entry_form }}</span></label>
+                  <div class="col-sm-10">
+                    <select class="form-control" name="module_art_aqa_product_form" id="input-form">
+                      <option value="1" {{ module_art_aqa_product_form == 1 ? 'selected' }}>{{ text_form_1 }}</option>
+                      <option value="2" {{ module_art_aqa_product_form == 2 ? 'selected' }}>{{ text_form_2 }}</option>
+                      <option value="3" {{ module_art_aqa_product_form == 3 ? 'selected' }}>{{ text_form_3 }}</option>
+                      <option value="4" {{ module_art_aqa_product_form == 4 ? 'selected' }}>{{ text_form_4 }}</option>
+                    </select>
+                  </div>
+                </div>
+              </fieldset>
+              <fieldset>
+                <legend>{{ text_display }}</legend>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-name">{{ entry_td_name }}</label>
+                  <div class="col-sm-10">
+                  <select name="module_art_aqa_product_td_name" id="input-name" class="form-control">
+                    {% if module_art_aqa_product_td_name %}
+                    <option value="1" selected="selected">{{ text_enabled }}</option>
+                    <option value="0">{{ text_disabled }}</option>
+                    {% else %}
+                    <option value="1">{{ text_enabled }}</option>
+                    <option value="0" selected="selected">{{ text_disabled }}</option>
+                    {% endif %}
+                  </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-email">{{ entry_td_email }}</label>
+                  <div class="col-sm-10">
+                  <select name="module_art_aqa_product_td_email" id="input-email" class="form-control">
+                    {% if module_art_aqa_product_td_email %}
+                    <option value="1" selected="selected">{{ text_enabled }}</option>
+                    <option value="0">{{ text_disabled }}</option>
+                    {% else %}
+                    <option value="1">{{ text_enabled }}</option>
+                    <option value="0" selected="selected">{{ text_disabled }}</option>
+                    {% endif %}
+                  </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-phone">{{ entry_td_phone }}</label>
+                  <div class="col-sm-10">
+                  <select name="module_art_aqa_product_td_phone" id="input-phone" class="form-control">
+                    {% if module_art_aqa_product_td_phone %}
+                    <option value="1" selected="selected">{{ text_enabled }}</option>
+                    <option value="0">{{ text_disabled }}</option>
+                    {% else %}
+                    <option value="1">{{ text_enabled }}</option>
+                    <option value="0" selected="selected">{{ text_disabled }}</option>
+                    {% endif %}
+                  </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-communication">{{ entry_td_communication }}</label>
+                  <div class="col-sm-10">
+                  <select name="module_art_aqa_product_td_communication" id="input-communication" class="form-control">
+                    {% if module_art_aqa_product_td_communication %}
+                    <option value="1" selected="selected">{{ text_enabled }}</option>
+                    <option value="0">{{ text_disabled }}</option>
+                    {% else %}
+                    <option value="1">{{ text_enabled }}</option>
+                    <option value="0" selected="selected">{{ text_disabled }}</option>
+                    {% endif %}
+                  </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-comment">{{ entry_td_question }}</label>
+                  <div class="col-sm-10">
+                  <select name="module_art_aqa_product_td_question" id="input-comment" class="form-control">
+                    {% if module_art_aqa_product_td_question %}
+                    <option value="1" selected="selected">{{ text_enabled }}</option>
+                    <option value="0">{{ text_disabled }}</option>
+                    {% else %}
+                    <option value="1">{{ text_enabled }}</option>
+                    <option value="0" selected="selected">{{ text_disabled }}</option>
+                    {% endif %}
+                  </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-answer">{{ entry_td_answer }}</label>
+                  <div class="col-sm-10">
+                  <select name="module_art_aqa_product_td_answer" id="input-answer" class="form-control">
+                    {% if module_art_aqa_product_td_answer %}
+                    <option value="1" selected="selected">{{ text_enabled }}</option>
+                    <option value="0">{{ text_disabled }}</option>
+                    {% else %}
+                    <option value="1">{{ text_enabled }}</option>
+                    <option value="0" selected="selected">{{ text_disabled }}</option>
+                    {% endif %}
+                  </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-td_status">{{ entry_td_status }}</label>
+                  <div class="col-sm-10">
+                  <select name="module_art_aqa_product_td_status" id="input-td_status" class="form-control">
+                    {% if module_art_aqa_product_td_status %}
+                    <option value="1" selected="selected">{{ text_enabled }}</option>
+                    <option value="0">{{ text_disabled }}</option>
+                    {% else %}
+                    <option value="1">{{ text_enabled }}</option>
+                    <option value="0" selected="selected">{{ text_disabled }}</option>
+                    {% endif %}
+                  </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-date_added">{{ entry_td_date_added }}</label>
+                  <div class="col-sm-10">
+                  <select name="module_art_aqa_product_td_date_added" id="input-date_added" class="form-control">
+                    {% if module_art_aqa_product_td_date_added %}
+                    <option value="1" selected="selected">{{ text_enabled }}</option>
+                    <option value="0">{{ text_disabled }}</option>
+                    {% else %}
+                    <option value="1">{{ text_enabled }}</option>
+                    <option value="0" selected="selected">{{ text_disabled }}</option>
+                    {% endif %}
+                  </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-ip">{{ entry_td_ip }}</label>
+                  <div class="col-sm-10">
+                  <select name="module_art_aqa_product_td_ip" id="input-ip" class="form-control">
+                    {% if module_art_aqa_product_td_ip %}
+                    <option value="1" selected="selected">{{ text_enabled }}</option>
+                    <option value="0">{{ text_disabled }}</option>
+                    {% else %}
+                    <option value="1">{{ text_enabled }}</option>
+                    <option value="0" selected="selected">{{ text_disabled }}</option>
+                    {% endif %}
+                  </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-forwarded_ip">{{ entry_td_forwarded_ip }}</label>
+                  <div class="col-sm-10">
+                  <select name="module_art_aqa_product_td_forwarded_ip" id="input-forwarded_ip" class="form-control">
+                    {% if module_art_aqa_product_td_forwarded_ip %}
+                    <option value="1" selected="selected">{{ text_enabled }}</option>
+                    <option value="0">{{ text_disabled }}</option>
+                    {% else %}
+                    <option value="1">{{ text_enabled }}</option>
+                    <option value="0" selected="selected">{{ text_disabled }}</option>
+                    {% endif %}
+                  </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-user_agent">{{ entry_td_user_agent }}</label>
+                  <div class="col-sm-10">
+                  <select name="module_art_aqa_product_td_user_agent" id="input-user_agent" class="form-control">
+                    {% if module_art_aqa_product_td_user_agent %}
+                    <option value="1" selected="selected">{{ text_enabled }}</option>
+                    <option value="0">{{ text_disabled }}</option>
+                    {% else %}
+                    <option value="1">{{ text_enabled }}</option>
+                    <option value="0" selected="selected">{{ text_disabled }}</option>
+                    {% endif %}
+                  </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-accept_language">{{ entry_td_accept_language }}</label>
+                  <div class="col-sm-10">
+                  <select name="module_art_aqa_product_td_accept_language" id="input-accept_language" class="form-control">
+                    {% if module_art_aqa_product_td_accept_language %}
+                    <option value="1" selected="selected">{{ text_enabled }}</option>
+                    <option value="0">{{ text_disabled }}</option>
+                    {% else %}
+                    <option value="1">{{ text_enabled }}</option>
+                    <option value="0" selected="selected">{{ text_disabled }}</option>
+                    {% endif %}
+                  </select>
+                  </div>
+                </div>
+              </fieldset> 
+            </div>
+            <div class="tab-pane" id="tab-setting_form">
+              <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                  <tr>
+                    <th width="300px"></th>
+                    <th width="100px" class="text-center">{{ entry_f_select }}</th>
+                    <th width="110px" class="text-center">{{ text_required }}</th>
+                    <th width="110px" class="text-center">{{ text_no_required }}</th>
+                    <th width="100px" class="text-center">{{ text_disabled }}</th>
+                    <th class="text-center">{{ text_name }}</th>
+                  </tr>
+                  <tr>
+                    <td>{{ entry_f_name }}</td>
+                    <td></td>
+                    <td class="text-center">
+                      <input type="radio" name="module_art_aqa_product_f_name" value="2" {{ module_art_aqa_product_f_name == 2 ? 'checked="checked"' }} />
+                    </td>
+                    <td class="text-center">
+                      <input type="radio" name="module_art_aqa_product_f_name" value="1" {{ module_art_aqa_product_f_name == 1 ? 'checked="checked"' }} />
+                    </td>
+                    <td class="text-center">
+                      <input type="radio" name="module_art_aqa_product_f_name" value="0" {{ module_art_aqa_product_f_name == 0 ? 'checked="checked"' }}/>
+                    </td>
+                    <td>
+                      {% for language in languages %}
+                        <img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" />
+                        <input style="width:calc(100% - 20px);display:inline-block;margin-bottom: 10px!important" class="form-control" type="text" name="module_art_aqa_product_text_f_name[{{ language.language_id }}]" value="{{ module_art_aqa_product_text_f_name[language.language_id] ? module_art_aqa_product_text_f_name[language.language_id] }}" placeholder="{{ entry_f_name }}">
+                        <br>
+                      {% endfor %}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>{{ entry_f_email }}</td>
+                    <td class="text-center" rowspan="2">
+                      {% if module_art_aqa_product_f_select %}
+                      <input type="checkbox" name="module_art_aqa_product_f_select" id="input-f_select" checked="checked" />
+                      {% else %}
+                      <input type="checkbox" name="module_art_aqa_product_f_select" id="input-f_select" />
+                      {% endif %}
+                    </td>
+                    <td class="text-center">
+                      <input type="radio" name="module_art_aqa_product_f_email" value="2" {% if module_art_aqa_product_f_email == 2 %} checked="checked" {% endif %} />
+                    </td>
+                    <td class="text-center">
+                      <input type="radio" name="module_art_aqa_product_f_email" value="1" {% if module_art_aqa_product_f_email == 1 %} checked="checked" {% endif %} />
+                    </td>
+                    <td class="text-center">
+                      <input type="radio" name="module_art_aqa_product_f_email" value="0" {% if module_art_aqa_product_f_email == 0 %} checked="checked" {% endif %} />
+                    </td>
+                    <td>
+                      {% for language in languages %}
+                        <img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" />
+                        <input style="width:calc(100% - 20px);display:inline-block;margin-bottom: 10px!important" class="form-control" type="text" name="module_art_aqa_product_text_f_email[{{ language.language_id }}]" value="{{ module_art_aqa_product_text_f_email[language.language_id] ? module_art_aqa_product_text_f_email[language.language_id] }}" placeholder="{{ entry_f_email }}">
+                        <br>
+                      {% endfor %}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>{{ entry_f_telephone }}</td>
+                    <td class="text-center">
+                      <input type="radio" name="module_art_aqa_product_f_telephone" value="2" {% if module_art_aqa_product_f_telephone == 2 %} checked="checked" {% endif %} />
+                    </td>
+                    <td class="text-center">
+                      <input type="radio" name="module_art_aqa_product_f_telephone" value="1" {% if module_art_aqa_product_f_telephone == 1 %} checked="checked" {% endif %}  />
+                    </td>
+                    <td class="text-center">
+                      <input type="radio" name="module_art_aqa_product_f_telephone" value="0" {% if module_art_aqa_product_f_telephone == 0 %} checked="checked" {% endif %} />
+                    </td>
+                    <td>
+                      {% for language in languages %}
+                        <img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" />
+                        <input style="width:calc(100% - 20px);display:inline-block;margin-bottom: 10px!important" class="form-control" type="text" name="module_art_aqa_product_text_f_telephone[{{ language.language_id }}]" value="{{ module_art_aqa_product_text_f_telephone[language.language_id] ? module_art_aqa_product_text_f_telephone[language.language_id] }}" placeholder="{{ entry_f_telephone }}">
+                        <br>
+                      {% endfor %}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>{{ entry_f_question }}</td>
+                    <td></td>
+                    <td class="text-center">
+                      <input type="radio" name="module_art_aqa_product_f_question" value="2" {{ module_art_aqa_product_f_question == 2 ? 'checked="checked"' }} />
+                    </td>
+                    <td class="text-center">
+                      <input type="radio" name="module_art_aqa_product_f_question" value="1" {{ module_art_aqa_product_f_question == 1 ? 'checked="checked"' }}  />
+                    </td>
+                    <td class="text-center">
+                      <input type="radio" name="module_art_aqa_product_f_question" value="0" {{ module_art_aqa_product_f_question == 0 ? 'checked="checked"' }} />
+                    </td>
+                    <td>
+                      {% for language in languages %}
+                        <img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" />
+                        <input style="width:calc(100% - 20px);display:inline-block;margin-bottom: 10px!important" class="form-control" type="text" name="module_art_aqa_product_text_f_question[{{ language.language_id }}]" value="{{ module_art_aqa_product_text_f_question[language.language_id] ? module_art_aqa_product_text_f_question[language.language_id] }}" placeholder="{{ entry_f_question }}">
+                        <br>
+                      {% endfor %}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>{{ entry_f_communication }}</td>
+                    <td></td>
+                    <td class="text-center"></td>
+                    <td class="text-center">
+                      <input type="radio" name="module_art_aqa_product_f_communication" value="1" {{ module_art_aqa_product_f_communication == 1 ? 'checked="checked"' }} />
+                    </td>
+                    <td class="text-center">
+                      <input type="radio" name="module_art_aqa_product_f_communication" value="0" {{ module_art_aqa_product_f_communication == 0 ? 'checked="checked"' }} />
+                    </td>
+                    <td>
+                      {% for language in languages %}
+                        <img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" />
+                        <input style="width:calc(100% - 20px);display:inline-block;margin-bottom: 10px!important" class="form-control" type="text" name="module_art_aqa_product_text_f_communication[{{ language.language_id }}]" value="{{module_art_aqa_product_text_f_communication[language.language_id] ? module_art_aqa_product_text_f_communication[language.language_id] }}" placeholder="{{ entry_f_communication }}">
+                        <br>
+                      {% endfor %}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>{{ entry_f_personal_data }}</td>
+                    <td></td>
+                    <td class="text-center">
+                      <input type="radio" name="module_art_aqa_product_f_personal_data" value="2" {{ module_art_aqa_product_f_question == 2 ? 'checked="checked"' }} />
+                    </td>
+                    <td class="text-center"></td>
+                    <td class="text-center">
+                      <input type="radio" name="module_art_aqa_product_f_personal_data" value="0" {{ module_art_aqa_product_f_personal_data == 0 ? 'checked="checked"' }} />
+                    </td>
+                    <td>
+                      {% for language in languages %}
+                        <img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" />
+                        <textarea class="form-control" style="vertical-align: middle;width:calc(100% - 20px);display:inline-block;resize: vertical;margin-bottom: 10px!important" type="text" name="module_art_aqa_product_text_f_personal_data[{{ language.language_id }}]" placeholder="{{ entry_f_personal_data|striptags }}">{{ module_art_aqa_product_text_f_personal_data[language.language_id] ? module_art_aqa_product_text_f_personal_data[language.language_id] }}</textarea>
+                        <br>
+                      {% endfor %}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>{{ entry_f_captcha }}</td>
+                    <td></td>
+                    <td class="text-center">
+                      <input type="radio" name="module_art_aqa_product_f_captcha" value="2" {{ module_art_aqa_product_f_captcha == 2 ? 'checked="checked"' }} />
+                    </td>
+                    <td class="text-center"></td>
+                    <td class="text-center">
+                      <input type="radio" name="module_art_aqa_product_f_captcha" value="0" {{ module_art_aqa_product_f_captcha == 0 ? 'checked="checked"' }} />
+                    </td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div class="tab-pane" id="tab-setting_mail">    
+              <div class="col-sm-3">           
+                <ul class="nav nav-pills nav-stacked">
+                  <li class="active"><a href="#tab-mail_question" data-toggle="tab">{{ entry_mail_question }}</a></li>
+                  <li><a href="#tab-mail_answer" data-toggle="tab">{{ entry_mail_answer }}</a></li>
+                </ul>
+                <br>
+                <br>
+                <table class="table table-bordered table-hover">
+                  <tbody>
+                    <tr>
+                      <th width="35%">{{ text_variable }}</th>
+                      <th width="65%">{{ text_description }}</th>
+                    </tr>
+                    {% set common_info = [
+                        'aqa_id',
+                        'store_name',
+                        'store_url',
+                        'date_added',
+                        'firstname',
+                        'question',
+                        'answer',
+                        'product',
+                        'product_link'
+                      ]
+                    %}
+                    {% for key in common_info %}
+                    <tr>
+                      <td class="copy">{{ '{' ~ key ~ '}' }}</td> 
+                      <td>{{ attribute(_context, 'entry_'~key) }}</td>
+                    </tr>
+                    {% endfor %}                        
+                  </tbody>
+                </table>
+              </div>
+              <div class="tab-content col-sm-9">
+                <div class="tab-pane active" id="tab-mail_question">
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-mail_question_status">{{ entry_status }}</label>
+                    <div class="col-sm-10">
+                      <select name="module_art_aqa_product_mail_question_status" id="input-mail_question_status" class="form-control">
+                        {% if module_art_aqa_product_mail_question_status %}
+                        <option value="1" selected="selected">{{ text_enabled }}</option>
+                        <option value="0">{{ text_disabled }}</option>
+                        {% else %}
+                        <option value="1">{{ text_enabled }}</option>
+                        <option value="0" selected="selected">{{ text_disabled }}</option>
+                        {% endif %}
+                      </select>
+                    </div>
+                  </div>
+                  <ul class="nav nav-tabs" id="language_mail_question">
+                    {% for language in languages %}
+                    <li><a href="#language_mail_question{{ language.language_id }}" data-toggle="tab"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /> {{ language.name }}</a></li>
+                    {% endfor %}
+                  </ul>
+                  <div class="tab-content">
+                    {% for language in languages %}
+                    <div class="tab-pane" id="language_mail_question{{ language.language_id }}">
+                      <div class="form-group">
+                        <label class="col-sm-12" for="input-mail_question_title">{{ entry_mail_title }}</label>
+                        <div class="col-sm-12">
+                          <input type="text" name="module_art_aqa_product_mail_question_title[{{ language.language_id }}]" placeholder="{{ entry_mail_title }}" value="{{ module_art_aqa_product_mail_question_title[language.language_id] ? module_art_aqa_product_mail_question_title[language.language_id] }}" id="input-mail_question_title" class="form-control" />
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="col-sm-12" for="input-mail_question">{{ entry_mail_question }}</label>
+                        <div class="col-sm-12">
+                          <textarea class="form-control" data-toggle="summernote" name="module_art_aqa_product_mail_question[{{ language.language_id }}]">{{ module_art_aqa_product_mail_question[language.language_id] ? module_art_aqa_product_mail_question[language.language_id] }}</textarea>
+                        </div>
+                      </div>
+                    </div>
+                    {% endfor %}
+                  </div>
+                </div>
+                <div class="tab-pane" id="tab-mail_answer">
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-mail_answer_status">{{ entry_status }}</label>
+                    <div class="col-sm-10">
+                      <select name="module_art_aqa_product_mail_answer_status" id="input-mail_answer_status" class="form-control">
+                        {% if module_art_aqa_product_mail_answer_status %}
+                        <option value="1" selected="selected">{{ text_enabled }}</option>
+                        <option value="0">{{ text_disabled }}</option>
+                        {% else %}
+                        <option value="1">{{ text_enabled }}</option>
+                        <option value="0" selected="selected">{{ text_disabled }}</option>
+                        {% endif %}
+                      </select>
+                    </div>
+                  </div>
+                  <ul class="nav nav-tabs" id="language_mail_answer">
+                    {% for language in languages %}
+                    <li><a href="#language_mail_answer{{ language.language_id }}" data-toggle="tab"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /> {{ language.name }}</a></li>
+                    {% endfor %}
+                  </ul>
+                  <div class="tab-content">
+                    {% for language in languages %}
+                    <div class="tab-pane" id="language_mail_answer{{ language.language_id }}">
+                      <div class="form-group">
+                        <label class="col-sm-12" for="input-mail_answer_title">{{ entry_mail_title }}</label>
+                        <div class="col-sm-12">
+                          <input type="text" name="module_art_aqa_product_mail_answer_title[{{ language.language_id }}]"placeholder="{{ entry_mail_title }}" value="{{ module_art_aqa_product_mail_answer_title[language.language_id] ? module_art_aqa_product_mail_answer_title[language.language_id] }}" id="input-mail_answer_title" class="form-control" />
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="col-sm-12" for="input-mail_answer">{{ entry_mail_answer }}</label>
+                        <div class="col-sm-12">
+                          <textarea class="form-control" data-toggle="summernote" name="module_art_aqa_product_mail_answer[{{ language.language_id }}]">{{ module_art_aqa_product_mail_answer[language.language_id] ? module_art_aqa_product_mail_answer[language.language_id] }}</textarea>
+                        </div>
+                      </div>
+                    </div>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane" id="tab-support">
+              <div class="panel-body">
+                <h3>{{ text_help_module }} <a href="mailto:serfbots@gmail.com"><b>serfbots@gmail.com</b></a></h3>
+                <div class="alert bg-info">
+                  <b>{{ text_author }}</b>
+                </div>
+                <h4><strong>{{ text_service_module }}</strong></h4>
+                <hr>
+                <h4>{{ text_service_web }} <a href="https://cmsshop.com.ua/" target="_blank"><b>cmsshop.com.ua</b></a></h4>
+                <hr>
+                <h4>{{ text_service_telegram }} <a href="https://telegrambot.com.ua/" target="_blank"><b>telegrambot.com.ua</b></a></h4>
+                <hr>
+                <h4>{{ text_service_seo }} <strong><a href="mailto:velmob3@gmail.com">velmob3@gmail.com</a></strong></h4>  
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<link href="view/javascript/codemirror/lib/codemirror.css" rel="stylesheet" />
+<link href="view/javascript/codemirror/theme/monokai.css" rel="stylesheet" />
+<script type="text/javascript" src="view/javascript/codemirror/lib/codemirror.js"></script> 
+<script type="text/javascript" src="view/javascript/codemirror/lib/xml.js"></script> 
+<script type="text/javascript" src="view/javascript/codemirror/lib/formatting.js"></script> 
+
+<script type="text/javascript" src="view/javascript/summernote/summernote.js"></script>
+<link href="view/javascript/summernote/summernote.css" rel="stylesheet" />
+<script type="text/javascript" src="view/javascript/summernote/summernote-image-attributes.js"></script>
+<script type="text/javascript" src="view/javascript/summernote/opencart.js"></script>
+
+<script type="text/javascript">
+  $('#language_mail_question a:first').tab('show');
+  $('#language_mail_answer a:first').tab('show');
+
+  $('#button-delete').on('click', function(e) {
+    $('#form-art_aqa_product').attr('action', $(this).attr('data-submit'));
+    
+    if (confirm('{{ text_confirm }}')) {
+      $('#form-art_aqa_product').submit();
+    } else {
+      return false;
+    }
+  });
+
+  $('#art_button-filter').on('click', function() {
+    url = 'index.php?route=extension/module/art_aqa_product&user_token={{ user_token }}';
+
+    var filter = [
+      'filter_product_id',
+    ]
+
+    for (var i = filter.length - 1; i >= 0; i--) {
+      var temp = $('input[name=\''+filter[i]+'\']').val();
+      if (temp) {
+        url += '&'+filter[i]+'=' + encodeURIComponent(temp);
+      }
+    }
+
+    var filter_status = $('select[name=\'filter_status\']').val();
+    if (filter_status != '*') {
+      url += '&filter_status=' + encodeURIComponent(filter_status);
+    }
+
+    location = url;
+  });
+
+</script>
+{{ footer }}

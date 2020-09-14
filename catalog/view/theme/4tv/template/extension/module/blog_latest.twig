@@ -1,0 +1,37 @@
+<div class="blog-latest-block-wrap">
+  <div class="heading-title-1">{{ heading_title }}</div>
+  <div class="blog-latest-slider-wrapper products-slider-wrapper products-wrapper">
+    <div class="swiper-viewport">
+      <div class="swiper-pager">
+        {{ text_view_all }}
+        <div class="swiper-button-next">
+          <i class="fa fa-angle-right"></i>
+        </div>
+        <div class="swiper-button-prev">
+          <i class="fa fa-angle-left"></i>
+        </div>
+      </div>
+      <div class="products-slider swiper-container">
+        <div class="swiper-wrapper">
+             {% for article in articles %}
+              <div class="swiper-slide">
+                <div class="product-layout">
+                  <div class="product-thumb transition">
+                    <div class="image"><a href="{{ article.href }}"><img src="{{ article.thumb }}" alt="{{ article.name }}" title="{{ article.name }}" class="img-responsive" /></a></div>
+                    <div class="caption">
+                      <div class="blog-latest-name products-name give-me-ellipsis"><a href="{{ article.href }}">{{ article.name }}</a></div>
+                      <div class="blog-latest-date">{{ article.date_added }}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+        </div>
+          <div class="swiper-pagination"></div>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+

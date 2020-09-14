@@ -1,0 +1,22 @@
+{% if (tracks) %}
+    <div class="table-responsive">
+        <table class="table table-condensed ne_stats_recipient_track">
+            <thead>
+            <tr>
+                <th class="text-left">{{ entry_url }}</th>
+                <th class="text-right">{{ entry_clicks }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for entry in tracks %}
+                <tr>
+                    <td class="text-left"><a href="{{ entry['url'] }}" target="_blank">{{ entry['url'] }}</a></td>
+                    <td class="text-right">{{ entry['clicks'] }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <p class="text-center">{{ text_no_data }}</p>
+{% endif %}

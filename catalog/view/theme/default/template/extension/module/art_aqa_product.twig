@@ -1,0 +1,132 @@
+<style>
+	.art_hidden{display: none;}
+	.art_communication svg{ width: 25px; height: 25px; cursor: pointer;display: inline-block;vertical-align: middle;fill:#559BA7;}
+	.art_communication label span {display: inline-block;vertical-align: middle;cursor: pointer;}
+	.art_communication label {display: inline-block;margin: 0;margin-right: 20px;}
+	.art_communication input[type="radio"]:checked + svg {fill: #e00d03;}
+	[for="input-communication"]{text-align: left!important}
+	.art_aqa_product_info{margin-bottom: 16px;}
+	.art_question_body{padding: 16px;font-size: 14px;}
+	.art_question_title{
+		display: flex;
+	    -webkit-box-orient: horizontal;
+	    -webkit-box-direction: normal;
+	    -ms-flex-direction: row;
+	    flex-direction: row;
+	    -webkit-box-align: center;
+	    -ms-flex-align: center;
+	    align-items: center;
+	    font-size: 16px;
+    	font-weight: 700;
+	}
+	.art_question_title img{margin-right: 5px}
+	.art_question_header{padding: 8px 16px;border-bottom: 1px solid #e9e9e9;}
+	.art_question_date{margin-left: auto;font-size: 12px;font-weight: 400;color: #a6a5a5;}
+	.art_aqa_product_question,.art_aqa_product_answer{border: 1px solid #e9e9e9;}
+	.art_aqa_product_answer{margin-top: 16px;margin-left: 16px;position: relative;}
+	.art_aqa_product_answer:before{content: '';position: absolute;top: 0;left: -16px;height: 100%;width: 1px; background: #e9e9e9}
+	.art_aqa_product_answer .art_question_header{border-bottom: none;}
+	.art_aqa_product_question .art_question_body p{margin-bottom: 0;}
+	.art_aqa_product_answer .art_question_body{padding-top: 8px;}
+	.art_aqa_product_block{margin-bottom: 20px;}
+</style>
+
+{% if art_aqa_product_form_type == 1 %}
+	<div class="contact-ask">
+		<div class="footer-column-title">{{ text_art_aqa }}</div>
+		<div class="contact-ask-descr">{{ text_info }}</div>
+	<button type="button" class="contact-ask-btn btn btn-default" id="art_aqa_product_modal_btn">{{ art_aqa_product_title }}</button>
+</div>
+{% endif %}
+
+{% if art_aqa_product_form_type == 3 %}
+	<div class="form-horizontal">
+		<h3>{{ art_aqa_product_title }}</h3>
+		{{ art_form }}
+	</div>
+{% endif %}
+
+{{ product_question }}
+
+{% if art_aqa_product_form_type == 2 %}
+<div class="art_aqa_product_block">
+	<button type="button" class="btn btn-primary btn-lg" id="art_aqa_product_modal_btn">{{ art_aqa_product_title }}</button>
+</div>
+{% endif %}
+
+{% if art_aqa_product_form_type == 4 %}
+	<div class="form-horizontal">
+		<h3>{{ art_aqa_product_title }}</h3>
+		{{ art_form }}
+	</div>
+{% endif %}
+
+{% if art_aqa_product_form_type == 1 or art_aqa_product_form_type == 2 %}
+<div id="art_aqa_product_modal" class="modal modal-custom fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+				<h3 class="modal-title">{{ art_aqa_product_title }}</h3>
+			</div>
+			<div class="modal-body">
+				{{ art_form }}
+			</div>
+		</div>
+	</div>
+</div>
+{% endif %}
+
+<script>
+	$('#art_aqa_product_modal_btn').click(function(){
+		$('#art_aqa_product_modal').modal('show');
+	})
+
+	$('#art_aqa_product_questions').delegate('.pagination a', 'click', function(e) {
+	    e.preventDefault();
+	    $('#art_aqa_product_questions').fadeOut('slow');
+	    $('#art_aqa_product_questions').load(this.href);
+	    $('#art_aqa_product_questions').fadeIn('slow');
+	    $('html, body').animate({
+	        scrollTop: $('#art_aqa_product_questions').offset().top - 100
+	    }, 750);
+	});
+
+	$('#button-art_aqa_product').on('click', function() {
+	  $.ajax({
+	    url: 'index.php?route=extension/module/art_aqa_product/sendmessage',
+	    type: 'post',
+	    dataType: 'json',
+	    data: $("#form-art_aqa_product").serialize(),
+	    beforeSend: function() {
+	      $('#button-art_aqa_product').button('loading');
+	    },
+	    complete: function() {
+	      $('#button-art_aqa_product').button('reset');
+	    },
+	    success: function(json) {
+	      $('.alert-success, .alert-danger').remove();
+
+	      if (json['error']) {
+	        $('#art_aqa_product').after('<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> ' + json['error'] + '</div>');
+	      }
+
+	      if (json['success']) {
+			$.ajax({
+				url: 'index.php?route=extension/module/art_aqa_product/success',
+				type: 'post',
+				success: function(data) {
+					$('#art_aqa_product_modal').modal('hide');
+					$('#art_aqa_product_modal_success').remove();
+					$('body').prepend(data);
+					$('#art_aqa_product_modal_success').modal('show');
+				}
+			});
+		
+	        $('#form-art_aqa_product input:not([type=\'hidden\'])').val('');
+	        $('#form-art_aqa_product textarea').val('');
+	      }
+	    }
+	  });
+	});
+</script>

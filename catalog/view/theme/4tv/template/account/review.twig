@@ -1,0 +1,104 @@
+{{ header }}
+<div id="account-review" class="container">
+    <div class="breadcrumb-product-wrap">
+            {{ column_megamenu }}
+        <ul class="breadcrumb">
+            {% set total = breadcrumbs|length %}
+            {% set counter = 0 %}
+            {% for breadcrumb in breadcrumbs %}
+                {{ breadcrumb['separator'] }}
+                {% set counter = counter + 1 %}
+                {% if (counter == total) %}
+                    <li>{{ breadcrumb['text'] }}</li>
+                {% else %}
+                    <li><a href="{{ breadcrumb['href'] }}">{{ breadcrumb['text'] }}</a></li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+
+    {% if success %}
+        <div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> {{ success }}
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+        </div>
+    {% endif %}
+    <div class="ac-row row">
+
+        <div class="ac-col-left">{{ column_left }}</div>
+
+        {% if column_left and column_right %}
+            {% set class = 'col-sm-6' %}
+        {% elseif column_left or column_right %}
+            {% set class = 'col-sm-9' %}
+        {% else %}
+            {% set class = 'col-sm-12' %}
+        {% endif %}
+        <div id="content" class="{{ class }}">{{ content_top }}
+            <div class="main-category-filter">
+                <div class="ac-personal-title">{{ heading_title }}</div>
+                <div class="category-sort-wrap">
+                    <div class="category-sort-select">
+                        <select id="input-sort" class="form-control">
+                            {% for  key,sort in sorts %}
+                                <option value="{{ key }}">{{ sort }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="ac-review-wrapper">
+                <div class="ac-reviews" id="ac-reviews"></div>
+            </div>
+            <div class="ac-order-item-show-more">
+                <div id="product-more-button" class="product-thumb transition"
+                     onclick="showReview({{ show_limit_review }})">
+                    <!-- id="product-more-button" - событие, по которому будут показываться больше товаров -->
+                    <div class="product-more-button-text"></div>
+                    <div class="product-more-button-icon">
+                        <img src="/catalog/view/theme/4tv/image/icons-bg/product-more-icon.svg" alt=""
+                             class="img-responsive">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ac-col-right">
+            <div class="ac-banner">
+                {{ column_right }}
+            </div>
+        </div>
+    </div>
+    {{ content_bottom }}
+</div>
+
+
+<script>
+    function ac_review_toggle(e) {
+        var el = $(e);
+        el.closest('.ac-review').toggleClass('active');
+        if (el.closest('.ac-review').hasClass('active')) {
+            el.html('<span>{{ close_content }}</span><i class="fa fa-angle-up"></i>');
+        } else {
+            el.html('<span>{{ open_content }}</span><i class="fa fa-angle-down"></i>');
+        }
+    }
+</script>
+<script>
+    $(document).ready(function () {
+        var show_limit_review = {{ show_limit_review }};
+        showReview(show_limit_review);
+    });
+
+    function showReview(limit) {
+        console.log($('.ac-review-item').length);
+        console.log(limit);
+        $.ajax({
+            url: 'index.php?route=account/review/loadReview&limit=' + limit + '&start=' + $('.ac-review-item').length,
+            dataType: 'html',
+            success: function (html) {
+                if ($('.ac-review-item').length) $(".ac-review-item:last").after(html);
+                else $('#ac-reviews').html(html);
+            }
+        });
+    }
+</script>
+{{ footer }}

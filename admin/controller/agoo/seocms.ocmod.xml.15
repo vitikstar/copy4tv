@@ -1,0 +1,60 @@
+<file path="system/library/config.php" error="skip">
+    <operation error="skip">
+        <search regex="true" position="replace"><![CDATA[~(.*?)function get[(](.*?)\{~]]></search>
+        <add position="replace"><![CDATA[
+$1function get($2{
+		// SEO CMS code
+		if ($key == 'blog_module') {
+			if (isset($this->data[$key])) {
+				$modules = $this->data[$key];
+			} else  {
+				$modules = null;
+			}
+            if ($modules != null && is_callable(array($this->seocms_registry, 'get')) && $this->seocms_registry->get('seocmslib')) {
+            	$modules = $this->seocms_registry->get('seocmslib')->config_15($modules);
+            	return $modules;
+            }
+        }
+		// End of SEO CMS code
+]]></add>
+    </operation>
+</file>
+
+<file path="system/library/config.php" error="skip">
+    <operation error="skip">
+        <search position="after"><![CDATA[class Config {]]></search>
+        <add position="after"><![CDATA[
+	// SEO CMS code
+	private $seocms_registry;
+	// End of SEO CMS code
+]]></add>
+    </operation>
+</file>
+
+
+
+<file path="system/library/config.php" error="skip">
+    <operation error="skip">
+        <search position="before"><![CDATA[public function get(]]></search>
+        <add position="before"><![CDATA[
+	// SEO CMS code
+	public function sc_registry($registry) {
+		$this->seocms_registry = $registry;
+	}
+	// End of SEO CMS code
+]]></add>
+    </operation>
+</file>
+
+
+
+<file path="catalog/controller/module/featured.php" error="skip">
+    <operation error="skip">
+        <search position="before"><![CDATA[$this->data['heading_title']]]></search>
+        <add position="before"><![CDATA[
+		// SEO CMS code
+        if (isset($setting['heading_title']) && $setting['heading_title'] != '') $this->data['heading_title'] = $setting['heading_title']; else
+		// End of SEO CMS code
+]]></add>
+    </operation>
+</file>

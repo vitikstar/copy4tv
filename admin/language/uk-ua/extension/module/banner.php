@@ -1,0 +1,25 @@
+<?php
+// *	@source		See SOURCE.txt for source and other copyright.
+// *	@license	GNU General Public License version 3; see LICENSE.txt
+
+// Heading
+$_['heading_title']    = 'Банер';
+
+// Text
+$_['text_module']      = 'Модулі';
+$_['text_success']     = 'Налаштування змінені';
+$_['text_edit']        = 'Редагування';
+
+// Entry
+$_['entry_name']       = 'Назва модуля';
+$_['entry_banner']     = 'Банер';
+$_['entry_dimension']  = 'Розміри (Ширина x Висота)';
+$_['entry_width']      = 'Ширина';
+$_['entry_height']     = 'Висота';
+$_['entry_status']     = 'Статус';
+
+// Error
+$_['error_permission'] = 'У вас недостатньо прав для внесення змін';
+$_['error_name']       = 'Назва має містити від 3 до 64 символів';
+$_['error_width']      = 'Необхідно вказати ширину';
+$_['error_height']     = 'Необхідно вказати висоту';

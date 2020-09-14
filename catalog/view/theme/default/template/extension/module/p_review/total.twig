@@ -1,0 +1,20 @@
+<span id="p-review-total">
+  {% if p_review['form']['field_rating'] %}
+  <span class="rating">
+    {% for i in 1..5 %}
+    {% if p_review['rating'] < i %}
+    <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i></span>
+    {% else %}
+    <span class="fa fa-stack"><i class="fa fa-star fa-stack-1x"></i><i class="fa fa-star-o fa-stack-1x"></i></span>
+    {% endif %}
+    {% endfor %}
+  </span>
+  {% endif %}
+  {% if p_review['total'] %}
+  <span>{{ p_review['text_total'] }}{{ p_review['total'] }}</span>
+  {% else %}
+  <span>{{ p_review['text_no_p_review'] }}</span>
+  {% endif %}
+  <input type="hidden" name="p_review_total" value="{{ p_review['total'] }}">
+</span>
+<button type="button" class="{% if p_review['form']['field_rating'] %}pull-right{% else %}btn-block{% endif %} btn btn-primary">{{ p_review['button_write'] }}</button>

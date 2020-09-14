@@ -1,0 +1,59 @@
+
+<div class="ac-nav-module-nav-wrap hidden-lg">
+  <div class="ac-nav-module-nav" data-toggle="collapse" data-target="#ac-nav-module">
+    <span>{{ text_nav }}</span>
+    <i class="fa fa-angle-down"></i>
+  </div>
+</div>
+
+<div id="ac-nav-module" class="collapse">
+  <div class="ac-nav-module">
+    <div class="ac-nav-module-item-wrap">
+      <div class="ac-nav-module-title">{{ heading_title }}</div>
+      <ul>
+        <li><a href="{{ account }}" class="ac-nav-module-item">{{ text_account }}</a></li>
+        <li><a href="{{ wishlist }}" class="ac-nav-module-item">{{ text_wishlist }}</a></li>
+        <li><a href="{{ waiting_list }}" class="ac-nav-module-item">{{ text_waiting_list }}</a></li>
+        <li><a href="{{ newsletter }}" class="ac-nav-module-item">{{ text_newsletter }}</a></li>
+      </ul>
+    </div>
+    <div class="ac-nav-module-item-wrap">
+      <div class="ac-nav-module-title">{{ text_history }}</div>
+      <ul>
+        <li><a href="{{ review_goods }}" class="ac-nav-module-item">{{ text_review_goods }}</a></li>
+        <li><a href="{{ order }}" class="ac-nav-module-item">{{ text_order }}</a></li>
+        <li><a href="{{ review }}" class="ac-nav-module-item">{{ text_otzuv }}</a></li>
+      </ul>
+    </div>
+
+
+
+      {#{% if not logged %}#}
+      {#<a href="{{ login }}" class="list-group-item">{{ text_login }}</a> <a href="{{ register }}" class="list-group-item">{{ text_register }}</a> <a href="{{ forgotten }}" class="list-group-item">{{ text_forgotten }}</a>#}
+      {#{% endif %}#}
+      {#<a href="{{ account }}" class="list-group-item">{{ text_account }}</a>#}
+      {#{% if logged %}#}
+      {#<a href="{{ edit }}" class="list-group-item">{{ text_edit }}</a> <a href="{{ password }}" class="list-group-item">{{ text_password }}</a>#}
+      {#{% endif %}#}
+      {#<a href="{{ address }}" class="list-group-item">{{ text_address }}</a> <a href="{{ wishlist }}" class="list-group-item">{{ text_wishlist }}</a> <a href="{{ order }}" class="list-group-item">{{ text_order }}</a> <a href="{{ download }}" class="list-group-item">{{ text_download }}</a><a href="{{ recurring }}" class="list-group-item">{{ text_recurring }}</a> <a href="{{ reward }}" class="list-group-item">{{ text_reward }}</a> <a href="{{ return }}" class="list-group-item">{{ text_return }}</a> <a href="{{ transaction }}" class="list-group-item">{{ text_transaction }}</a> <a href="{{ newsletter }}" class="list-group-item">{{ text_newsletter }}</a>#}
+      {#{% if logged %}#}
+      {#<a href="{{ logout }}" class="list-group-item">{{ text_logout }}</a>#}
+      {#{% endif %}#}
+  </div>
+</div>
+
+
+
+
+<script>
+    $(document).ready(function() {
+        var catLinkDone = '{{ catLinkDone }}';
+        $('.ac-nav-module a').each(function() {
+            var menuLink = $(this).attr('href').toLowerCase();
+            if (menuLink && catLinkDone.indexOf(menuLink) !== -1) {
+                $(this).addClass('account-active');
+                $(this).attr('href','javascript:void(0)');
+            }
+        });
+    });
+</script>

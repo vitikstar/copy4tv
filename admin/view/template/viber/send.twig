@@ -1,0 +1,178 @@
+{{ header }}{{ column_left }}
+<div id="content">
+    <div class="page-header">
+        <div class="container-fluid">
+            <div class="pull-right">
+                <a id="button-preview" href="#" data-toggle="tooltip" title="{{ button_preview }}" class="btn btn-info"><i class="fa fa-eye"></i></a>
+                <a onclick="$('input[name=spam_check]').val('1');send('index.php?route=viber/send/send&user_token={{ user_token }}');return false;" href="#" data-toggle="tooltip" title="{{ button_check }}" class="btn btn-warning"><i class="fa fa-check-square-o"></i></a>
+                <a onclick="$('#form').ajaxFormUnbind();$('#form').attr('action', '{{ save }}');$('#form').submit();return false;" href="#" data-toggle="tooltip" title="{{ back ? button_update : button_save }}" class="btn btn-success"><i class="fa fa-floppy-o"></i></a>
+                <a id="button-send" href="#" data-toggle="tooltip" title="{{ button_send }}" class="btn btn-primary"><i class="fa fa-envelope-o"></i></a>
+                <a href="{{ back ? back : reset }}" data-toggle="tooltip" title="{{ back ? button_back : button_reset }}" class="btn btn-default"><i class="fa fa-{{ back ? 'reply' : 'undo' }}"></i></a>
+            </div>
+            <h1>{{ heading_title }}</h1>
+        </div>
+    </div>
+    <div class="container-fluid">
+        {% if (error_warning) %}
+            <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+        {% endif %}
+        {% if (success) %}
+            <div class="alert alert-success"><i class="fa fa-check-circle"></i> {{ success }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+        {% endif %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-envelope"></i> {{ text_create_and_send }}</h3>
+            </div>
+            <div class="panel-body">
+                <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form" class="form-horizontal">
+                    <input type="hidden" name="id" value="{{ id }}" />
+                    <input type="hidden" name="newsletter_id" value="" />
+                    <input type="hidden" name="sent_count" value="" />
+                    <input type="hidden" name="spam_check" value="" />
+                    <input type="hidden" name="attachments_id" value="{{ attachments_id }}" />
+                    <input type="hidden" name="attachments_count" value="0" />
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-alias">{{ entry_theme }}</label>
+                        <div class="col-sm-10">
+                            <select name="alias" id="input-alias" class="form-control">
+                                <option value="0">Выберите</option>
+                                {% for item in form_send_all %}
+                                        <option value="{{ item['alias'] }}" {% if alias %} selected="selected" {% endif %}>{{ item['name'] }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div  id="add_news_form_group" style="display: none">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"></label>
+                        <div class="col-sm-10">
+                            <input type="checkbox" name="add_news" value="1"/>Добавить существующую новость
+                        </div>
+                    </div>
+                    </div>
+                    <div id="result-news"></div>
+                    <div id="result-user"></div>
+                    <div id="result-textarea"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="preview-modal" tabindex="-1" role="dialog" aria-labelledby="preview-modal-label" aria-hidden="true">
+        <div class="modal-dialog" style="min-width:800px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body"></div>
+            </div>
+        </div>
+    </div>
+
+
+    <script type="text/javascript">
+
+        $(document).ready(function() {
+
+            $('select[name=\'alias\']').on('change', function () {
+                if ($(this).val() == 'news') {
+                    $("#add_news_form_group").css('display', 'block');
+                    if ($('input[name=\'add_news\']').is(':checked')) {
+
+                    } else {
+                        showEditor();
+                    }
+                } else {
+                    $("#result-news").html('');
+                    $("#add_news_form_group").css('display', 'none');
+                    showEditor();
+                }
+                $.ajax({
+                    url: 'index.php?route=viber/send/selectUser&user_token={{ user_token }}',
+                    dataType: 'html',
+                    data: {
+                        alias: $(this).val()
+                    },
+                    type: 'post',
+                    success: function (html) {
+                        $("#result-user").html(html);
+                    }
+                });
+
+            });
+
+            $('input[name=\'add_news\']').on('click', function () {
+                if ($('input[name=\'add_news\']:checked').val() == 1) {
+                    $("#add_template_form_group").css('display', 'none');
+                    $.ajax({
+                        url: 'index.php?route=viber/send/selectNews&user_token={{ user_token }}',
+                        dataType: 'html',
+                        data: {},
+                        type: 'post',
+                        success: function (html) {
+                            $("#result-news").html(html);
+                        }
+                    });
+                } else {
+                    $("#add_template_form_group").css('display', 'block');
+                    $("#result-news").html('');
+                }
+            });
+
+            $('#button-send').on('click', function () {
+                var input_image = $("#input-image").val();
+                var text = $("#preview").val();
+                var customer_string_id = '';
+                var checkboxes = $('input[name=\'customer_id\']:checked');
+                for (var i = 0; i < checkboxes.length; i++) {
+                    var x = checkboxes.eq(i).val();
+                    customer_string_id += x+',';
+                }
+                $('.text-danger').remove();
+                $.ajax({
+                    url: 'index.php?route=viber/send/send&user_token={{ user_token }}',
+                    dataType: 'json',
+                    data: {
+                        customer_string_id:customer_string_id,
+                        image_url:input_image,
+                        text:text
+                    },
+                    type: 'post',
+                    success: function (json) {
+                        if(json['error']['customer_id']){
+                            $("#result-user").after('<div class="text-danger">'+ json['error']['customer_id'] +'</div>')
+                        }
+                        if(json['error']['text']){
+                            $("#preview").after('<div class="text-danger">'+ json['error']['text'] +'</div>')
+                        }
+                        if(json["error"]['response_status']){
+                            $("#preview").after('<div class="text-danger">'+ json["error"]['response_status'] +'</div>')
+                        }
+                        if(!json['error']){
+                            window.location.href = json['redirect'];
+                        }
+                    }
+                });
+                return false;
+            });
+
+            function showEditor() {
+                $.ajax({
+                    url: 'index.php?route=viber/send/textarea&user_token={{ user_token }}',
+                    dataType: 'html',
+                    data: {},
+                    type: 'post',
+                    success: function (html) {
+                        $("#result-textarea").html(html);
+                    }
+                });
+            }
+        })
+        </script>
+</div>{{ footer }}

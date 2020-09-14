@@ -1,0 +1,17 @@
+<span id="ajaxwidget-{{ cmswidget }}" class="cmswidget">
+</span>
+<script>
+$.ajax({
+   type: 'POST',
+   url: '{{ href_url }}',
+   data: { ajax_file: '{{ ajax_file }}', sc_ajax: '3', cmswidget: '{{ cmswidget }}' },
+   async: true,
+   dataType: 'html',
+   beforeSend: function () {
+    $('#ajaxwidget-{{ cmswidget }}').html('Loading...<img src="catalog/view/theme/default/image/aloading16.png" alt="">');
+  },
+   success: function(msg_{{ cmswidget }}){
+    $('#ajaxwidget-{{ cmswidget }}').replaceWith(msg_{{ cmswidget }});
+  }
+});
+</script>

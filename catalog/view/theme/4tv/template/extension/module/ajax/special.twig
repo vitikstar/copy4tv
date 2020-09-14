@@ -1,0 +1,106 @@
+<div class="heading-title-1">{{ heading_title }}</div>
+
+<div class="special-slider-wrapper products-slider-wrapper products-wrapper">
+    <div class="swiper-viewport">
+        <div class="swiper-pager">{{ text_view_all }}
+            <div class="swiper-button-next">
+                <i class="fa fa-angle-right"></i>
+            </div>
+            <div class="swiper-button-prev">
+                <i class="fa fa-angle-left"></i>
+            </div>
+        </div>
+        <div class="products-slider swiper-container">
+            <div class="swiper-wrapper">
+                {% for product in products %}
+                    <div class="swiper-slide">
+                        <div class="product-layout">
+                            <div class="product-thumb transition">
+                                {% if(product.metka_id=='top') %} <div class="product-sticker" style="background: #347ad9;">Топ продаж</div>{% endif %}
+                                {% if(product.metka_id=='new') %}<div class="product-sticker" style="background: #ffc001;">Новинка</div>{% endif %}
+                                {% if(product.metka_id=='super_price') %}<div class="product-sticker" style="background: #ff6e19;">Суперцена</div>{% endif %}
+
+                                <div class="image"><a href="{{ product.href }}"><img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" class="img-responsive" /></a></div>
+                                <div class="caption">
+                                    <div class="products-name give-me-ellipsis"><a href="{{ product.href }}">{{ product.name }}</a></div>
+                                    <div class="products-inform">
+                                        {% if product.rating %}
+                                            <div class="rating">
+                                                {% for i in 1..5 %}
+                                                    {% if product.rating < i %} <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-2x"></i></span> {% else %} <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span> {% endif %}
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                        {% if product.reviews %}
+                                            <div class="products-review-quantity" onclick="location='{{ product.href }}#tab-review'">
+                                                <div class="products-review-quantity-icon">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="18" height="18" viewBox="0 0 18 18"><g><g><image width="18" height="18" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAABbklEQVQ4T63UMUiVYRTG8d8ViVzDoKglWgIhDB2CyBaRJkmDiBqCcnJwEgQxqCmQGgJxEAVBvKKIlmuL2FBLVlsIpd5IXJsUhIoD7weXr764ej3j4X3/nPOc55ySv6MBt3AbHTiTnuziLRbxCr+qv5ZynCuYxmlM4g228BsX0ImH+IkH+JD9rwZ1YxbPMYq9f1QbqSYMYgj3sBLJDBSVrOERFgoA+XQPZnAjKgtQaPIRS3haIyR7NoIAtgeoF2O4+J92ivgnsYGBAIUu3/D4kNVkz5/gUoC+437S6CisaygH6CC1VamihFah2WfcTUOZw2XcQWiTRfjsx3GAzqGStRZ+CNceJa6GZQJUxtc6xI4htdQ7/hOpiP7jMGSI35qtSBtW0Yf5GoU6j23E+N/nlzb0eoFn2C8ARjsZ5BNehx2KzsgpTKUzspluT5yRrrTYMfIJrOMlxvOgKKL6sF3HWTRiB+/SSn3BMG6iGct/AFy+UfqaNluTAAAAAElFTkSuQmCC"/></g></g></svg>
+                                                </div>
+                                                <div class="products-review-quantity-number">{{ product.reviews }}</div>
+                                            </div>
+                                        {% endif %}
+                                        <div class="products-compare-wish-btn">
+                                            <button class="product_compare{{ product.product_id }}" type="button" data-toggle="tooltip" title="{{ button_compare }}" onclick="compare.add('{{ product.product_id }}');">
+                                                {% if product.compare_count %}
+                                                    <img src="/catalog/view/theme/4tv/image/icons-bg/compare-icon-2.png" alt="">
+                                                    <div class="products-compare-quantity-number product_compare_number{{ product.product_id }}">{{ product.compare_count }}</div>
+                                                {% else %}
+                                                    <img src="/catalog/view/theme/4tv/image/icons-bg/compare-icon-1.png" alt="">
+                                                    {#<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="21" height="18" viewBox="0 0 21 18"><g><g><image width="21" height="18" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAASCAYAAAC0EpUuAAAB/0lEQVQ4T4XUSciPURQG8N9HWSBTSn0RkjKmzGJhKAtDlIUpw0JhIUkRyVSEBckCZWHImAUZFsqwILOFuRAylBKST1KGTt23bm/v///d5b3Pee45z3nOadD86YfDGIwHmI+n9cIaSo+tMAr5/S58xTasQQesyOL+4SZ+F3dl0lXYXpHFQhzCAhyseF+NHVWkLfEK3bEJGxPoJMbgKObiOmamt8BswFv0wp+4zzOdjtMpo0mJPEpqi61Yhj1Yix8IqYLsIqKSGThTJr2M71iCdwl4LGXUA6/RE2/S3ZwkRTfsQztMyEn74zHG4yqOoDdG1iG9hReYh3G4ggF4UpQfP43GwEQyAhE0FPdRznQI7qVPb6eYR7gRlQZpe3zASuzPOnsHz1LHy6ThhL4YnuEXYycagzQ8tx5d0ZSBoqwDCM1aZ5r+TJovSjIVIW3wHpuDNGz0FxcqBmEp1iU7FY2KBm3B3tzwKXYyWgTpLzysMXrTcDwZuyCNAZmNsxVDECM9KEhPoQ/G4ksGjF/PITz7PCs/sOHNqaXqOuFaYIO0MdmhM07gE4ZhCnYnzcuNin2wHOdxF10wC5/DloWlQuTo3sS0MELn6PClOj4NbOyCGM9vCRvuaSovlFobrWqiam6/5khjqqKKkCjcETp/TLP/shZrc6SxR2N/lk+U27EW6X+uvXstUzFpnAAAAABJRU5ErkJggg=="/></g></g></svg>#}
+                                                {% endif %}
+                                            </button>
+                                            <button class="{{ product.class_name }} product{{ product.product_id }}" type="button"  data-toggle="tooltip" title="{{ button_wishlist }}" onclick="wishlist.add('{{ product.product_id }}');">
+                                                {#<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="21" height="18" viewBox="0 0 21 18"><g><g><image width="21" height="18" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAASCAYAAAC0EpUuAAACtklEQVQ4T6WUz0sbURDHZzY/dLEpSBtMokbERQpiUCSKhBwiCP0Dso9iSw+CUOm1BWkLjYeWQktP/YXeWopld+OtvXgQA6JNKIoiUlgFlTU2aQ/WJrG7zb7yghG10TTtHN6yb2c+OzPvOw/hwCRJcnEcdxsRr5im6QYAAwA+UUrHAOANISQfiUS4tra2awAwhIh+SqnNYrEk8/n8O8MwHg8MDHxhOGRLNBoNIOIHnud5QRBstbW1YBgGJJPJzPr6upVSGuM4btA0zTFE7GtubtbdbrfDarXC7u4uqKpqZLPZDKX0cjgc/ogTExMeu93+ubGx8VxXVxdwHFdMvvDc29uD6enpb7qun7fb7d9DodAFh8NxzMc0TUgkElTTtB+6rl/CaDT6oqamZqi/v996EliMzOVysLS09NXn813kef4YsPjCwFNTU78ymcw4Tk5Optrb252CIJR0rmRTVVVYXl5OoyzLNBgMQl1dXSXxJX1TqRTEYjFARVGyfr+f93q9/w3d2tqCeDyeY9D3LpcrFAgESjergl/Nzs7u7+zszLDygwAw09vbC/X19QWJ/Ytpmkbn5uZYaF8BIsvyPUSMMLDH47FUCt3e3mZAEwAehMPh+4eZKYoyCgB3e3p6oKGh4a/Bmqbl5+fngVL6RBTFkcOJOjKqI4j4sLu72/R6vWXBm5ub+Xg8zqZlVBRFllTB/uihJEkFsN/vN5qamuyntWJjY0NPJBI2SukdQsijo34lD0aSpGFEfNbZ2ZlvaWmxnQSvra0ZCwsL7E64RQh5evL7qad9AH7e0dGhC4JQVQxUVXV/cXGxilJ6kxDyslQlZ0pIUZRBSum4z+fTW1tbq1dXV3+urKywkocJIexKLGlldSnL8lUAeO10OvfT6XQ1AFwXRfHtWbIrCz3QMQO/AoAb5YDM/zdAcyC502og9QAAAABJRU5ErkJggg=="/></g></g></svg>#}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="button-group-new-wrapper">
+                                    <div class="button-group-new-line"></div>
+                                    <div class="button-group-new">
+                                        {% if product.price %}
+                                            <p class="price">
+                                                {% if not product.super_price %}
+                                                    {{ product.price }}
+                                                {% else %}
+                                                    <span class="price-new">{{ product.super_price }}</span> <span class="price-old">{{ product.price }}</span>
+                                                {% endif %}
+                                                {% if product.tax %} <span class="price-tax">{{ text_tax }} {{ product.tax }}</span> {% endif %}
+                                            </p>
+                                        {% endif %}
+                                        <button class="products-buy-btn btn btn-default" id="button-cart" type="button" onclick="cart.add('{{ product.product_id }}');">
+                                            <span class="products-buy-btn-icon"></span>
+                                            <span class="products-buy-btn-text">{{ button_cart }}</span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {% if product.attribute_groups %}
+                                    <div class="products-attribute-wrap">
+                                        <div class="button-group-new-line"></div>
+                                        <div class="products-attribute">
+                                            <div class="products-attribute-inner give-me-ellipsis">
+                                                {% for attribute_group in product.attribute_groups %}
+                                                    {% for attribute in attribute_group.attribute %}
+                                                        <div class="products-attribute-name-text">
+                                                            <span class="products-attribute-name">{{ attribute.name }}:</span>
+                                                            <span class="products-attribute-text"> {{ attribute.text }}</span>
+                                                        </div>
+                                                    {% endfor %}
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="swiper-pagination"></div>
+        </div>
+    </div>
+</div>
+

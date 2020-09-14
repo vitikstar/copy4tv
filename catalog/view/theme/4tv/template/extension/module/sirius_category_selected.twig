@@ -1,0 +1,15 @@
+<div class="category-wall-wrap">
+    <div class="heading-title-1">{{ heading_title }}</div>
+    <div class="category-wall-items">
+        {% for category in categories %}
+            <a href="{{ category.href }}"  class="category-wall-item">
+            <span class="category-wall-item-img">
+                {#<img src="{{ category.thumb }}" alt="{{ category.name }}" class="img-responsive">#}
+                <img src="{{ category.thumb }}" alt="{{ category.name }}" class="img-responsive">
+            </span>
+                <span class="category-wall-item-name">{{ category.name }}</span>
+                <span class="category-wall-item-quantity">{{ category.product_total }} {{ category.declension }}</span>
+            </a>
+        {% endfor %}
+    </div>
+</div> 

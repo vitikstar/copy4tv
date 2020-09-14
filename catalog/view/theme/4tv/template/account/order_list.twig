@@ -1,0 +1,115 @@
+{{ header }}
+<div id="account-order" class="container">
+  <div class="breadcrumb-product-wrap">
+{{ column_megamenu }}
+    <ul class="breadcrumb">
+      {% set total = breadcrumbs|length %}
+      {% set counter = 0 %}
+      {% for breadcrumb in breadcrumbs %}
+        {{ breadcrumb['separator'] }}
+        {% set counter = counter + 1 %}
+        {% if (counter == total) %}
+          <li>{{ breadcrumb['text'] }}</li>
+        {% else %}
+          <li><a href="{{ breadcrumb['href'] }}">{{ breadcrumb['text'] }}</a></li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  </div>
+
+
+  <div class="ac-row row">
+
+    <div class="ac-col-left">{{ column_left }}</div>
+
+      {% if column_left and column_right %}
+          {% set class = 'col-sm-6' %}
+      {% elseif column_left or column_right %}
+          {% set class = 'col-sm-9' %}
+      {% else %}
+          {% set class = 'col-sm-12' %}
+      {% endif %}
+    <div id="content" class="{{ class }}">{{ content_top }}
+      <div class="main-category-filter">
+        <div class="ac-personal-title">Мои заказы</div>
+       <!-- <div class="category-sort-wrap">
+          <div class="category-sort-select">
+            <select id="input-sort" class="form-control">
+              <option value=""></option>
+              <option value=""></option>
+            </select>
+          </div>
+        </div>-->
+      </div>
+      {% if order_total %}
+      <div class="ac-order-wrap">
+        <div class="ac-order-title">
+          <div class="ac-order-col-1 ac-order-col">Дата заказа</div>
+          <div class="ac-order-col-2 ac-order-col">№ заказа</div>
+          <div class="ac-order-col-3 ac-order-col"><span>Товары</span></div>
+          <div class="ac-order-col-4 ac-order-col">Стоимость</div>
+          <div class="ac-order-col-5 ac-order-col">Статус</div>
+        </div>
+
+        <div class="ac-order-items">
+  <div id="load-order"></div>
+        </div>
+
+        <div class="ac-order-item-show-more" style="display: none">
+          <div id="product-more-button" class="product-thumb transition" onclick="showOrder({{ show_limit_order }})"> <!-- id="product-more-button" - событие, по которому будут показываться больше товаров -->
+            <div class="product-more-button-text"></div>
+            <div class="product-more-button-icon">
+              <img src="/catalog/view/theme/4tv/image/icons-bg/product-more-icon.svg" alt="" class="img-responsive">
+            </div>
+          </div>
+        </div>
+
+      </div>
+      {% endif %}
+    </div>
+    <div class="ac-col-right">
+      <div class="ac-banner">
+          {{ column_right }}
+      </div>
+    </div>
+  </div>
+    {{ content_bottom }}
+</div>
+{{ footer }}
+<script>
+  $(document).ready(function() {
+    var show_limit_order = {{ show_limit_order }};
+    showOrder(show_limit_order);
+  });
+  function showOrder(limit){
+
+    {#var show_limit_order = {{ show_limit_order }};#}
+    {#var order_total = {{ order_total }};#}
+    {#var page_item = $('.ac-order-item').length;#}
+    {#if((order_total - page_item) < show_limit_order){#}
+      {#limit = order_total - page_item;#}
+    {#}#}
+    console.log(limit);
+    $.ajax({
+      url: 'index.php?route=account/order/loadOrder&limit='+limit+'&page='+$('.ac-order-item').length+'&show_display_item_order='+$('.ac-order-item').length,
+      dataType: 'html',
+      success: function(html) {
+        if($('.ac-order-item').length) $(".ac-order-item:last").after(html);
+        else $('#load-order').html(html);
+      }
+    });
+  }
+ function cancel_order(store_id,order_id) {
+	$.ajax({
+		url: 'index.php?route=api/order/history&api=1&store_id='+ store_id +'&order_id='+ order_id,
+		type: 'post',
+		dataType: 'json',
+		data: '&notify=1&override=0&append=0&comment=""',
+		success: function(json) {
+			if (json['success']) {
+				location.reload();
+        }
+		}
+	});
+ }
+</script>

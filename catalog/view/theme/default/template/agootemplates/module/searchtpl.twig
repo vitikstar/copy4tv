@@ -1,0 +1,82 @@
+<div id="content_search" class="content_search">
+	<div class="content_search input-group">
+  		<input type="text" name="filter_name" class="form-control input-lg seocms-input-search" value="{{ text_for_search }}" placeholder="{{ text_for_search }}" onclick="this.value = '';"  onkeydown="this.style.color = '000000'"/>
+  		<span class="input-group-btn">
+    		<button type="button" id="button-search_blog" class="btn btn-default btn-lg button"><i class="fa fa-search"></i></button>
+  		</span>
+	</div>
+
+   	<div id="search_other" class="input-group seocms-category-search">
+		<select name="filter_blog_id" class="ascp_select_search form-control">
+			<option value="0">{{ text_blog }}</option>
+			 {% if (blogies is not empty) %}
+						{% for blog_1 in blogies %}
+
+			{% if (filter_blog_id is defined and blog_1['blog_id'] == filter_blog_id) %}
+			<option value="{{ blog_1['blog_id'] }}" selected="selected">{{ blog_1['name'] }}</option>
+			{% else %}
+			<option value="{{ blog_1['blog_id'] }}">{{ blog_1['name'] }}</option>
+			{% endif %}
+			{% for blog_2 in blog_1['children'] %}
+			{% if (filter_blog_id is defined and blog_2['blog_id'] == filter_blog_id) %}
+			<option value="{{ blog_2['blog_id'] }}" selected="selected">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ blog_2['name'] }}</option>
+			{% else %}
+			<option value="{{ blog_2['blog_id'] }}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ blog_2['name'] }}</option>
+			{% endif %}
+			{% for blog_3 in blog_2['children'] %}
+			{% if (filter_blog_id is defined and blog_3['blog_id'] == filter_blog_id) %}
+			<option value="{{ blog_3['blog_id'] }}" selected="selected">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ blog_3['name'] }}</option>
+			{% else %}
+			<option value="{{ blog_3['blog_id'] }}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ blog_3['name'] }}</option>
+			{% endif %}
+			{% endfor %}
+			{% endfor %}
+			{% endfor %}
+			{% endif %}
+		</select>
+		<div class="seocms-search-checkbox">
+			<input type="checkbox" name="filter_sub_blog" value="1" id="sub_blog" checked="checked" />
+			&nbsp;<label for="sub_blog">{{ text_for_childcategory }}</label>
+		</div>
+		<div class="seocms-search-checkbox">
+			<input type="checkbox" name="filter_description" value="1" id="description" checked="checked" />
+			&nbsp;<label for="description">{{ text_for_desc }}</label>
+		</div>
+	</div>
+</div>
+
+<script>
+		$('#content_search input[name=\'filter_name\']').keydown(function(e) {
+			if (e.keyCode == 13) {
+				$('#button-search_blog').trigger('click');
+			}
+		});
+
+		$('#button-search_blog').bind('click', function() {
+			var url = '{{ blog_search["href"] }}';
+
+			var filter_name = $('#content_search input[name=\'filter_name\']').prop('value');
+			if (filter_name) {
+				url += '&filter_name=' + encodeURIComponent(filter_name);
+			}
+
+			var filter_blog_id = $('#content_search select[name=\'filter_blog_id\']').prop('value');
+			if (filter_blog_id > 0) {
+				url += '&filter_blog_id=' + encodeURIComponent(filter_blog_id);
+			}
+
+			var filter_sub_blog = $('#content_search input[name=\'filter_sub_blog\']:checked').prop('value');
+			if (filter_sub_blog) {
+				url += '&filter_sub_blog=true';
+			}
+
+			var filter_description = $('#content_search input[name=\'filter_description\']:checked').prop('value');
+			if (filter_description) {
+				url += '&filter_description=true';
+			}
+			location = url;
+		});
+</script>
+
+
+

@@ -1,0 +1,261 @@
+{{ header }}{{ column_left }}
+<div id="content">
+    <div class="page-header">
+        <div class="container-fluid">
+            <h1>{{ heading_title }}</h1>
+        </div>
+    </div>
+    <div class="container-fluid">
+        {% if (error_warning) %}
+            <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+        {% endif %}
+        {% if (success) %}
+            <div class="alert alert-success"><i class="fa fa-check-circle"></i> {{ success }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+        {% endif %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-users"></i> {{ text_subscribers }}</h3>
+            </div>
+            <div class="panel-body">
+                <div class="well">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="control-label" for="input-name">{{ column_name }}</label>
+                                <input type="text" name="filter_name" value="{{ filter_name }}" placeholder="{{ column_name }}" id="input-name" class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="input-email">{{ column_email }}</label>
+                                <input type="text" name="filter_email" value="{{ filter_email }}" placeholder="{{ column_email }}" id="input-email" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="control-label" for="input-customer-group">{{ column_customer_group }}</label>
+                                <select name="filter_customer_group_id" id="input-customer-group" class="form-control">
+                                    <option value=""></option>
+                                    {% for customer_group in customer_groups %}
+                                        {% if (customer_group['customer_group_id'] == filter_customer_group_id) %}
+                                            <option value="{{ customer_group['customer_group_id'] }}" selected="selected">{{ customer_group['name'] }}</option>
+                                        {% else %}
+                                            <option value="{{ customer_group['customer_group_id'] }}">{{ customer_group['name'] }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="input-newsletter">{{ column_newsletter }}</label>
+                                <select name="filter_newsletter" id="input-newsletter" class="form-control">
+                                    <option value=""></option>
+                                    {% if (filter_newsletter == '1') %}
+                                        <option value="1" selected="selected">{{ entry_yes }}</option>
+                                    {% else %}
+                                        <option value="1">{{ entry_yes }}</option>
+                                    {% endif %}
+                                    {% if (filter_newsletter == '0') %}
+                                        <option value="0" selected="selected">{{ entry_no }}</option>
+                                    {% else %}
+                                        <option value="0">{{ entry_no }}</option>
+                                    {% endif %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="control-label" for="input-store">{{ column_store }}</label>
+                                <select name="filter_store" id="input-store" class="form-control">
+                                    <option value=""></option>
+                                    {% if (filter_store == '0') %}
+                                        <option value="0" selected="selected">{{ text_default }}</option>
+                                    {% else %}
+                                        <option value="0">{{ text_default }}</option>
+                                    {% endif %}
+                                    {% for store in stores %}
+                                        {% if (filter_store == store['store_id'] and filter_store != '') %}
+                                            <option value="{{ store['store_id'] }}" selected="selected">{{ store['name'] }}</option>
+                                        {% else %}
+                                            <option value="{{ store['store_id'] }}">{{ store['name'] }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="input-language">{{ column_language }}</label>
+                                <select name="filter_language" id="input-language" class="form-control">
+                                    <option value="*"></option>
+                                    {% if (filter_language == '') %}
+                                        <option value="" selected="selected">{{ text_default }}</option>
+                                    {% else %}
+                                        <option value="">{{ text_default }}</option>
+                                    {% endif %}
+                                    {% for language in languages %}
+                                        {% if (filter_language == language['code'] and filter_language != '') %}
+                                            <option value="{{ language['code'] }}" selected="selected">{{ language['name'] }}</option>
+                                        {% else %}
+                                            <option value="{{ language['code'] }}">{{ language['name'] }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <button type="button" id="button-filter" class="btn btn-primary pull-right"><i class="fa fa-search"></i> {{ button_filter }}</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <td class="text-left">
+                                {% if (sort == 'name') %}
+                                    <a href="{{ sort_name }}" class="{{ order|lower }}">{{ column_name }}</a>
+                                {% else %}
+                                    <a href="{{ sort_name }}">{{ column_name }}</a>
+                                {% endif %}
+                            </td>
+                            <td class="text-left">
+                                {% if (sort == 'c.email') %}
+                                    <a href="{{ sort_email }}" class="{{ order|lower }}">{{ column_email }}</a>
+                                {% else %}
+                                    <a href="{{ sort_email }}">{{ column_email }}</a>
+                                {% endif %}
+                            </td>
+                            <td class="text-right">
+                                {% if (sort == 'customer_group') %}
+                                    <a href="{{ sort_customer_group }}" class="{{ order|lower }}">{{ column_customer_group }}</a>
+                                {% else %}
+                                    <a href="{{ sort_customer_group }}">{{ column_customer_group }}</a>
+                                {% endif %}
+                            </td>
+                            <td class="text-right">
+                                {% if (sort == 'c.newsletter') %}
+                                    <a href="{{ sort_newsletter }}" class="{{ order|lower }}">{{ column_newsletter }}</a>
+                                {% else %}
+                                    <a href="{{ sort_newsletter }}">{{ column_newsletter }}</a>
+                                {% endif %}
+                            </td>
+                            <td class="text-right">
+                                {% if (sort == 'store_id') %}
+                                    <a href="{{ sort_store }}" class="{{ order|lower }}">{{ column_store }}</a>
+                                {% else %}
+                                    <a href="{{ sort_store }}">{{ column_store }}</a>
+                                {% endif %}
+                            </td>
+                            <td class="text-right">
+                                {% if (sort == 'language_code') %}
+                                    <a href="{{ sort_language }}" class="{{ order|lower }}">{{ column_language }}</a>
+                                {% else %}
+                                    <a href="{{ sort_language }}">{{ column_language }}</a>
+                                {% endif %}
+                            </td>
+                            <td class="text-right">{{ column_actions }}</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% if (customers) %}
+                            {% for customer in customers %}
+                                <tr>
+                                <td class="text-left">{{ customer['name'] }}</td>
+                                <td class="text-left">{{ customer['email'] }}</td>
+                                <td class="text-right">{{ customer['customer_group'] }}</td>
+                                <td class="text-right">
+                                    {% if (customer['newsletter'] == '1') %}
+                                        {{ entry_yes }}
+                                    {% else %}
+                                        {{ entry_no }}
+                                    {% endif %}
+                                </td>
+                                <td class="text-right">
+                                    {% if (customer['store_id'] == '0') %}
+                                        {{ text_default }}
+                                    {% else %}
+                                        {% for store in stores %}
+                                            {% if (customer['store_id'] == store['store_id']) %}
+                                                {{ store['name'] }}
+
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                </td>
+                                <td class="text-right">
+                                {% if (not customer['language_code']) %}
+                                    {{ text_default }}
+                                {% else %} {% for language in languages %}
+                                    {% if (customer['language_code'] == language['code']) %}
+                                        {{ language['name'] }}
+
+                                    {% endif %}
+                                {% endfor %}
+                                    </td>
+                                    <td class="text-right">
+                                        {% if (customer['newsletter']) %}
+                                            <a href="{{ unsubscribe ~ customer['customer_id'] }}" data-toggle="tooltip" title="{{ button_unsubscribe }}" class="btn btn-danger"><i class="fa fa-minus"></i></a>
+                                        {% else %}
+                                            <a href="{{ subscribe ~ customer['customer_id'] }}" data-toggle="tooltip" title="{{ button_subscribe }}" class="btn btn-primary"><i class="fa fa-plus"></i></a>
+                                        {% endif %}
+                                    </td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %} {% else %}
+                            <tr>
+                                <td class="text-center" colspan="7">{{ text_no_results }}</td>
+                            </tr>
+                        {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 text-left">{{ pagination }}</div>
+                    <div class="col-sm-6 text-right">{{ results }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript"><!--
+        $('#button-filter').on('click', function() {
+            var url = 'index.php?route=ne/subscribers&user_token={{ user_token }}';
+
+            var filter_name = $('input[name=\'filter_name\']').val();
+
+            if (filter_name) {
+                url += '&filter_name=' + encodeURIComponent(filter_name);
+            }
+
+            var filter_email = $('input[name=\'filter_email\']').val();
+
+            if (filter_email) {
+                url += '&filter_email=' + encodeURIComponent(filter_email);
+            }
+
+            var filter_customer_group_id = $('select[name=\'filter_customer_group_id\']').val();
+
+            if (filter_customer_group_id) {
+                url += '&filter_customer_group_id=' + encodeURIComponent(filter_customer_group_id);
+            }
+
+            var filter_newsletter = $('select[name=\'filter_newsletter\']').val();
+
+            if (filter_newsletter) {
+                url += '&filter_newsletter=' + encodeURIComponent(filter_newsletter);
+            }
+
+            var filter_store = $('select[name=\'filter_store\']').val();
+
+            if (filter_store) {
+                url += '&filter_store=' + encodeURIComponent(filter_store);
+            }
+
+            var filter_language = $('select[name=\'filter_language\']').val();
+
+            if (filter_language != "*") {
+                url += '&filter_language=' + encodeURIComponent(filter_language);
+            }
+
+            location = url;
+        });
+        //--></script>
+</div>
+{{ footer }}

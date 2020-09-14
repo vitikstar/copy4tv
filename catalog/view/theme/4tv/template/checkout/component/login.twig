@@ -1,0 +1,363 @@
+<ul class="nav nav-tabs">
+    <li class="active"><a href="#ch-new-customer" data-toggle="tab">{{ text_new_customer }}</a></li>
+    <li><a href="#ch-regular-customer" data-toggle="tab">{{ text_returning_customer }}</a></li>
+  </ul>
+  <div class="tab-content">
+    <div class="tab-pane active" id="ch-new-customer">
+      <div class="row">
+        <div class="col-xs-12 col-sm-3">
+          <div class="form-group">
+            <label>{{ text_firstname }}</label>
+            <input type="text" name="firstname_login" value="{{ firstname_login_val }}" class="form-control" placeholder="">
+          </div>
+        </div>
+        <div class="col-xs-12 col-sm-3">
+          <div class="form-group">
+            <label>{{ text_lastname }}</label>
+            <input type="text" name="lastname_login" value="{{ lastname_login_val }}" class="form-control" placeholder="">
+          </div>
+        </div>
+        <div class="col-sm-3 col-xs-12">
+          <div class="form-group">
+            <label>{{ entry_zone }}</label>
+            <select class="form-control"  name="region_login" id="inputRegionLogin">
+              <option>{{ form_option_select }}</option>
+              {% for key, name_item in regions %}
+                <option value="{{ key }}" {% if(region_login_val==key) %} selected {% endif %}  region="{{ region }}">{{name_item}}</option>
+              {% endfor %}
+              {#                                                <?php  if($name_item == $region){ ?> selected <?php } ?>#}
+              <?php } ?>
+            </select>
+          </div>
+        </div>
+        <div class="col-sm-3 col-xs-12">
+          <div class="form-group">
+            <label>{{ entry_city }}</label>
+            <select class="form-control"  name="city_login"  id="inputCityLogin" disabled="disabled">
+            </select>
+          </div>
+        </div>
+        <div class="col-xs-12 col-sm-5">
+          <div class="form-group">
+            <label>{{ entry_email }}</label>
+            <input type="email" name="email_login" class="form-control" placeholder="" value="{{ email_login_val }}">
+            <div class="ch-input-description">{{ entry_follow_the_order }}</div>
+          </div>
+        </div>
+        <div class="col-xs-6 col-sm-5">
+          <div class="form-group">
+            <label>{{ entry_telephone }}</label>
+            <input type="tel" name="telephone_login" class="form-control" placeholder="+38 (ХХХ) ХХХ - ХХ - ХХ" value="{{ telephone_login }}">
+            <div class="ch-input-description">{{ entry_verefication_code }}</div>
+          </div>
+        </div>
+        <div class="col-xs-6 col-sm-2">
+          <div class="form-group">
+            <label>Код з смс</label>
+            <input type="tel" name="verefication_code" class="form-control" placeholder="" disabled="disabled" minlength="4" maxlength="4">
+          </div>
+        </div>
+      </div>
+      <div id="error-summary-login"></div>
+      <div class="ch-block-btn-wrap">
+        <input type="button" id="contact-data-confirmed" class="ch-block-btn btn btn-default" value="{{ text_contact_data_confirmed }}">
+        <input type="button" id="step-1-bth-continue" class="ch-block-btn btn btn-default" value="{{ text_next }}" style="display: none">
+      </div>
+    </div>
+
+    <div class="tab-pane" id="ch-regular-customer">
+      <div class="regular-customer-wrap row">
+        <div class="regular-customer-wrap-1 col-sm-6 col-xs-12">
+          <div class="form-group">
+            <label for="input-email">{{ entry_email_or_telephone }}</label>
+            <input type="email" name="email" value="" placeholder="" id="input-email" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="input-password">Код</label>
+            <input type="text" name="verefication_code" value="" placeholder="" id="input-verefication-code" class="form-control" disabled="disabled">
+          </div>
+          <div class="regular-customer-remember-forgot">
+            <label for="ch-customer-remember" class="regular-customer-remember">
+              <input type="checkbox" id="ch-customer-remember" name="" class="checkbox-input-mod">
+              <span>{{ entry_remember_me }}</span>
+            </label>
+            <div class="regular-customer-forgot">
+              <a href="https://test.uniup.com.ua/forgot-password">{{ text_forgotten }}</a>
+            </div>
+          </div>
+          <div class="ch-block-btn-wrap">
+            <input type="button" value="Далее" id="button-login" data-loading-text="{{ text_loading }}" class="btn btn-default">
+            <input type="button" value="Вхід" id="button-login-up" data-loading-text="{{ text_loading }}" class="btn btn-default" style="display:none">
+          </div>
+
+          <link rel="stylesheet" type="text/css" href="catalog/view/theme/default/stylesheet/socnetauth2.css">
+          <style>
+            a.socnetauth2_buttons:hover img {
+              opacity: 0.8;
+            }
+          </style>
+        </div>
+        <div class="regular-customer-wrap-2 col-sm-6 col-xs-12">
+          <div class="regular-customer-wrap-2-title">{{ text_soc_auth }}</div>
+          <div class="account_socnetauth2_bline_links">
+            <table>
+              <tbody>
+              <tr>
+                <td style="padding-right: 10px; padding-top: 10px;">
+                  <a class="socnetauth2_buttons" href="index.php?route=extension/module/socnetauth2/facebook&first=1" data-view="checkout">
+                    <img src="/image/icon-social/xfb45.png">
+                  </a>
+                </td>
+                <td style="padding-right: 10px; padding-top: 10px;">
+                  <a class="socnetauth2_buttons" href="/index.php?route=extension/module/socnetauth2/gmail&first=1" data-view="checkout">
+                    <img src="/image/icon-social/xgm45.png">
+                  </a>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div id="alert-message"></div>
+      </div>
+    </div>
+  </div>
+ {% if(logged) %}
+   <script>
+     $('#form_login').css('display','none');
+     $("input[name='firstname_login'],input[name='lastname_login'],select[name='region_login'],select[name='city_login'],input[name='email_login'],input[name='telephone_login'],input[name='verefication_code']").attr('readonly','readonly');
+     $("select[name='region_login'],select[name='city_login']").attr('disabled','disabled');
+     $("#ch-del-input-2, #ch-del-input-1, #ch-pay-input-1, #ch-pay-input-2, #ch-pay-input-3, #ch-pay-input-4, #checkbox-input-mod").removeAttr("disabled");
+     // var destination = $("#ch-del-1").offset().top-260;
+     // $("html, body").animate({ scrollTop: destination }, 1100);
+   </script>
+ {% endif %}
+ <script>
+   $('#inputRegionLogin').on('change',function () {
+     $('#inputCityLogin').html('<option>Loading....</option>');
+     $('#inputCityLogin').attr('disabled','disabled');
+     $.ajax({
+       url: 'index.php?route=checkout/checkout/getListSities',
+       data: 'region_id=' + $(this).val() + '&city_selected={{ city }}',
+       type: 'post',
+       dataType: 'html',
+       success: function(html) {
+         if(html){
+           $('#inputCityLogin').html(html);
+           $('#inputCityLogin').removeAttr('disabled');
+
+           {% if(city) %}
+           $('#inputCityLogin').trigger("change");
+           {% endif %}
+         }
+       }
+     });
+   });
+
+   $('#inputRegionLogin').on('change',function () {
+     getCityByRegion($(this).val());
+   });
+
+  function getCityByRegion(region_id) {
+    $('#inputCityLogin').html('<option>Loading....</option>');
+    $('#inputCityLogin').attr('disabled','disabled');
+    $.ajax({
+      url: 'index.php?route=checkout/checkout/getListSities',
+      data: 'region_id=' + region_id + '&city_selected={{ city_login_val }}',
+      type: 'post',
+      dataType: 'html',
+      success: function(html) {
+        if(html){
+          $('#inputCityLogin').html(html);
+          $('#inputCityLogin').removeAttr('disabled');
+
+          {% if(city) %}
+          $('#inputCityLogin').trigger("change");
+          {% endif %}
+        }
+      }
+    });
+  }
+
+   {% if(lastname_login_val) %}
+   $("input[name='lastname_login']").removeAttr('disabled');
+   {% endif %}
+   {% if(firstname_login_val) %}
+   $("input[name='firstname_login']").removeAttr('disabled');
+   {% endif %}
+   {% if(email_login_val) %}
+   $("input[name='email_login']").removeAttr('disabled');
+   {% endif %}
+   {% if(telephone_login_val) %}
+   $("input[name='telephone_login']").removeAttr('disabled');
+   {% endif %}
+
+   {% if(region_login_val) %}
+   getCityByRegion('{{ region_login_val }}');
+   {% endif %}
+
+   $('#contact-data-confirmed').on('click',function () {
+     var post = {
+       'region_login' : $("select[name='region_login']").find('option:selected').val(),
+       'city_login' : $("select[name='city_login']").find('option:selected').val(),
+       'firstname_login' : $("input[name='firstname_login']").val(),
+       'lastname_login' : $("input[name='lastname_login']").val(),
+       'email_login' : $("input[name='email_login']").val(),
+       'telephone_login' : $("input[name='telephone_login']").val(),
+     };
+     
+     $.ajax({
+       url: 'index.php?route=checkout/component/login/validateGuestUser',
+       data: post,
+       type: 'post',
+       dataType: 'json',
+       success: function(json) {
+         $("#ch-new-customer input").removeClass('is-invalid');
+         console.log(json);
+         if(json['error']){
+           for(error in json['error']){
+             $("input[name='"+error+"']").addClass("is-invalid");
+             $("select[name='"+error+"']").after("<div class=\"alert alert-danger alert-dismissible\">" + json['error'][error] + "</div>");
+           }
+         }else if(json['check_logged']==true){
+            $('#error-summary-login').html('<div class="alert alert-warning" role="alert"><div class="text-center">'+  json['check_logged_text'] +'</div></div>')
+            $('#contact-data-confirmed').val('Авторизуватись');
+            $("input[name='firstname_login'],input[name='lastname_login'],select[name='region_login'],select[name='city_login'],input[name='email_login'],input[name='telephone_login']").attr('readonly','readonly');
+            $("select[name='region_login'],select[name='city_login']").attr('disabled','disabled');
+            $("input[name='verefication_code']").removeAttr('disabled');
+            $("input[name='verefication_code']").focus();
+            $('#contact-data-confirmed').css('display','none');
+            $('#step-1-bth-continue').css('display','block');
+         }else{
+           $("input[name='firstname_login'],input[name='lastname_login'],select[name='region_login'],select[name='city_login'],input[name='email_login'],input[name='telephone_login']").attr('readonly','readonly');
+           $("select[name='region_login'],select[name='city_login']").attr('disabled','disabled');
+           $("input[name='verefication_code']").removeAttr('disabled');
+           $("input[name='verefication_code']").focus();
+           $('#contact-data-confirmed').css('display','none');
+           $('#step-1-bth-continue').css('display','block');
+         }
+       }
+     });
+     
+     $('#step-1-bth-continue').on('click',function () {
+       $.ajax({
+         url: 'index.php?route=checkout/component/login/save5',
+         data: {
+           'verefication_code':$("input[name='verefication_code']").val(),
+           'firstname' : $("input[name='firstname_login']").val(),
+           'lastname' : $("input[name='lastname_login']").val(),
+           'email' : $("input[name='email_login']").val(),
+           'telephone' : $("input[name='telephone_login']").val(),
+         },
+         type: 'post',
+         dataType: 'json',
+         success: function(json) {
+           console.log(json);
+           $("#ch-new-customer .alert").remove();
+           if(json['error']){
+             for(error in json['error']){
+               console.log(json['error'][error]);
+               $("input[name='"+error+"']").after("<div class=\"alert alert-danger alert-dismissible\">" + json['error'][error] + "</div>");
+             }
+           }else{
+             $("input[name='verefication_code']").attr('readonly','readonly');
+             $("#ch-del-input-2, #ch-del-input-1, #ch-pay-input-1, #ch-pay-input-2, #ch-pay-input-3, #ch-pay-input-4, #checkbox-input-mod").removeAttr("disabled");
+             $(".ch-block-2").removeClass("disabled");
+             $.ajax({
+               url: 'index.php?route=checkout/component/login/save2',
+               data: {
+                      'verefication_code':$("input[name='verefication_code']").val(),
+                      'firstname' : $("input[name='firstname_login']").val(),
+                      'lastname' : $("input[name='lastname_login']").val(),
+                      'email' : $("input[name='email_login']").val(),
+                      'telephone' : $("input[name='telephone_login']").val(),
+               },
+               type: 'post',
+               dataType: 'json',
+               success: function(json) {
+                 console.log(1);
+                          $('#form_login').css('display','none');
+                          $("input[name='firstname_login'],input[name='lastname_login'],select[name='region_login'],select[name='city_login'],input[name='email_login'],input[name='telephone_login'],input[name='verefication_code']").attr('readonly','readonly');
+                          $("select[name='region_login'],select[name='city_login']").attr('disabled','disabled');
+                          $("#ch-del-input-2, #ch-del-input-1, #ch-pay-input-1, #ch-pay-input-2, #ch-pay-input-3, #ch-pay-input-4, #checkbox-input-mod").removeAttr("disabled");
+                      location.reload();
+               }
+             });
+           }
+         }
+       });
+     })
+   })
+
+   $("input[name='verefication_code']").keyup(function () {
+     if($(this).val().length==4){
+       $("#step-1-bth-continue").addClass("active");
+     }
+   })
+   
+   $("input[name='telephone_login']").keyup(function () {
+     if($(this).val().replace(/\D+/g,"").length==12){
+       $("#contact-data-confirmed").addClass("active");
+     }else{
+              $("#contact-data-confirmed").removeClass('active');
+     }
+   })
+   $('#button-login').on('click',function () {
+     $("#ch-regular-customer .alert").remove();
+     $.ajax({
+       url: 'index.php?route=checkout/component/login/save',
+       data: {
+         'email' :    $('.regular-customer-wrap-1 #input-email').val()
+       },
+       type: 'post',
+       dataType: 'json',
+       success: function(json) {
+       if(json['error']){
+             for(error in json['error']){
+               console.log(json['error'][error]);
+               $("#ch-regular-customer input[name='"+error+"']").after("<div class=\"alert alert-danger alert-dismissible\">" + json['error'][error] + "</div>");
+             }
+       }else{
+         $('#button-login').css("display","none");
+         $('#button-login-up').css("display","block");
+         $('#button-login-up').css("display","block");
+         $("#ch-regular-customer input[name='verefication_code']").removeAttr('disabled');
+         $("#ch-regular-customer input[name='verefication_code']").after("<div class=\"alert alert-success alert-dismissible\">" + json['alert_message'] + "</div>");
+                    //  $('#form_login').css('display','none');
+                     // $("input[name='firstname_login'],input[name='lastname_login'],select[name='region_login'],select[name='city_login'],input[name='email_login'],input[name='telephone_login'],input[name='verefication_code']").attr('readonly','readonly');
+                     // $("select[name='region_login'],select[name='city_login']").attr('disabled','disabled');
+                   //   $("#ch-del-input-2, #ch-del-input-1, #ch-pay-input-1, #ch-pay-input-2, #ch-pay-input-3, #ch-pay-input-4, #checkbox-input-mod").removeAttr("disabled");
+                    //  location.reload();
+           }
+       }
+     });
+   })
+   
+   $('#button-login-up').on('click',function () {
+     $("#ch-regular-customer .alert").remove();
+     $.ajax({
+       url: 'index.php?route=checkout/component/login/login',
+       data: {
+         'email' :    $('.regular-customer-wrap-1 #input-email').val(),
+         'verefication_code' : $('.regular-customer-wrap-1 #input-verefication-code').val()
+       },
+       type: 'post',
+       dataType: 'json',
+       success: function(json) {
+         console.log(json);
+       if(json['error']){
+             for(error in json['error']){
+               console.log(json['error'][error]);
+               $("#ch-regular-customer input[name='"+error+"']").after("<div class=\"alert alert-danger alert-dismissible\">" + json['error'][error] + "</div>");
+             }
+       }else{
+           location.reload(); 
+           }
+       }
+     });
+   })
+
+   $(function () {
+   $("input[name='telephone_login").mask("+38 (099) 999-99-99");
+});
+ </script>

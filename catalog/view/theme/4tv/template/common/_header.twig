@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<!--[if IE 8 ]><html dir="{{ direction }}" lang="{{ lang }}" class="ie8"><![endif]-->
+<!--[if IE 9 ]><html dir="{{ direction }}" lang="{{ lang }}" class="ie9"><![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html dir="{{ direction }}" lang="{{ lang }}">
+<!--<![endif]-->
+<head>
+    <meta name="robots" content="noindex,nofolow"/>
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{{ title }}</title>
+    {% if robots %}
+        <meta name="robots" content="{{ robots }}" />
+    {% endif %}
+    <base href="{{ base }}" />
+    {% if description %}
+        <meta name="description" content="{{ description }}" />
+    {% endif %}
+    {% if keywords %}
+        <meta name="keywords" content="{{ keywords }}" />
+    {% endif %}
+    <meta property="og:title" content="{{ title }}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="{{ og_url }}" />
+    {% if og_image %}
+        <meta property="og:image" content="{{ og_image }}" />
+    {% else %}
+        <meta property="og:image" content="{{ logo }}" />
+    {% endif %}
+    <meta property="og:site_name" content="{{ name }}" />
+    <script src="/catalog/view/javascript/jquery/jquery-2.1.1.min.js" type="text/javascript"></script>
+
+    <script type="text/javascript" src="/catalog/view/javascript/cookies/jquery.cookie.js"></script>
+
+    <link href="/catalog/view/javascript/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen" />
+    <script src="/catalog/view/javascript/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+
+
+
+    <link rel="stylesheet" type="text/css" href="catalog/view/javascript/menu/jquery.mmenu.all.css" />
+    <script src="catalog/view/javascript/menu/jquery.mmenu.js"></script>
+
+
+    <link href="/catalog/view/theme/4tv/stylesheet/stylesheet.css" rel="stylesheet">
+    <link href="/catalog/view/theme/4tv/stylesheet/adaptive.css" rel="stylesheet">
+    <link  href="/catalog/view/theme/4tv/stylesheet/print.css" />
+
+    <link href="/catalog/view/theme/4tv/stylesheet/mega_menu.css" rel="stylesheet">
+    {#<link href="/catalog/view/theme/4tv/stylesheet/mmenu.css" rel="stylesheet" />#}
+    {#<script src="/catalog/view/javascript/mmenu.js"></script>#}
+    <!-- Fire the plugin -->
+
+    {% for style in styles %}
+        <link href="{{ style.href }}" type="text/css" rel="{{ style.rel }}" media="{{ style.media }}" />
+    {% endfor %}
+    {% for script in scripts %}
+        <script src="{{ script }}" type="text/javascript"></script>
+    {% endfor %}
+    <script src="catalog/view/javascript/common.js" type="text/javascript"></script>
+    {% for link in links %}
+        <link href="{{ link.href }}" rel="{{ link.rel }}" />
+    {% endfor %}
+    {% for analytic in analytics %}
+        {{ analytic }}
+    {% endfor %}
+
+
+</head>
+<body {% if route == 'common/home'%} class="common-home"{% endif %}
+        {% if route == 'checkout/checkout'%} class="checkout-checkout"{% endif %}
+>
+
+
+<script>
+    window.fbAsyncInit = function() {
+        FB.init({
+            appId      : '2437958099794120',
+            xfbml      : true,
+            version    : 'v5.0'
+        });
+        FB.AppEvents.logPageView();
+    };
+
+    (function(d, s, id){
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {return;}
+        js = d.createElement(s); js.id = id;
+        js.src = "https://connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+</script>
+<div id="bluring" style="visibility: hidden;"></div>
+
+
+<!------------------------ mob version --------------------------->
+<div class="header-mob">
+    <div class="header-mob-top">
+        <a href="#menu1" class="m-menu-button">
+            <span></span>
+            <span></span>
+            <span></span>
+        </a>
+        <div class="header-mob-logo">
+            <a href="{{ home }}"><img src="{{ logo }}" title="{{ name }}" alt="{{ name }}" class="img-responsive" /></a>
+        </div>
+        <div class="header-mob-search data-dropdown-link" data-dropdown="#dropdown-search-mob"></div>
+        {#<div class="header-mob-info data-dropdown-link" data-dropdown="#dropdown-info-mob"></div>#}
+        <div class="header-mob-info data-dropdown-link" data-toggle="modal" data-target="#dropdown-info-mob"></div>
+
+
+        <div class="header-mob-cart">
+            <div class="header-cart">
+                {{ cart }}
+            </div>
+        </div>
+        <div class="header-mob-login data-dropdown-link" data-dropdown="#dropdown-account-mob"></div>
+
+        <div class="header-mob-login-reg data-dropdown-link" data-dropdown="#dropdown-login-reg-mob"></div>
+
+
+        <!-- dropdown mob -->
+        <div id="dropdown-account-mob" class="dropdown-custom-mob" style="display: none;">
+            <div class="dropdown-custom-mob-close"></div>
+            <div class="header-login-btn-wrap">
+
+                <div class="dropdown-account-mob-header">
+                    <div class="dropdown-account-mob-header-pic-wrap">
+                        {#                        <img src="http://via.placeholder.com/80x80" alt="" class="img-responsive">#}
+                    </div>
+                    <div class="dropdown-account-mob-header-text">
+                        <div class="header-login-btn-text">{{ text_hello_user }}, </div>
+                        <div class="header-login-btn">
+                            <span class="header-login-btn-icon-1"></span>
+                            <span class="header-login-btn-name">{{ logged_first_name }}</span>
+                            <i class="fa fa-chevron-down"></i>
+                        </div>
+                        <div class="dropdown-account-mob-header-add-pic-wrap">
+                            <span class="dropdown-account-mob-header-add-pic">{{ text_add_photo_menu_user }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="header-login-dropdown">
+                    <ul class="header-login-dropdown-inner">
+                        <li>
+                            <a  href="/my-account">
+                                <span class="header-login-dropdown-inner-text">{{ text_data_menu_user }}</span>
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a  href="/wishlist">
+                                <span class="header-login-dropdown-inner-text">{{ text_wishlist }}</span>
+                                <span class="header-login-dropdown-inner-number">82</span>
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a  href="javascript:void(0)">
+                                <span class="header-login-dropdown-inner-text">{{ text_waiting_list }}</span>
+                                <span class="header-login-dropdown-inner-number">24</span>
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a  href="/order-history">
+                                <span class="header-login-dropdown-inner-text">{{ text_order_menu }}</span>
+                                <span class="header-login-dropdown-inner-number">24</span>
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a  href="javascript:void(0)">
+                                <span class="header-login-dropdown-inner-text">{{ text_feedback }}</span>
+                                <span class="header-login-dropdown-inner-number">8</span>
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a  href="javascript:void(0)">
+                                <span class="header-login-dropdown-inner-text">{{ text_viewed_products }}</span>
+                                <span class="header-login-dropdown-inner-number">234</span>
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a  href="/newsletter">
+                                <span class="header-login-dropdown-inner-text">{{ text_newsletters }}</span>
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a  href="javascript:void(0)" onclick="logout()">
+                                <span class="header-login-dropdown-inner-text">{{ text_logout }} </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="dropdown-search-mob" class="dropdown-custom-mob" style="display: none;">
+            <div class="dropdown-custom-mob-close"></div>
+        </div>
+
+
+
+
+        {#<div id="dropdown-info-mob" class="dropdown-custom-mob" style="display: none;">#}
+        {#<div class="dropdown-custom-mob-close"></div>#}
+        {#</div>#}
+
+
+        <div id="dropdown-info-mob" class="modal modal-custom fade" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div id="dropdown-login-reg-mob" class="dropdown-custom-mob" style="display: none;">
+            <div class="dropdown-custom-mob-close"></div>
+            <div class="dropdown-login-reg-mob-btn-wrap">
+                <div class="dropdown-login-reg-mob-btn-reg" onclick="login()">Регистрация</div>
+                <div class="dropdown-login-reg-mob-btn-login" onclick="login()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"><path d="M18 10v-4c0-3.313-2.687-6-6-6s-6 2.687-6 6v4h-3v14h18v-14h-3zm-10 0v-4c0-2.206 1.794-4 4-4s4 1.794 4 4v4h-8z"></path></svg>
+                    <span>Вход на сайт</span>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            $(document).ready(function() {
+
+                if (innerWidth < 1200) {
+                    $('#search').appendTo('#dropdown-search-mob');
+
+                    // info
+                    $('.header-top').appendTo('#dropdown-info-mob .modal-body');
+                    $('.header-phone-dropdown').appendTo('#dropdown-info-mob .modal-body');
+                    $('.header-phone-dropdown').removeClass('dropdown-menu dropdown-menu-custom modal-custom');
+
+                    var clone_1 =  $('.footer-social-wrap').clone();
+                    var clone_2 =  $('.footer-social-follow-wrapper-main').clone();
+
+                    clone_1.appendTo('#dropdown-info-mob .modal-body');
+                    clone_2.appendTo('#dropdown-info-mob .modal-body');
+
+                    $('#dropdown-info-mob .footer-column-title-1.footer-column-title').text('Следите за нами в соцсетях:');
+                    // end info
+                }
+
+                $('.data-dropdown-link').click(function() {
+                    var id = $(this).attr('data-dropdown');
+                    if ($(id).css('display') == 'none') {
+
+                        $('.data-dropdown-link').removeClass('active');
+                        $(this).addClass('active');
+
+                        $('.dropdown-custom-mob').hide();
+                        $('.header-mob > .header-phone-tel-backdrop').remove();
+                        $(id).show();
+                        $('.header-mob').append('<div class="modal-backdrop in fade header-phone-tel-backdrop"></div>');
+                    } else {
+
+                        $('.data-dropdown-link').removeClass('active');
+
+
+                        $('.dropdown-custom-mob').hide();
+                        $('.header-mob > .header-phone-tel-backdrop').remove();
+                    }
+                });
+            });
+
+            $('.dropdown-custom-mob-close, .dropdown-login-reg-mob-btn-reg, .dropdown-login-reg-mob-btn-login').click(function() {
+                $('.data-dropdown-link').removeClass('active');
+                $('.dropdown-custom-mob').hide();
+                $('.header-mob > .header-phone-tel-backdrop').remove();
+            });
+
+            $(document).click(function (e) { // отслеживаем событие клика по веб-документу
+                if (innerWidth < 1200) {
+                    var all_block = $('.dropdown-custom-mob, .data-dropdown-link');
+                    var block = $('.dropdown-custom-mob'); // определяем элемент, к которому будем применять условия (можем указывать ID, класс либо любой другой идентификатор элемента)
+                    if (!all_block.is(e.target) // проверка условия если клик был не по нашему блоку
+                        && all_block.has(e.target).length === 0) { // проверка условия если клик не по его дочерним элементам
+                        block.hide();
+                        $('.header-mob > .header-phone-tel-backdrop').remove();
+
+                        $('.data-dropdown-link').removeClass('active');
+                        // если условия выполняются - скрываем наш элемент
+                    }
+                }
+            });
+        </script>
+        <!-- end dropdown mob -->
+
+
+    </div>
+    <div class="header-mob-banner-top">
+        {% if banner_top and not banner_top_cookie %}
+            <div class="banner-top-wrap modal-custom banner-top-wrap-without-img">
+                <span class="banner-top-mob-title">{{ banner_top.title }}</span>
+                <a class="banner-top-mob-link" href="{{ banner_top.link }}" title="{{ banner_top.title }}">Подробнее</a>
+                <span class="close"></span>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{#<nav id="menu1">#}
+{#    <ul>#}
+{#        <li><a href="/">Home</a></li>#}
+{#        <li><a href="/work">Our work</a></li>#}
+{#        <li><span>About us</span>#}
+{#            <ul>#}
+{#                <li><a href="/about/history">History</a></li>#}
+{#                <li><span>The team</span>#}
+{#                    <ul>#}
+{#                        <li><a href="/about/team/management">Management</a></li>#}
+{#                        <li><a href="/about/team/sales">Sales</a></li>#}
+{#                        <li><a href="/about/team/development">Development</a></li>#}
+{#                    </ul>#}
+{#                </li>#}
+{#            </ul>#}
+{#        </li>#}
+{#        <li><span>Services</span>#}
+{#            <ul>#}
+{#                <li><a href="/services/design">Design</a></li>#}
+{#                <li><a href="/services/development">Development</a></li>#}
+{#                <li><a href="/services/marketing">Marketing</a></li>#}
+{#            </ul>#}
+{#        </li>#}
+{#        <li><a href="/contact">Contact</a></li>#}
+{#    </ul>#}
+{#</nav>#}
+
+
+<!----------------------- end mob version -------------------------->
+
+
+
+
+<nav id="top">
+
+    {% if banner_top and not banner_top_cookie %}
+        {% if banner_top_is_image %}
+            <div class="banner-top-wrap modal-custom">
+                <a href="{{ banner_top.link }}" title="{{ banner_top.title }}" class="banner-top" style="background-image: url({{ banner_top.image }})"></a>
+                <span class="close"></span>
+            </div>
+        {% else %}
+            <div class="banner-top-wrap modal-custom banner-top-wrap-without-img">
+                <a href="{{ banner_top.link }}" title="{{ banner_top.title }}" class="banner-top"><span>{{ banner_top.title }}</span></a>
+                <span class="close"></span>
+            </div>
+        {% endif %}
+    {% endif %}
+
+    <script>
+        $(document).ready(function(){
+            $('.banner-top-wrap .close').click(function() {
+                $.cookie('banner_top_cookie', '1', { expires: 1, path: '/' }); // 1 day
+                $('.banner-top-wrap').remove();
+            });
+        });
+    </script>
+
+    <div class="container">
+        <div class="header-top">
+            {% if informations %}
+                <ul class="header-top-block-1 list-unstyled">
+                    {% for information in informations %}
+                        <li><a href="{{ information.href }}">{{ information.title }}</a></li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            <div class="header-top-block-2">
+                <div class="header-top-block-vert-line"></div>
+                {{ currency }}
+                <div class="header-top-block-vert-line"></div>
+                {{ language }}
+                <div class="header-top-block-vert-line"></div>
+                <!--<a class="header-top-register" href="{#{{ register }}#}">{#{{ text_register }}#}</a>-->
+                <!-- <a class="header-top-login" href="{# login #}}">-->
+                <div class="header-top-login {% if logged %}logged{% else %}no-logged{% endif %}">
+                    {% if not logged %}
+                        <div class="header-top-login-reg">
+                            <div class="header-top-login-text">
+                                <a href="javascript:void(0)" onclick="login()">Регистрация</a>
+                            </div>
+                        </div>
+                        <div class="header-top-login-login">
+                        <span class="header-top-login-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"><path d="M18 10v-4c0-3.313-2.687-6-6-6s-6 2.687-6 6v4h-3v14h18v-14h-3zm-10 0v-4c0-2.206 1.794-4 4-4s4 1.794 4 4v4h-8z"/></svg>
+                        </span>
+                            <div class="header-top-login-text">
+                                {#<a href="javascript:void(0)" onclick="login()"> {{ text_login_register }}</a>#}
+                                <a href="javascript:void(0)" onclick="login()"> Вход на сайт</a>
+                            </div>
+                        </div>
+
+                    {% endif %}
+
+                    {% if logged %}
+                        <div class="header-top-login-text">
+
+                            <div class="header-login-btn-wrap">
+                                <span class="header-login-btn-text">{{ text_hello_user }}, </span>
+                                <span class="header-login-btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                    <span class="header-login-btn-icon-1"></span>
+                                    <span class="header-login-btn-name">{{ logged_first_name }}</span>
+                                    <i class="fa fa-chevron-down"></i>
+                                </span>
+                                <div class="header-login-dropdown dropdown-menu dropdown-menu-custom modal-custom">
+                                    <span class="dropdown-menu-arrow"></span>
+                                    <ul class="header-login-dropdown-inner">
+                                        <li>
+                                            <a  href="/my-account">
+                                                <span class="header-login-dropdown-inner-text">{{ text_data_menu_user }}</span>
+                                                <i class="fa fa-angle-right"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a  href="/wishlist">
+                                                <span class="header-login-dropdown-inner-text">{{ text_wishlist }}</span>
+                                                <span class="header-login-dropdown-inner-number">82</span>
+                                                <i class="fa fa-angle-right"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a  href="javascript:void(0)">
+                                                <span class="header-login-dropdown-inner-text">{{ text_waiting_list }}</span>
+                                                <span class="header-login-dropdown-inner-number">24</span>
+                                                <i class="fa fa-angle-right"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a  href="javascript:void(0)">
+                                                <span class="header-login-dropdown-inner-text">{{ text_order_menu }}</span>
+                                                <span class="header-login-dropdown-inner-number">24</span>
+                                                <i class="fa fa-angle-right"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a  href="javascript:void(0)">
+                                                <span class="header-login-dropdown-inner-text">{{ text_feedback }}</span>
+                                                <span class="header-login-dropdown-inner-number">8</span>
+                                                <i class="fa fa-angle-right"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a  href="javascript:void(0)">
+                                                <span class="header-login-dropdown-inner-text">{{ text_viewed_products }}</span>
+                                                <span class="header-login-dropdown-inner-number">234</span>
+                                                <i class="fa fa-angle-right"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a  href="javascript:void(0)">
+                                                <span class="header-login-dropdown-inner-text">{{ text_newsletters }}</span>
+                                                <i class="fa fa-angle-right"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a  href="javascript:void(0)" onclick="logout()">
+                                                <span class="header-login-dropdown-inner-text">{{ text_logout }} </span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            {#{{ blog_menu }}#}
+
+
+        </div>
+
+        {#<div id="top-links">#}
+        {#<ul class="list-inline">#}
+        {#<li><a href="{{ contact }}"><i class="fa fa-phone"></i></a> <span class="hidden-xs hidden-sm hidden-md">{{ telephone }}</span></li>#}
+        {#<li class="dropdown"><a href="{{ account }}" title="{{ text_account }}" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> <span class="hidden-xs hidden-sm hidden-md">{{ text_account }}</span> <span class="caret"></span></a>#}
+        {#<ul class="dropdown-menu dropdown-menu-right">#}
+        {#{% if logged %}#}
+        {#<li><a href="{{ account }}">{{ text_account }}</a></li>#}
+        {#<li><a href="{{ order }}">{{ text_order }}</a></li>#}
+        {#<li><a href="{{ transaction }}">{{ text_transaction }}</a></li>#}
+        {#<li><a href="{{ download }}">{{ text_download }}</a></li>#}
+        {#<li><a href="{{ logout }}">{{ text_logout }}</a></li>#}
+        {#{% else %}#}
+        {#<li><a href="{{ register }}">{{ text_register }}</a></li>#}
+        {#<li><a href="{{ login }}">{{ text_login }}</a></li>#}
+        {#{% endif %}#}
+        {#</ul>#}
+        {#</li>#}
+        {#<li><a href="{{ wishlist }}" id="wishlist-total" title="{{ text_wishlist }}"><i class="fa fa-heart"></i> <span class="hidden-xs hidden-sm hidden-md">{{ text_wishlist }}</span></a></li>#}
+        {#<li><a href="{{ shopping_cart }}" title="{{ text_shopping_cart }}"><i class="fa fa-shopping-cart"></i> <span class="hidden-xs hidden-sm hidden-md">{{ text_shopping_cart }}</span></a></li>#}
+        {#<li><a href="{{ checkout }}" title="{{ text_checkout }}"><i class="fa fa-share"></i> <span class="hidden-xs hidden-sm hidden-md">{{ text_checkout }}</span></a></li>#}
+        {#</ul>#}
+        {#</div>#}
+
+
+    </div>
+</nav>
+
+<header>
+    <div class="container">
+        <div class="header-row row">
+            <div class="header-row-block-1 header-row-block col-sm-3">
+                <div id="logo">
+                    {% if logo %}
+                        {% if home == og_url %}
+                            <img src="{{ logo }}" title="{{ name }}" alt="{{ name }}" class="img-responsive" />
+                        {% else %}
+                            <a href="{{ home }}"><img src="{{ logo }}" title="{{ name }}" alt="{{ name }}" class="img-responsive" /></a>
+                        {% endif %}
+                    {% else %}
+                        <h1><a href="{{ home }}">{{ name }}</a></h1>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="header-row-block-2 header-row-block col-sm-3">{{ search }}</div>
+
+            {#{% if telephone_block %}#}
+            {#{{ telephone_block }}#}
+            {#{% endif %}#}
+
+            <div class="header-row-block-3 header-row-block col-sm-3">
+                <div class="header-phone">
+                    <div class="header-phone-text">{{ text_contact_telephones }}</div>
+                    <div class="header-phone-tel dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span>+38 (067) 433-22-70</span> <i class="fa fa-chevron-down hidden-xs"></i></div>
+
+                    <div class="header-phone-dropdown dropdown-menu dropdown-menu-custom modal-custom">
+                        <div class="dropdown-menu-arrow"></div>
+                        <div class="header-phone-tel-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                            <div class="header-phone-tel-title">{{ text_consult_for_telephones }}</div>
+                        </div>
+                        <div class="header-phone-tel-body">
+
+                            <div class="header-phone-tel-body-contact">
+                                <div class="header-phone-tel-body-contact-1">
+                                    <div class="header-phone-tel-body-contact-item">
+                                        <div class="header-phone-tel-body-contact-item-icon">
+                                            <img src="/catalog/view/theme/4tv/image/icons-bg/social/tel-icon-1.png" alt="" class="img-responsive">
+                                        </div>
+                                        <div class="header-phone-tel-body-contact-item-number-name">
+                                            <div class="header-phone-tel-body-contact-item-number">
+                                                <a href="tel:+380674332270">+38 (067) 433 22 70</a>
+                                            </div>
+                                            <div class="header-phone-tel-body-contact-item-name">{{ text_operator_kievstar }}</div>
+                                        </div>
+                                    </div>
+                                    <div class="header-phone-tel-body-contact-item">
+                                        <div class="header-phone-tel-body-contact-item-icon">
+                                            <img src="/catalog/view/theme/4tv/image/icons-bg/social/tel-icon-2.png" alt="" class="img-responsive">
+                                        </div>
+                                        <div class="header-phone-tel-body-contact-item-number-name">
+                                            <div class="header-phone-tel-body-contact-item-number">
+                                                <a href="tel:+380504334432">+38 (050) 433 44 32</a>
+                                            </div>
+                                            <div class="header-phone-tel-body-contact-item-name">Vodafone</div>
+                                        </div>
+                                    </div>
+                                    <div class="header-phone-tel-body-contact-item">
+                                        <div class="header-phone-tel-body-contact-item-icon">
+                                            <img src="/catalog/view/theme/4tv/image/icons-bg/social/tel-icon-3.png" alt="" class="img-responsive">
+                                        </div>
+                                        <div class="header-phone-tel-body-contact-item-number-name">
+                                            <div class="header-phone-tel-body-contact-item-number">
+                                                <a href="tel:+380634334433">+38 (063) 433 44 33</a>
+                                            </div>
+                                            <div class="header-phone-tel-body-contact-item-name">Lifecell</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="header-phone-tel-body-contact-2">
+                                    <div class="header-phone-tel-body-contact-item">
+                                        <div class="header-phone-tel-body-contact-item-icon">
+                                            <img src="/catalog/view/theme/4tv/image/icons-bg/social/tel-icon-4.png" alt="" class="img-responsive">
+                                        </div>
+                                        <div class="header-phone-tel-body-contact-item-number-name">
+                                            <div class="header-phone-tel-body-contact-item-number">
+                                                <a href="tel:+380432602040">+38 (0432) 60 20 40</a>
+                                            </div>
+                                            <div class="header-phone-tel-body-contact-item-name">{{ text_type_telephone }}</div>
+                                        </div>
+                                    </div>
+                                    <div class="header-phone-tel-body-contact-item">
+                                        <div class="header-phone-tel-body-contact-item-icon">
+                                            <img src="/catalog/view/theme/4tv/image/icons-bg/social/tel-icon-5.png" alt="" class="img-responsive">
+                                        </div>
+                                        <div class="header-phone-tel-body-contact-item-number-name">
+                                            <div class="header-phone-tel-body-contact-item-number">
+                                                <a href="tel:+380977430039">+38 (097) 743 00 39</a>
+                                            </div>
+                                            <div class="header-phone-tel-body-contact-item-name">{{ text_service_centre }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="header-phone-tel-body-work">
+                                <div class="header-phone-tel-body-work-title">{{ text_grafik_call_centre }}</div>
+                                <div class="header-phone-tel-body-work-text">
+                                    <div class="header-phone-tel-body-work-text-1"><strong>{{ text_weekdays }}</strong></div>
+                                    <div class="header-phone-tel-body-work-text-2"><strong>с 09:00 до 18:00</strong></div>
+                                </div>
+                                <div class="header-phone-tel-body-work-text">
+                                    <div class="header-phone-tel-body-work-text-1">Суббота:</div>
+                                    <div class="header-phone-tel-body-work-text-2">с 09:00 до 15:00</div>
+                                </div>
+                                <div class="header-phone-tel-body-work-text">
+                                    <div class="header-phone-tel-body-work-text-1">Воскресенье:</div>
+                                    <div class="header-phone-tel-body-work-text-2">выходной</div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    {#<div class="header-phone-tel" data-toggle="modal" data-target="#header-phone-dropdown"><span>+38 (067) 433-22-70</span> <i class="fa fa-chevron-down hidden-xs"></i></div>#}
+                    {#<ul class="header-phone-dropdown dropdown-menu dropdown-menu-custom">#}
+                    {#<div class="modal fade modal-custom" id="header-phone-dropdown">#}
+                    {#<div class="modal-dialog" role="document">#}
+                    {#<div class="modal-content">#}
+                    {#<div class="modal-header">#}
+                    {#<button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>#}
+                    {#<div class="modal-title">Консультации и заказы по телефонам</div>#}
+                    {#</div>#}
+                    {#<div class="modal-body">#}
+                    {#<li><a href="tel:+380674332270">+38 (067) 433-22-70</a></li>#}
+                    {#<li><a href="tel:+380954332270">+38 (095) 433-22-70</a></li>#}
+                    {#<li><a href="tel:+380964332270">+38 (096) 433-22-70</a></li>#}
+                    {#</div>#}
+                    {#</div>#}
+                    {#</div>#}
+                    {#</div>#}
+                    {#</ul>#}
+
+                </div>
+            </div>
+
+
+
+            <div class="header-row-block-4 header-row-block col-sm-3">
+                <a href="index.php?route=product/compare" class="header-compare header-compare-only">
+            <span class="header-compare-inner">
+                <span class="header-compare-icon"></span>
+                <span class="header-compare-text">{{ text_compare }}</span>
+            </span>
+                </a>
+
+                <a href="{{ wishlist }}" class="header-wishlist header-compare" id="wishlist-total">
+              <span class="header-wisshlist-inner header-compare-inner">
+                <span class="header-wishlist-icon header-compare-icon"></span>
+                <span class="header-wishlist-text header-compare-text">{{ text_wishlist }}</span>
+              </span>
+                </a>
+
+
+                <div class="header-cart">
+                    {{ cart }}
+
+                    <div class="pr-header-cart-dropdown-wrap">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+
+    <script>
+        $(document).ready(function() {
+            $('html').click(function() {
+                if (innerWidth >= 1200) {
+                    setTimeout(function() {
+                        $('body > .header-phone-tel-backdrop').remove();
+                        if ($('.header-phone-tel').attr('aria-expanded') === 'true'
+                            || $('.header-login-btn').attr('aria-expanded') === 'true') {
+                            $('body').append('<div class="modal-backdrop in fade header-phone-tel-backdrop"></div>');
+//                        setTimeout(function() {
+//                            $('body > .header-phone-tel-backdrop').addClass('in');
+//                        });
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</header>
+{#{{ menu }}#}

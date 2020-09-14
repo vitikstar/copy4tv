@@ -1,0 +1,109 @@
+2020-07-07 16:50:19 - 
+ERROR: FILE NOT FOUND!
+FILE: /home/tvfree/uniup.com.ua/test/admin/controller/extension/installer.php
+MOD: Local copy OCMOD by iSenseLabs
+
+ERROR: CODE NOT FOUND!
+FILE: admin/controller/marketing/contact.php
+CODE: $data['text_product'] = $this->language->get('text_product');
+MOD: Newsletter 1.0
+
+ERROR: FILE NOT FOUND!
+FILE: /home/tvfree/uniup.com.ua/test/catalog/controller/{common,startup}/seo_pro.php
+MOD: OCFilter Modification
+
+ERROR: FILE NOT FOUND!
+FILE: /home/tvfree/uniup.com.ua/test/catalog/controller/{common,startup}/seo_pro.php
+MOD: OCFilter Modification
+
+ERROR: CODE NOT FOUND!
+FILE: catalog/controller/common/header.php
+CODE: getStyles();
+MOD: OCFilter Modification
+
+ERROR: CODE NOT FOUND!
+FILE: catalog/controller/common/column_megamenu.php
+CODE: if ($route == 'information/information'
+MOD: Review Product
+
+ERROR: FILE NOT FOUND!
+FILE: /home/tvfree/uniup.com.ua/test/catalog/controller/startup/seo_pro.php
+MOD: Review Product
+
+ERROR: FILE NOT FOUND!
+FILE: /home/tvfree/uniup.com.ua/test/catalog/controller/extension/module/product_tab.php
+MOD: Review Product
+
+ERROR: CODE NOT FOUND!
+FILE: catalog/view/theme/4tv/template/common/footer.twig
+CODE: {{ text_contact }}</a></li>
+MOD: Review Product
+
+ERROR: FILE NOT FOUND!
+FILE: /home/tvfree/uniup.com.ua/test/admin/view/template/common/column_left.tpl
+MOD: SEO CMS
+
+ERROR: FILE NOT FOUND!
+FILE: /home/tvfree/uniup.com.ua/test/admin/view/template/common/header.tpl
+MOD: SEO CMS
+
+ERROR: FILE NOT FOUND!
+FILE: /home/tvfree/uniup.com.ua/test/admin/view/template/sale/orderpro_list.twig
+MOD: Shipping Data Admin
+
+ERROR: FILE NOT FOUND!
+FILE: /home/tvfree/uniup.com.ua/test/catalog/controller/checkout/simplecheckout_customer.php
+MOD: Авторизация через соцсети
+
+ERROR: FILE NOT FOUND!
+FILE: /home/tvfree/uniup.com.ua/test/catalog/controller/account/simpleregister.php
+MOD: Авторизация через соцсети
+
+ERROR: FILE NOT FOUND!
+FILE: /home/tvfree/uniup.com.ua/test/catalog/controller/checkout/fastorder/fastorder.php
+MOD: Авторизация через соцсети
+
+ERROR: FILE NOT FOUND!
+FILE: /home/tvfree/uniup.com.ua/test/catalog/view/theme/*/template/account/simpleregister.twig
+MOD: Авторизация через соцсети
+
+ERROR: FILE NOT FOUND!
+FILE: /home/tvfree/uniup.com.ua/test/catalog/view/theme/*/template/checkout/simplecheckout_customer.twig
+MOD: Авторизация через соцсети
+
+ERROR: FILE NOT FOUND!
+FILE: /home/tvfree/uniup.com.ua/test/catalog/view/theme/*/template/checkout/fastorder/fastorder.twig
+MOD: Авторизация через соцсети
+
+ERROR: CODE NOT FOUND!
+FILE: catalog/view/theme/default/template/information/contact.twig
+CODE: {# Задать вопрос #}
+MOD: Задать вопрос
+
+ERROR: CODE NOT FOUND!
+FILE: catalog/language/en-gb/product/special.php
+CODE: $_['text_benefits']
+MOD: Заказ в 1 клик + сообщите когда появиться
+
+ERROR: FILE NOT FOUND!
+FILE: /home/tvfree/uniup.com.ua/test/catalog/language/{ua-uk,uk-uk,ua-ua}/product/product.php
+MOD: Заказ в 1 клик + сообщите когда появиться
+
+ERROR: FILE NOT FOUND!
+FILE: /home/tvfree/uniup.com.ua/test/catalog/language/{ua-uk,uk-uk,ua-ua}/product/special.php
+MOD: Заказ в 1 клик + сообщите когда появиться
+
+ERROR: CODE NOT FOUND!
+FILE: catalog/controller/product/special.php
+CODE: $data['text_empty']
+MOD: Заказ в 1 клик + сообщите когда появиться
+
+ERROR: CODE NOT FOUND!
+FILE: catalog/view/theme/default/template/product/category.twig
+CODE: <!--pc-quantity-btn-->
+MOD: Качелька +- wide-catalog
+
+ERROR: CODE NOT FOUND!
+FILE: catalog/view/theme/default/template/product/category.twig
+CODE: <!--button show_more-->
+MOD: Подивитись ще

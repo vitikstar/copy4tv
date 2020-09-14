@@ -1,0 +1,1362 @@
+{{ header }}{{ column_left }}
+<div id="content">
+    <div class="page-header">
+        <div class="container-fluid">
+            <div class="pull-right">
+                <a id="button-preview" href="#" data-toggle="tooltip" title="{{ button_preview }}" class="btn btn-info"><i class="fa fa-eye"></i></a>
+                <button type="submit" form="form" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-success"><i class="fa fa-floppy-o"></i></button>
+                <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a>
+            </div>
+            <h1>{{ heading_title }}</h1>
+        </div>
+    </div>
+    <div class="container-fluid">
+        {% if (error_warning) %}
+            <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+        {% endif %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-calendar"></i> {{ text_newsletters_schedule }}</h3>
+            </div>
+            <div class="panel-body">
+                <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form" class="form-horizontal">
+                    <input type="hidden" name="date_next" value="{{ date_next }}" />
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">{{ entry_active }}</label>
+                        <div class="col-sm-10">
+                            <label class="radio-inline">
+                                {% if (active) %}
+                                    <input type="radio" name="active" value="1" checked="checked" />
+                                    {{ entry_yes }}
+                                {% else %}
+                                    <input type="radio" name="active" value="1" />
+                                    {{ entry_yes }}
+                                {% endif %}
+                            </label>
+                            <label class="radio-inline">
+                                {% if (not active) %}
+                                    <input type="radio" name="active" value="0" checked="checked" />
+                                    {{ entry_no }}
+                                {% else %}
+                                    <input type="radio" name="active" value="0" />
+                                    {{ entry_no }}
+                                {% endif %}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group required">
+                        <label class="col-sm-2 control-label" for="input-name">{{ entry_name }}</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="name" value="{{ name }}" id="input-name" placeholder="{{ entry_name }}" class="form-control" />
+                            {% if (error_name) %}
+                                <div class="text-danger">{{ error_name }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">{{ entry_recurrent }}</label>
+                        <div class="col-sm-10">
+                            <label class="radio-inline">
+                                {% if (recurrent) %}
+                                    <input type="radio" name="recurrent" value="1" checked="checked" />
+                                    {{ entry_yes }}
+                                {% else %}
+                                    <input type="radio" name="recurrent" value="1" />
+                                    {{ entry_yes }}
+                                {% endif %}
+                            </label>
+                            <label class="radio-inline">
+                                {% if (not recurrent) %}
+                                    <input type="radio" name="recurrent" value="0" checked="checked" />
+                                    {{ entry_no }}
+                                {% else %}
+                                    <input type="radio" name="recurrent" value="0" />
+                                    {{ entry_no }}
+                                {% endif %}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group once">
+                        <label class="col-sm-2 control-label" for="input-date">{{ entry_datetime }}</label>
+                        <div class="col-sm-10">
+                            <div class="form-inline">
+                                <div class="form-group" style="margin-left:0; margin-right:15px;">
+                                    <div class="input-group date">
+                                        <input type="text" name="date" value="{{ date }}" data-date-format="YYYY-MM-DD" id="input-date" class="form-control" />
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="form-group" style="margin-left:0; margin-right:15px;">
+                                    <label>{{ text_at }}</label>
+                                    <select name="time" class="form-control">
+                                        <option value="0" {{ time == '0' ? ' selected="selected"' : "" }}>00:00</option>
+                                        <option value="1" {{ time == '1' ? ' selected="selected"' : "" }}>01:00</option>
+                                        <option value="2" {{ time == '2' ? ' selected="selected"' : "" }}>02:00</option>
+                                        <option value="3" {{ time == '3' ? ' selected="selected"' : "" }}>03:00</option>
+                                        <option value="4" {{ time == '4' ? ' selected="selected"' : "" }}>04:00</option>
+                                        <option value="5" {{ time == '5' ? ' selected="selected"' : "" }}>05:00</option>
+                                        <option value="6" {{ time == '6' ? ' selected="selected"' : "" }}>06:00</option>
+                                        <option value="7" {{ time == '7' ? ' selected="selected"' : "" }}>07:00</option>
+                                        <option value="8" {{ time == '8' ? ' selected="selected"' : "" }}>08:00</option>
+                                        <option value="9" {{ time == '9' ? ' selected="selected"' : "" }}>09:00</option>
+                                        <option value="10" {{ time == '10' ? ' selected="selected"' : "" }}>10:00</option>
+                                        <option value="11" {{ time == '11' ? ' selected="selected"' : "" }}>11:00</option>
+                                        <option value="12" {{ time == '12' ? ' selected="selected"' : "" }}>12:00</option>
+                                        <option value="13" {{ time == '13' ? ' selected="selected"' : "" }}>13:00</option>
+                                        <option value="14" {{ time == '14' ? ' selected="selected"' : "" }}>14:00</option>
+                                        <option value="15" {{ time == '15' ? ' selected="selected"' : "" }}>15:00</option>
+                                        <option value="16" {{ time == '16' ? ' selected="selected"' : "" }}>16:00</option>
+                                        <option value="17" {{ time == '17' ? ' selected="selected"' : "" }}>17:00</option>
+                                        <option value="18" {{ time == '18' ? ' selected="selected"' : "" }}>18:00</option>
+                                        <option value="19" {{ time == '19' ? ' selected="selected"' : "" }}>19:00</option>
+                                        <option value="20" {{ time == '20' ? ' selected="selected"' : "" }}>20:00</option>
+                                        <option value="21" {{ time == '21' ? ' selected="selected"' : "" }}>21:00</option>
+                                        <option value="22" {{ time == '22' ? ' selected="selected"' : "" }}>22:00</option>
+                                        <option value="23" {{ time == '23' ? ' selected="selected"' : "" }}>23:00</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" style="margin-left:0; margin-right:15px;">
+                                    <label style="font-style:italic;font-weight:normal;">{{ text_current_server_time }}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group recurrent">
+                        <label class="col-sm-2 control-label">{{ entry_frequency }}</label>
+                        <div class="col-sm-10">
+                            <select name="frequency" class="form-control">
+                                <option value="1" {{ frequency == '1' ? ' selected="selected"' : "" }}>
+                                    {{ text_daily }}
+                                </option>
+                                <option value="7" {{ frequency == '7' ? ' selected="selected"' : "" }}>
+                                    {{ text_weekly }}
+                                </option>
+                                <option value="30" {{ frequency == '30' ? ' selected="selected"' : "" }}>
+                                    {{ text_monthly }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group recurrent">
+                        <label class="col-sm-2 control-label" for="input-date">{{ entry_daytime }}</label>
+                        <div class="col-sm-10">
+                            <div class="form-inline">
+                                <div class="form-group" style="margin-left:0; margin-right:15px;">
+                                    <select name="day" {{ frequency == '1' ? 'disabled="disabled"' : '' }} class="form-control">
+                                        <option value="1" {{ day == '1' ? ' selected="selected"' : "" }}>{{ text_monday }}</option>
+                                        <option value="2" {{ day == '2' ? ' selected="selected"' : "" }}>{{ text_tuesday }}</option>
+                                        <option value="3" {{ day == '3' ? ' selected="selected"' : "" }}>{{ text_wednesday }}</option>
+                                        <option value="4" {{ day == '4' ? ' selected="selected"' : "" }}>{{ text_thursday }}</option>
+                                        <option value="5" {{ day == '5' ? ' selected="selected"' : "" }}>{{ text_friday }}</option>
+                                        <option value="6" {{ day == '6' ? ' selected="selected"' : "" }}>{{ text_saturday }}</option>
+                                        <option value="0" {{ day == '0' ? ' selected="selected"' : "" }}>{{ text_sunday }}</option>
+                                        {% if ( frequency == '1' ) %}
+                                            <option value="" selected="selected">{{ text_daily }}</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                                <div class="form-group" style="margin-left:0; margin-right:15px;">
+                                    <label>{{ text_at }}</label>
+                                    <select name="rtime" class="form-control">
+                                        <option value="0" {{ time == '0' ? ' selected="selected"' : "" }}>00:00</option>
+                                        <option value="1" {{ time == '1' ? ' selected="selected"' : "" }}>01:00</option>
+                                        <option value="2" {{ time == '2' ? ' selected="selected"' : "" }}>02:00</option>
+                                        <option value="3" {{ time == '3' ? ' selected="selected"' : "" }}>03:00</option>
+                                        <option value="4" {{ time == '4' ? ' selected="selected"' : "" }}>04:00</option>
+                                        <option value="5" {{ time == '5' ? ' selected="selected"' : "" }}>05:00</option>
+                                        <option value="6" {{ time == '6' ? ' selected="selected"' : "" }}>06:00</option>
+                                        <option value="7" {{ time == '7' ? ' selected="selected"' : "" }}>07:00</option>
+                                        <option value="8" {{ time == '8' ? ' selected="selected"' : "" }}>08:00</option>
+                                        <option value="9" {{ time == '9' ? ' selected="selected"' : "" }}>09:00</option>
+                                        <option value="10" {{ time == '10' ? ' selected="selected"' : "" }}>10:00</option>
+                                        <option value="11" {{ time == '11' ? ' selected="selected"' : "" }}>11:00</option>
+                                        <option value="12" {{ time == '12' ? ' selected="selected"' : "" }}>12:00</option>
+                                        <option value="13" {{ time == '13' ? ' selected="selected"' : "" }}>13:00</option>
+                                        <option value="14" {{ time == '14' ? ' selected="selected"' : "" }}>14:00</option>
+                                        <option value="15" {{ time == '15' ? ' selected="selected"' : "" }}>15:00</option>
+                                        <option value="16" {{ time == '16' ? ' selected="selected"' : "" }}>16:00</option>
+                                        <option value="17" {{ time == '17' ? ' selected="selected"' : "" }}>17:00</option>
+                                        <option value="18" {{ time == '18' ? ' selected="selected"' : "" }}>18:00</option>
+                                        <option value="19" {{ time == '19' ? ' selected="selected"' : "" }}>19:00</option>
+                                        <option value="20" {{ time == '20' ? ' selected="selected"' : "" }}>20:00</option>
+                                        <option value="21" {{ time == '21' ? ' selected="selected"' : "" }}>21:00</option>
+                                        <option value="22" {{ time == '22' ? ' selected="selected"' : "" }}>22:00</option>
+                                        <option value="23" {{ time == '23' ? ' selected="selected"' : "" }}>23:00</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" style="margin-left:0; margin-right:15px;">
+                                    <label style="font-style:italic;font-weight:normal;">{{ text_current_server_time }}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">{{ entry_template }}</label>
+                        <div class="col-sm-10">
+                            <select name="template_id" class="form-control">
+                                {% for template in templates %}
+                                    {% if (template['template_id'] == template_id) %}
+                                        <option value="{{ template['template_id'] }}" selected="selected">{{ template['name'] }}</option>
+                                    {% else %}
+                                        <option value="{{ template['template_id'] }}">{{ template['name'] }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">{{ entry_language }}</label>
+                        <div class="col-sm-10">
+                            <select name="language_id" class="form-control">
+                                {% for language in languages %}
+                                    {% if (language['language_id'] == config_language_id) %}
+                                        <option value="{{ language['language_id'] }}" selected="selected">{{ language['name'] }}</option>
+                                    {% else %}
+                                        <option value="{{ language['language_id'] }}">{{ language['name'] }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                            <div class="checkbox">
+                                <label>
+                                    {% if (only_selected_language) %}
+                                        <input type="checkbox" name="only_selected_language" value="1" checked="checked" />
+                                    {% else %}
+                                        <input type="checkbox" name="only_selected_language" value="1" />
+                                    {% endif %}
+                                    {{ text_only_selected_language }}
+                                </label>
+                            </div>
+                            <p class="help-block">{{ text_only_selected_language_help }}</p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">{{ entry_currency }}</label>
+                        <div class="col-sm-10">
+                            <select name="currency" class="form-control">
+                                {% for cur in currencies %}
+                                    {% if (cur['code'] == currency) %}
+                                        <option value="{{ cur['code'] }}" selected="selected">{{ cur['title'] }}</option>
+                                    {% else %}
+                                        <option value="{{ cur['code'] }}">{{ cur['title'] }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">{{ entry_store }}</label>
+                        <div class="col-sm-10">
+                            <select name="store_id" class="form-control">
+                                array_unshift(stores, {('store_id' : 0, 'name' : text_default) }
+                                {% for store in stores %} )
+                                    {% if (store['store_id'] == store_id) %}
+                                        <option value="{{ store['store_id'] }}" selected="selected">{{ store['name'] }}</option>
+                                    {% else %}
+                                        <option value="{{ store['store_id'] }}">{{ store['name'] }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-10 col-sm-offset-2">
+                            <div class="alert alert-warning">
+                                <i class="fa fa-exclamation-circle"></i> {{ text_clear_warning }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-to">{{ entry_to }}</label>
+                        <div class="col-sm-10">
+                            <select name="to" id="input-to" class="form-control">
+                                {% if (to == 'newsletter') %}
+                                    <option value="newsletter" selected="selected">{{ text_newsletter }}</option>
+                                {% else %}
+                                    <option value="newsletter">{{ text_newsletter }}</option>
+                                {% endif %}
+                                {% if (to == 'customer_all') %}
+                                    <option value="customer_all" selected="selected">{{ text_customer_all }}</option>
+                                {% else %}
+                                    <option value="customer_all">{{ text_customer_all }}</option>
+                                {% endif %}
+                                {% if (to == 'customer_group') %}
+                                    <option value="customer_group" selected="selected">{{ text_customer_group }}</option>
+                                {% else %}
+                                    <option value="customer_group">{{ text_customer_group }}</option>
+                                {% endif %}
+                                {% if (to == 'customer') %}
+                                    <option value="customer" selected="selected">{{ text_customer }}</option>
+                                {% else %}
+                                    <option value="customer">{{ text_customer }}</option>
+                                {% endif %}
+                                {% if (to == 'affiliate_all') %}
+                                    <option value="affiliate_all" selected="selected">{{ text_affiliate_all }}</option>
+                                {% else %}
+                                    <option value="affiliate_all">{{ text_affiliate_all }}</option>
+                                {% endif %}
+                                {% if (to == 'affiliate') %}
+                                    <option value="affiliate" selected="selected">{{ text_affiliate }}</option>
+                                {% else %}
+                                    <option value="affiliate">{{ text_affiliate }}</option>
+                                {% endif %}
+                                {% if (to == 'product') %}
+                                    <option value="product" selected="selected">{{ text_product }}</option>
+                                {% else %}
+                                    <option value="product">{{ text_product }}</option>
+                                {% endif %}
+                                {% if (to == 'marketing') %}
+                                    <option value="marketing" selected="selected">{{ text_marketing }}</option>
+                                {% else %}
+                                    <option value="marketing">{{ text_marketing }}</option>
+                                {% endif %}
+                                {% if (to == 'marketing_all') %}
+                                    <option value="marketing_all" selected="selected">{{ text_marketing_all }}</option>
+                                {% else %}
+                                    <option value="marketing_all">{{ text_marketing_all }}</option>
+                                {% endif %}
+                                {% if (to == 'subscriber') %}
+                                    <option value="subscriber" selected="selected">{{ text_subscriber_all }}</option>
+                                {% else %}
+                                    <option value="subscriber">{{ text_subscriber_all }}</option>
+                                {% endif %}
+                                {% if (to == 'all') %}
+                                    <option value="all" selected="selected">{{ text_all }}</option>
+                                {% else %}
+                                    <option value="all">{{ text_all }}</option>
+                                {% endif %}
+                                {% if (to == 'rewards') %}
+                                    <option value="rewards" selected="selected">{{ text_rewards }}</option>
+                                {% else %}
+                                    <option value="rewards">{{ text_rewards }}</option>
+                                {% endif %}
+                                {% if (to == 'rewards_all') %}
+                                    <option value="rewards_all" selected="selected">{{ text_rewards_all }}</option>
+                                {% else %}
+                                    <option value="rewards_all">{{ text_rewards_all }}</option>
+                                {% endif %}
+                            </select>
+                        </div>
+                    </div>
+                    {% if (list_data) %}
+                    <div class="form-group to to-marketing">
+                        <label class="col-sm-2 control-label">{{ entry_marketing }}</label>
+                        <div class="col-sm-10">
+                            {% for store in stores %}
+                            <div class="well well-sm list-display marketing-list-{{ store['store_id'] }}" style="height: 150px; overflow: auto;">
+                                {% if (list_data[store['store_id']] is defined and list_data[store['store_id']]) {% for key,list in list_data[store['store_id']] %} %}
+                                <div class="checkbox">
+                                    <label>
+                                        {% if (marketing_list and is_array(marketing_list) and store['store_id'] ~ '_' ~ key in marketing_list) %}
+                                        <input type="checkbox" name="marketing_list[]" value="{{ store['store_id'] }}_{{ key }}" checked="checked" />
+                                                    {% else %}
+                                                        <input type="checkbox" name="marketing_list[]" value="{{ store['store_id'] }}_{{ key }}" />
+                                                    {% endif %}
+                                                    {{ list[config_language_id] }}</label>
+                                                </label>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+
+                            </div>
+                        </div>
+
+                    <div class="form-group to to-customer-group">
+                        <label class="col-sm-2 control-label" for="input-customer-group">{{ entry_customer_group }}</label>
+                        <div class="col-sm-10">
+                            <select name="customer_group_id" id="input-customer-group" class="form-control">
+                                {% for customer_group in customer_groups %}
+                                    {% if (customer_group['customer_group_id'] == customer_group_id and to == 'customer_group') %}
+                                        <option value="{{ customer_group['customer_group_id'] }}" selected="selected">{{ customer_group['name'] }}</option>
+                                    {% else %}
+                                        <option value="{{ customer_group['customer_group_id'] }}">{{ customer_group['name'] }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                            <div class="checkbox">
+                                <label>
+                                    {% if (customer_group_only_subscribers) %}
+                                        <input type="checkbox" name="customer_group_only_subscribers" value="1" checked="checked" />
+                                    {% else %}
+                                        <input type="checkbox" name="customer_group_only_subscribers" value="1" />
+                                    {% endif %}
+                                    {{ text_only_subscribers }}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group to to-customer">
+                        <label class="col-sm-2 control-label" for="input-customer">{{ entry_customer }}</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="customers" value="" placeholder="{{ entry_customer }}" id="input-customer" class="form-control" autocomplete="off">
+                            <div id="ne-customer" class="well well-sm" style="height: 150px; overflow: auto;">
+                                        {% for customer in customers %}
+                                        <div id="ne-customer-{{ customer['customer_id'] }}"><i class="fa fa-minus-circle"></i> {{ customer['name'] }}
+                                            <input type="hidden" name="customer[]" value="{{ customer['customer_id'] }}" />
+                                        </div>
+                                        {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group to to-affiliate">
+                            <label class="col-sm-2 control-label" for="input-affiliate">{{ entry_affiliate }}</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="affiliates" value="" placeholder="{{ entry_affiliate }}" id="input-affiliate" class="form-control" autocomplete="off">
+                                <div id="affiliate" class="well well-sm" style="height: 150px; overflow: auto;">
+                                    {% for affiliate in affiliates %}
+                                        <div id="affiliate-{{ affiliate['affiliate_id'] }}"><i class="fa fa-minus-circle"></i> {{ affiliate['name'] }}
+                                            <input type="hidden" name="affiliate[]" value="{{ affiliate['affiliate_id'] }}" />
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group to to-product">
+                            <label class="col-sm-2 control-label" for="input-product">{{ entry_product }}</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="products" value="" placeholder="{{ entry_product }}" id="input-product" class="form-control" autocomplete="off">
+                                <div id="product" class="well well-sm" style="height: 150px; overflow: auto;">
+                                    {% for product in products %}
+                                        <div id="product-{{ product['product_id'] }}"><i class="fa fa-minus-circle"></i> {{ product['name'] }}
+                                            <input type="hidden" name="product[]" value="{{ product['product_id'] }}" />
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group random-setting">
+                            <label class="col-sm-2 control-label">{{ entry_random }}</label>
+                            <div class="col-sm-10">
+                                <label class="radio-inline">
+                                    {% if (random) %}
+                                        <input type="radio" name="random" value="1" checked="checked" />
+                                        {{ entry_yes }}
+                                    {% else %}
+                                        <input type="radio" name="random" value="1" />
+                                        {{ entry_yes }}
+                                    {% endif %}
+                                </label>
+                                <label class="radio-inline">
+                                    {% if (not random) %}
+                                        <input type="radio" name="random" value="0" checked="checked" />
+                                        {{ entry_no }}
+                                    {% else %}
+                                        <input type="radio" name="random" value="0" />
+                                        {{ entry_no }}
+                                    {% endif %}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group required random">
+                            <label class="col-sm-2 control-label" for="input-random-count"><span data-toggle="tooltip" title="{{ help_random_count }}">{{ entry_random_count }}</span></label>
+                            <div class="col-sm-10 col-md-2">
+                                <input type="text" name="random_count" value="{{ random_count }}" class="form-control" id="input-random-count" size="2">
+                            </div>
+                        </div>
+                        <div class="form-group defined-setting">
+                            <label class="col-sm-2 control-label">{{ entry_defined }}</label>
+                            <div class="col-sm-10">
+                                <label class="radio-inline">
+                                    {% if (defined) %}
+                                        <input type="radio" name="defined" value="1" checked="checked" />
+                                        {{ entry_yes }}
+                                    {% else %}
+                                        <input type="radio" name="defined" value="1" />
+                                        {{ entry_yes }}
+                                    {% endif %}
+                                </label>
+                                <label class="radio-inline">
+                                    {% if (not defined) %}
+                                        <input type="radio" name="defined" value="0" checked="checked" />
+                                        {{ entry_no }}
+                                    {% else %}
+                                        <input type="radio" name="defined" value="0" />
+                                        {{ entry_no }}
+                                    {% endif %}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group defined-product">
+                            <label class="col-sm-2 control-label" for="input-section-name">{{ entry_section_name }}</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="defined_product_text" value="" placeholder="{{ entry_section_name }}" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group defined-product">
+                            <label class="col-sm-2 control-label" for="input-defined-products">{{ entry_product }}</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="defined_products" value="" placeholder="{{ entry_product }}" id="input-defined-products" class="form-control" autocomplete="off">
+                                <div id="defined-product" class="well well-sm" style="height: 150px; overflow: auto;">
+                                    {% for product in defined_products %}
+                                        <div id="defined-product-{{ product['product_id'] }}"><i class="fa fa-minus-circle"></i> {{ product['name'] }}
+                                            <input type="hidden" name="defined_product[]" value="{{ product['product_id'] }}" />
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        {% for index,dpm in defined_products_more %}
+                            <div class="form-group defined-product">
+                                <label class="col-sm-2 control-label" for="input-section-name-{{ index }}">{{ entry_section_name }}</label>
+                                <div class="col-sm-10">
+                                    <div class="input-group">
+                                        <input type="text" name="defined_product_more[{{ index }}][text]" value="{{ dpm['text'] }}" id="input-section-name-{{ index }}" placeholder="{{ entry_section_name }}" class="form-control" />
+                                        <span class="input-group-btn">
+                                        <button onclick="removeSection(this);" class="btn btn-default" type="button">
+                                            <i class="fa fa-minus-circle"></i> {{ button_remove }}
+                                        </button>
+                                    </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group defined-product">
+                                <label class="col-sm-2 control-label" for="input-defined-products-{{ index }}">{{ entry_product }}</label>
+                                <div class="col-sm-10">
+                                    <input type="text" name="defined_products_{{ index }}" value="" placeholder="{{ entry_product }}" id="input-defined-products-{{ index }}" data-id="{{ index }}" class="form-control" autocomplete="off">
+                                    <div id="defined-product-{{ index }}" class="well well-sm" style="height: 150px; overflow: auto;">
+                                        {% for product in dpm['products'] %}
+                                            <div id="defined-product-entry-{{ index }}-{{ product['product_id'] }}"><i class="fa fa-minus"></i> {{ product['name'] }}
+                                                <input type="hidden" name="defined_product_more[{{ index }}][products][]" value="{{ product['product_id'] }}" />
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        <div class="form-group defined-product">
+                            <div class="col-sm-10 col-sm-offset-2">
+                                <button id="button-add-defined-section" class="btn btn-primary" type="button">
+                                    <i class="fa fa-plus"></i> {{ button_add_defined_section }}
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">{{ entry_special }}</label>
+                            <div class="col-sm-10">
+                                <label class="radio-inline">
+                                    {% if (special) %}
+                                        <input type="radio" name="special" value="1" checked="checked" />
+                                        {{ entry_yes }}
+                                    {% else %}
+                                        <input type="radio" name="special" value="1" />
+                                        {{ entry_yes }}
+                                    {% endif %}
+                                </label>
+                                <label class="radio-inline">
+                                    {% if (not special) %}
+                                        <input type="radio" name="special" value="0" checked="checked" />
+                                        {{ entry_no }}
+                                    {% else %}
+                                        <input type="radio" name="special" value="0" />
+                                        {{ entry_no }}
+                                    {% endif %}
+                                </label>
+                                <div class="checkbox checkbox-special">
+                                    <label>
+                                        {% if (skip_out_of_stock["special"] is not empty) %}
+                                            <input type="checkbox" name="skip_out_of_stock[special]" value="1" checked="checked" />
+                                        {% else %}
+                                            <input type="checkbox" name="skip_out_of_stock[special]" value="1" />
+                                        {% endif %}
+                                        {{ text_skip_out_of_stock }}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">{{ entry_latest }}</label>
+                            <div class="col-sm-10">
+                                <label class="radio-inline">
+                                    {% if (latest) %}
+                                        <input type="radio" name="latest" value="1" checked="checked" />
+                                        {{ entry_yes }}
+                                    {% else %}
+                                        <input type="radio" name="latest" value="1" />
+                                        {{ entry_yes }}
+                                    {% endif %}
+                                </label>
+                                <label class="radio-inline">
+                                    {% if (not latest) %}
+                                        <input type="radio" name="latest" value="0" checked="checked" />
+                                        {{ entry_no }}
+                                    {% else %}
+                                        <input type="radio" name="latest" value="0" />
+                                        {{ entry_no }}
+                                    {% endif %}
+                                </label>
+                                <div class="checkbox checkbox-latest">
+                                    <label>
+                                        {% if (skip_out_of_stock["latest"] is not empty) %}
+                                            <input type="checkbox" name="skip_out_of_stock[latest]" value="1" checked="checked" />
+                                        {% else %}
+                                            <input type="checkbox" name="skip_out_of_stock[latest]" value="1" />
+                                        {% endif %}
+                                        {{ text_skip_out_of_stock }}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">{{ entry_popular }}</label>
+                            <div class="col-sm-10">
+                                <label class="radio-inline">
+                                    {% if (popular) %}
+                                        <input type="radio" name="popular" value="1" checked="checked" />
+                                        {{ entry_yes }}
+                                    {% else %}
+                                        <input type="radio" name="popular" value="1" />
+                                        {{ entry_yes }}
+                                    {% endif %}
+                                </label>
+                                <label class="radio-inline">
+                                    {% if (not popular) %}
+                                        <input type="radio" name="popular" value="0" checked="checked" />
+                                        {{ entry_no }}
+                                    {% else %}
+                                        <input type="radio" name="popular" value="0" />
+                                        {{ entry_no }}
+                                    {% endif %}
+                                </label>
+                                <div class="checkbox checkbox-popular">
+                                    <label>
+                                        {% if (skip_out_of_stock["popular"] is not empty) %}
+                                            <input type="checkbox" name="skip_out_of_stock[popular]" value="1" checked="checked" />
+                                        {% else %}
+                                            <input type="checkbox" name="skip_out_of_stock[popular]" value="1" />
+                                        {% endif %}
+                                        {{ text_skip_out_of_stock }}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">{{ entry_defined_categories }}</label>
+                            <div class="col-sm-10">
+                                <label class="radio-inline">
+                                    {% if (defined_categories) %}
+                                        <input type="radio" name="defined_categories" value="1" checked="checked" />
+                                        {{ entry_yes }}
+                                    {% else %}
+                                        <input type="radio" name="defined_categories" value="1" />
+                                        {{ entry_yes }}
+                                    {% endif %}
+                                </label>
+                                <label class="radio-inline">
+                                    {% if (not defined_categories) %}
+                                        <input type="radio" name="defined_categories" value="0" checked="checked" />
+                                        {{ entry_no }}
+                                    {% else %}
+                                        <input type="radio" name="defined_categories" value="0" />
+                                        {{ entry_no }}
+                                    {% endif %}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group defined-categories">
+                            <div class="col-sm-10 col-sm-offset-2">
+                                <div class="well well-sm" style="height: 150px; overflow: auto;">
+                                    {% for category in categories %}
+                                        <div class="checkbox">
+                                            <label>
+                                                {% if (defined_category and is_array(defined_category) and category['category_id'] in defined_category) %}
+                                                    <input type="checkbox" name="defined_category[]" value="{{ category['category_id'] }}" checked="checked" />
+                                                {% else %}
+                                                    <input type="checkbox" name="defined_category[]" value="{{ category['category_id'] }}" />
+                                                {% endif %}
+                                                {{ category['name'] }}
+                                            </label>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                <div class="form-inline">
+                                    <div class="form-group" style="margin-left:0; margin-right:15px;">
+                                        <label for="input-defined-categories-limit">{{ entry_limit }}</label>
+                                        <input type="text" name="defined_category_limit" value="{{ defined_category_limit }}" class="form-control" id="input-defined-categories-limit" size="2">
+                                    </div>
+                                    <div class="form-group" style="margin-left:0; margin-right:15px;">
+                                        <label>{{ entry_sort_by }}</label>
+                                        <select name="defined_category_sort" class="form-control">
+                                            {% if (defined_category_sort == 'date_added') %}
+                                                <option value="date_added" selected="selected">{{ text_date_added }}</option>
+                                            {% else %}
+                                                <option value="date_added">{{ text_date_added }}</option>
+                                            {% endif %}
+                                            {% if (defined_category_sort == 'sort_order') %}
+                                                <option value="sort_order" selected="selected">{{ text_sort_order }}</option>
+                                            {% else %}
+                                                <option value="sort_order">{{ text_sort_order }}</option>
+                                            {% endif %}
+                                        </select>
+                                    </div>
+                                    <div class="form-group" style="margin-left:0; margin-right:15px;">
+                                        <label>{{ entry_order }}</label>
+                                        <select name="defined_category_order" class="form-control">
+                                            {% if (not defined_category_order) %}
+                                                <option value="0" selected="selected">{{ text_ascending }}</option>
+                                            {% else %}
+                                                <option value="0">{{ text_ascending }}</option>
+                                            {% endif %}
+                                            {% if (defined_category_order) %}
+                                                <option value="1" selected="selected">{{ text_descending }}</option>
+                                            {% else %}
+                                                <option value="1">{{ text_descending }}</option>
+                                            {% endif %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group required">
+                            <label class="col-sm-2 control-label" for="input-subject">{{ entry_subject }}</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="subject" value="{{ subject }}" id="input-subject" placeholder="{{ entry_subject }}" class="form-control" />
+                                {% if (error_subject) %}
+                                    <div class="text-danger">{{ error_subject }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="form-group required">
+                            <label class="col-sm-2 control-label">{{ entry_message }}</label>
+                            <div class="col-sm-10">
+                                <textarea name="message" class="form-control">{{ message }}</textarea>
+                                {% if (error_message) %}
+                                    <div class="text-danger">{{ error_message }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="input-text-message">{{ entry_text_message }}</label>
+                            <div class="col-sm-10">
+                                <textarea name="text_message" id="input-text-message" rows="10" class="form-control">{{ text_message }}</textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">{{ entry_text_message_products }}</label>
+                            <div class="col-sm-10">
+                                <label class="radio-inline">
+                                    {% if (text_message_products) %}
+                                        <input type="radio" name="text_message_products" value="1" checked="checked" />
+                                        {{ entry_yes }}
+                                    {% else %}
+                                        <input type="radio" name="text_message_products" value="1" />
+                                        {{ entry_yes }}
+                                    {% endif %}
+                                </label>
+                                <label class="radio-inline">
+                                    {% if (not text_message_products) %}
+                                        <input type="radio" name="text_message_products" value="0" checked="checked" />
+                                        {{ entry_no }}
+                                    {% else %}
+                                        <input type="radio" name="text_message_products" value="0" />
+                                        {{ entry_no }}
+                                    {% endif %}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-10 col-sm-offset-2">
+                                <div class="alert alert-info">
+                                    {{ text_message_info }}
+                                </div>
+                            </div>
+                        </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="preview-modal" tabindex="-1" role="dialog" aria-labelledby="preview-modal-label" aria-hidden="true">
+        <div class="modal-dialog" style="min-width:800px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body"></div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="view/javascript/ne/ckeditor/ckeditor.js"></script>
+    <script type="text/javascript"><!--
+        CKEDITOR.replace('message', {
+            height:'500'
+        });
+        //--></script>
+    <script type="text/javascript"><!--
+        var defined_section_row = {{ max(count(defined_products_more), 0) }};
+
+        $(document).ready(function() {
+            $('select[name=\'to\']').bind('change', function () {
+                $('.to').hide();
+                $('.to-' + $(this).val().replace('_', '-')).show();
+
+                var to = $(this).val();
+
+                if (to == 'marketing' || to == 'marketing_all' || to == 'subscriber' || to == 'all') {
+                    if ($('.marketing-list-' + $('select[name=\'store_id\']').val() + ' input:checkbox').size() == 0) {
+                        $('.to-marketing').hide();
+                    } else {
+                        $('.to-marketing').show();
+                    }
+                }
+            }).trigger('change');
+
+            $('select').each(function(){
+                if ($(this).children().length <= 1) {
+                    $(this).parent().parent().hide();
+                }
+            });
+
+            $('select[name=\'frequency\']').change(function() {
+                var len = $('select[name=\'day\'] option').size();
+                if ($(this).val() == '30' || $(this).val() == '1') {
+                    if (len == 8) {
+                        $('select[name=\'day\']').removeAttr('disabled');
+                        $('select[name=\'day\'] option:last').remove();
+                    }
+                    $('select[name=\'day\']').append($("<option></option>").attr("value", "").text('{{ text_daily }}'));
+                    $('select[name=\'day\'] option:last').attr('selected', 'selected');
+                    $('select[name=\'day\']').attr('disabled', 'disabled');
+                } else if (len == 8) {
+                    $('select[name=\'day\']').removeAttr('disabled');
+                    $('select[name=\'day\'] option:last').remove();
+                }
+            });
+
+            $('input[name=\'recurrent\']').bind('click', function() {
+                if ($('input[name=\'recurrent\']:checked').val() == 1) {
+                    $('.once').hide();
+                    $('.recurrent').show();
+                    $('.defined-setting').hide();
+                    $('.random-setting').show();
+                } else {
+                    $('.recurrent').hide();
+                    $('.once').show();
+                    $('.random-setting').hide();
+                    $('.defined-setting').show();
+                }
+                checkDefined();
+                checkRandom();
+            });
+            $('input[name=\'recurrent\']:checked').trigger('click');
+
+            $('select[name=\'language_id\'], select[name=\'template_id\']').bind('change', function(){
+                getTemplate();
+            });
+
+            $('.list-display').hide();
+            $('.marketing-list-' + $('select[name=\'store_id\']').val()).show();
+
+            $('select[name=\'store_id\']').bind('change', function(){
+                $('.list-display').hide();
+                $('.list-display input:checkbox').removeAttr('checked');
+
+                var to = $('select[name=\'to\']').val();
+
+                if (to == 'marketing' || to == 'marketing_all' || to == 'subscriber' || to == 'all') {
+                    if ($('.marketing-list-' + $(this).val() + ' input:checkbox').size() == 0) {
+                        $('.to-marketing').hide();
+                    } else {
+                        $('.to-marketing').show();
+                    }
+                }
+
+                $('.marketing-list-' + $(this).val()).show();
+                getTemplate();
+            });
+
+            if ($('input[name=\'recurrent\']:checked').val() == 1)
+            {
+                $('.defined-setting').hide();
+                $('.random-setting').show();
+            }
+            else
+            {
+                $('.random-setting').hide();
+                $('.defined-setting').show();
+            }
+
+            if ($('input[name=\'defined_categories\']:checked').val() == 1)
+            {
+                $('.defined-categories').show();
+            }
+            else
+            {
+                $('.defined-categories').hide();
+            }
+
+            $('input[name=\'random\']').bind('click', function() {
+                checkRandom();
+            });
+
+            if ($('input[name=\'special\']:checked').val() == 1)
+            {
+                $('.checkbox-special').show();
+            }
+            else
+            {
+                $('.checkbox-special').hide();
+            }
+
+            if ($('input[name=\'latest\']:checked').val() == 1)
+            {
+                $('.checkbox-latest').show();
+            }
+            else
+            {
+                $('.checkbox-latest').hide();
+            }
+
+            if ($('input[name=\'popular\']:checked').val() == 1)
+            {
+                $('.checkbox-popular').show();
+            }
+            else
+            {
+                $('.checkbox-popular').hide();
+            }
+
+            $('input[name=\'special\'], input[name=\'latest\'], input[name=\'popular\']').bind('click', function() {
+
+                if ($('input[name=\'special\']:checked').val() == 1)
+                {
+                    $('.checkbox-special').show();
+                }
+                else
+                {
+                    $('.checkbox-special').hide();
+                }
+
+                if ($('input[name=\'latest\']:checked').val() == 1)
+                {
+                    $('.checkbox-latest').show();
+                }
+                else
+                {
+                    $('.checkbox-latest').hide();
+                }
+
+                if ($('input[name=\'popular\']:checked').val() == 1)
+                {
+                    $('.checkbox-popular').show();
+                }
+                else
+                {
+                    $('.checkbox-popular').hide();
+                }
+            });
+
+            $('input[name=\'defined\']').bind('click', function() {
+                checkDefined();
+            });
+
+            $('input[name=\'defined_categories\']').bind('click', function() {
+                checkDefinedCategories();
+            });
+
+            var subject = $('input[name=\'subject\']').val();
+            var message;
+
+            for (var instance in CKEDITOR.instances) {
+                message = CKEDITOR.instances[instance].getData();
+            }
+
+            if (!subject.length && !message.length) {
+                getTemplate();
+            }
+
+            $('input[name=\'defined_products\']').autocomplete({
+                'source': function(request, response) {
+                    $.ajax({
+                        url: 'index.php?route=catalog/product/autocomplete&user_token={{ user_token }}&filter_name=' +  encodeURIComponent(request),
+                        dataType: 'json',
+                        data: {
+                            user_token: '{{ user_token }}',
+                            filter_name: encodeURIComponent(request)
+                        },
+                        type: 'post',
+                        success: function(json) {
+                            response($.map(json, function(item) {
+                                return {
+                                    label: item['name'],
+                                    value: item['product_id']
+                                }
+                            }));
+                        }
+                    });
+                },
+                'select': function(item) {
+                    $(this).val('');
+
+                    $('#defined-product-' + item['value']).remove();
+                    $('#defined-product').append('<div id="defined-product-' + item['value'] + '"><i class="fa fa-minus-circle"></i> ' + item['label'] + '<input type="hidden" name="defined_product[]" value="' + item['value'] + '" /></div>');
+                }
+            });
+
+            $('input[name^=\'defined_products_\']').autocomplete({
+                'source': function(request, response) {
+                    $.ajax({
+                        url: 'index.php?route=catalog/product/autocomplete&user_token={{ user_token }}&filter_name=' +  encodeURIComponent(request),
+                        dataType: 'json',
+                        data: {
+                            user_token: '{{ user_token }}',
+                            filter_name: encodeURIComponent(request)
+                        },
+                        type: 'post',
+                        success: function(json) {
+                            response($.map(json, function(item) {
+                                return {
+                                    label: item['name'],
+                                    value: item['product_id']
+                                }
+                            }));
+                        }
+                    });
+                },
+                'select': function(item) {
+                    $(this).val('');
+
+                    var id = $(this).attr('data-id');
+
+                    $('#defined-product-entry-' + id + '-' + item['value']).remove();
+                    $('#defined-product-' + id).append('<div id="defined-product-entry-' + id + '-' + item['value'] + '"><i class="fa fa-minus-circle"></i> ' + item['label'] + '<input type="hidden" name="defined_product_more[' + id + '][products][]" value="' + item['value'] + '" /></div>');
+                }
+            });
+
+            $('#defined-product').delegate('.fa-minus-circle', 'click', function() {
+                $(this).parent().remove();
+            });
+
+            $("[id^='defined-product-']").delegate('.fa-minus-circle', 'click', function() {
+                $(this).parent().remove();
+            });
+
+            checkDefinedCategories();
+
+            $('#button-preview').bind('click', function() {
+                $(this).attr('disabled', true).find('i').removeClass('fa-eye').addClass('fa-refresh fa-spin');
+
+                var defined_products = [];
+
+                if ($('input[name=defined]:checked').val() == 1) {
+                    $('#defined-product input').each(function(id) {
+                        var item = $('#defined-product input').get(id);
+                        defined_products.push(item.value);
+                    });
+                }
+
+                var defined_products_more = [];
+
+                if ($('input[name=defined]:checked').val() == 1) {
+                    for (var i = 0; i < defined_section_row; i++) {
+                        defined_products_more[i] = {
+                            'text' : $('input[name="defined_product_more[' + i + '][text]"]').val(),
+                            'products' : []
+                        };
+                        $('#defined-product-' + i + ' input').each(function(id) {
+                            var item = $('#defined-product-' + i + ' input').get(id);
+                            defined_products_more[i]['products'].push(item.value);
+                        });
+                    }
+                }
+
+                var defined_categories = [];
+
+                if ($('input[name=defined_categories]:checked').val() == 1) {
+                    $('input[name="defined_category[]"]:checked').each(function(){
+                        defined_categories.push($(this).val());
+                    });
+                }
+
+                var skip_out_of_stock = [];
+
+                if ($('input[name="skip_out_of_stock[special]"]').is(':checked')) {
+                    skip_out_of_stock['special'] = 1;
+                } else {
+                    skip_out_of_stock['special'] = 0;
+                }
+
+                if ($('input[name="skip_out_of_stock[latest]"]').is(':checked')) {
+                    skip_out_of_stock['latest'] = 1;
+                } else {
+                    skip_out_of_stock['latest'] = 0;
+                }
+
+                if ($('input[name="skip_out_of_stock[popular]"]').is(':checked')) {
+                    skip_out_of_stock['popular'] = 1;
+                } else {
+                    skip_out_of_stock['popular'] = 0;
+                }
+
+                var message;
+
+                for (var instance in CKEDITOR.instances) {
+                    message = CKEDITOR.instances[instance].getData();
+                }
+
+                $.ajax({
+                    type: 'post',
+                    url: 'index.php?route=ne/newsletter/preview&user_token={{ user_token }}',
+                    data: {
+                        recurrent: $('input[name=recurrent]:checked').val(),
+                        special: $('input[name=special]:checked').val(),
+                        latest: $('input[name=latest]:checked').val(),
+                        popular: $('input[name=popular]:checked').val(),
+                        random: $('input[name=random]:checked').val(),
+                        random_count: $('input[name=random_count]').val(),
+                        defined: defined_products,
+                        defined_text: $('input[name=defined_product_text]').val(),
+                        defined_more: defined_products_more,
+                        defined_categories: defined_categories,
+                        defined_category_limit: $('input[name=defined_category_limit]').val(),
+                        defined_category_order: $('select[name=defined_category_order]').val(),
+                        defined_category_sort: $('select[name=defined_category_sort]').val(),
+                        skip_out_of_stock: $.extend({}, skip_out_of_stock),
+                        template_id: $('select[name=template_id]').val(),
+                        language_id: $('select[name=language_id]').val(),
+                        currency: $('select[name=currency]').val(),
+                        customer_group_id: ($('select[name=customer_group_id]').length ? $('select[name=customer_group_id]').val() : ''),
+                        store_id: $('select[name=store_id]').val(),
+                        message: message,
+                        subject: $('input[name=subject]').val()
+                    },
+                    dataType: 'json',
+                    success: function(data) {
+                        $('#preview-modal .modal-title').text(data.subject);
+                        $('#preview-modal .modal-body').html(data.body);
+                        $('#preview-modal').modal('show');
+                        $('#button-preview').attr('disabled', false).find('i').removeClass('fa-refresh fa-spin').addClass('fa-eye');
+                    }
+                });
+
+                return false;
+            });
+
+            $('#button-add-defined-section').bind('click', function() {
+                var html;
+                html  = '<div class="form-group defined-product">';
+                html += '   <label class="col-sm-2 control-label" for="input-section-name-' + defined_section_row + '">{{ entry_section_name }}</label>';
+                html += '   <div class="col-sm-10">';
+                html += '       <div class="input-group">';
+                html += '           <input type="text" name="defined_product_more[' + defined_section_row + '][text]" value="" id="input-section-name-' + defined_section_row + '" placeholder="{{ entry_section_name }}" class="form-control" />';
+                html += '           <span class="input-group-btn">';
+                html += '               <button onclick="removeSection(this);" class="btn btn-default" type="button">';
+                html += '                   <i class="fa fa-minus-circle"></i> {{ button_remove }}';
+                html += '               </button>';
+                html += '           </span>';
+                html += '       </div>';
+                html += '   </div>';
+                html += '</div>';
+                html += '<div class="form-group defined-product">';
+                html += '   <label class="col-sm-2 control-label" for="input-defined-products-' + defined_section_row + '">{{ entry_product }}</label>';
+                html += '   <div class="col-sm-10">';
+                html += '       <input type="text" name="defined_products_' + defined_section_row + '" value="" placeholder="{{ entry_product }}" id="input-defined-products-' + defined_section_row + '" data-id="' + defined_section_row + '" class="form-control" autocomplete="off">';
+                html += '       <div id="defined-product-' + defined_section_row + '" class="well well-sm" style="height: 150px; overflow: auto;"></div>';
+                html += '   </div>';
+                html += '</div>';
+
+                $(this).parent().parent().before(html);
+
+                $('input[name=\'defined_products_' + defined_section_row + '\']').autocomplete({
+                    'source': function(request, response) {
+                        $.ajax({
+                            url: 'index.php?route=catalog/product/autocomplete&user_token={{ user_token }}&filter_name=' +  encodeURIComponent(request),
+                            dataType: 'json',
+                            data: {
+                                user_token: '{{ user_token }}',
+                                filter_name: encodeURIComponent(request)
+                            },
+                            type: 'post',
+                            success: function(json) {
+                                response($.map(json, function(item) {
+                                    return {
+                                        label: item['name'],
+                                        value: item['product_id']
+                                    }
+                                }));
+                            }
+                        });
+                    },
+                    'select': function(item) {
+                        $(this).val('');
+
+                        var id = $(this).attr('data-id');
+
+                        $('#defined-product-entry-' + id + '-' + item['value']).remove();
+                        $('#defined-product-' + id).append('<div id="defined-product-entry-' + id + '-' + item['value'] + '"><i class="fa fa-minus-circle"></i> ' + item['label'] + '<input type="hidden" name="defined_product_more[' + id + '][products][]" value="' + item['value'] + '" /></div>');
+                    }
+                });
+
+                defined_section_row++;
+            });
+
+            $('input[name=\'customers\']').autocomplete({
+                'source': function(request, response) {
+                    $.ajax({
+                        {% if (version_compare(constant('VERSION'), '2.0.3.1', '>')) %}
+                        url: 'index.php?route=customer/customer/autocomplete&user_token={{ user_token }}&filter_name=' +  encodeURIComponent(request),
+                        {% else %}
+                        url: 'index.php?route=sale/customer/autocomplete&user_token={{ user_token }}&filter_name=' +  encodeURIComponent(request),
+                        {% endif %}
+                        dataType: 'json',
+                        data: {
+                            user_token: '{{ user_token }}',
+                            filter_name: encodeURIComponent(request)
+                        },
+                        type: 'post',
+                        success: function(json) {
+                            response($.map(json, function(item) {
+                                return {
+                                    label: item['name'],
+                                    value: item['customer_id']
+                                }
+                            }));
+                        }
+                    });
+                },
+                'select': function(item) {
+                    $(this).val('');
+                    $('#ne-customer-' + item['value']).remove();
+                    $('#ne-customer').append('<div id="ne-customer-' + item['value'] + '"><i class="fa fa-minus-circle"></i> ' + item['label'] + '<input type="hidden" name="customer[]" value="' + item['value'] + '" /></div>');
+                }
+            });
+
+            $('#ne-customer').delegate('.fa-minus-circle', 'click', function() {
+                $(this).parent().remove();
+            });
+
+            $('input[name=\'affiliates\']').autocomplete({
+                'source': function(request, response) {
+                    $.ajax({
+                        url: 'index.php?route=marketing/affiliate/autocomplete&user_token={{ user_token }}&filter_name=' +  encodeURIComponent(request),
+                        dataType: 'json',
+                        data: {
+                            user_token: '{{ user_token }}',
+                            filter_name: encodeURIComponent(request)
+                        },
+                        type: 'post',
+                        success: function(json) {
+                            response($.map(json, function(item) {
+                                return {
+                                    label: item['name'],
+                                    value: item['affiliate_id']
+                                }
+                            }));
+                        }
+                    });
+                },
+                'select': function(item) {
+                    $(this).val('');
+                    $('#affiliate-' + item['value']).remove();
+                    $('#affiliate').append('<div id="affiliate-' + item['value'] + '"><i class="fa fa-minus-circle"></i> ' + item['label'] + '<input type="hidden" name="affiliate[]" value="' + item['value'] + '" /></div>');
+                }
+            });
+
+            $('#affiliate').delegate('.fa-minus-circle', 'click', function() {
+                $(this).parent().remove();
+            });
+
+            $('input[name=\'products\']').autocomplete({
+                'source': function(request, response) {
+                    $.ajax({
+                        url: 'index.php?route=catalog/product/autocomplete&user_token={{ user_token }}&filter_name=' +  encodeURIComponent(request),
+                        dataType: 'json',
+                        data: {
+                            user_token: '{{ user_token }}',
+                            filter_name: encodeURIComponent(request)
+                        },
+                        type: 'post',
+                        success: function(json) {
+                            response($.map(json, function(item) {
+                                return {
+                                    label: item['name'],
+                                    value: item['product_id']
+                                }
+                            }));
+                        }
+                    });
+                },
+                'select': function(item) {
+                    $(this).val('');
+                    $('#product-' + item['value']).remove();
+                    $('#product').append('<div id="product-' + item['value'] + '"><i class="fa fa-minus-circle"></i> ' + item['label'] + '<input type="hidden" name="product[]" value="' + item['value'] + '" /></div>');
+                }
+            });
+
+            $('#product').delegate('.fa-minus-circle', 'click', function() {
+                $(this).parent().remove();
+            });
+        });
+
+        function checkRandom() {
+            if ($('input[name=\'random\']:checked').val() == 1 && $('input[name=\'recurrent\']:checked').val() == 1)
+            {
+                $('.random').show();
+            }
+            else
+            {
+                $('.random').hide();
+            }
+        }
+
+        function checkDefined() {
+            if ($('input[name=\'defined\']:checked').val() == 1 && $('input[name=\'recurrent\']:checked').val() != 1)
+            {
+                $('.defined-product').show();
+            }
+            else
+            {
+                $('.defined-product').hide();
+            }
+        }
+
+        function checkDefinedCategories() {
+            if ($('input[name=\'defined_categories\']:checked').val() == 1)
+            {
+                $('.defined-categories').show();
+            }
+            else
+            {
+                $('.defined-categories').hide();
+            }
+        }
+
+        function getTemplate() {
+            $.ajax({
+                type: 'post',
+                url: 'index.php?route=ne/schedule/template&user_token={{ user_token }}',
+                data: {
+                    template_id: $('select[name=template_id]').val(),
+                    language_id: $('select[name=language_id]').val(),
+                    store_id: $('select[name=store_id]').val()
+                },
+                dataType: 'json',
+                success: function(json) {
+                    $('input[name=subject]').val(json.subject);
+                    for (var instance in CKEDITOR.instances) {
+                        CKEDITOR.instances[instance].setData(json.body);
+                    }
+                }
+            });
+        }
+
+        function removeSection(el) {
+            $(el).closest('.defined-product').next().remove();
+            $(el).closest('.defined-product').remove();
+
+            defined_section_row--;
+        }
+
+
+        //--></script>
+    <script type="text/javascript"><!--
+        $('.date').datetimepicker({
+            pickTime: false
+        });
+        //--></script>
+</div>
+{{ footer }}

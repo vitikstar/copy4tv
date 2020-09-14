@@ -1,0 +1,157 @@
+<div id="register-block">
+<div class="lr-tel ch-block">
+    <div class="form-group required">
+        <input type="text" name="firstname_register"   placeholder="{{ entry_firstname }}"  class="lr-tel-input-complete form-control" />
+    </div>
+    <p class="text-danger error-firstname error-register"></p>
+</div>
+<div class="lr-tel ch-block" style="display: none">
+    <div class="form-group required">
+        <input type="text" name="lastname_register"     placeholder="{{ entry_lastname }}"  class="lr-tel-input-complete  form-control" />
+    </div>
+    <p class="text-danger error-lastname error-register"></p>
+</div>
+<div class="lr-tel ch-block" id="email_register_div" style="display:none">
+    <div class="form-group required">
+        <input type="email" name="email_register"    placeholder="{{ entry_email }}"  class="lr-tel-input-complete form-control"/>
+    </div>
+    <p class="text-danger error-email error-register"></p>
+</div>
+<div class="lr-tel ch-block" id="telephone_register_div">
+    <div class="form-group required">
+        <input type="telephone" name="telephone_register"    placeholder="{{ entry_telephone }}"  class="lr-tel-input-complete form-control" />
+    </div>
+    <p class="text-danger error-telephone error-register"></p>
+</div>
+<div class="lr-tel ch-block" style="display:none" id="password_register_div">
+    <div class="form-group required">
+        <input type="password" name="password_register"   placeholder="{{ entry_password }}"  class="lr-tel-input-complete form-control" />
+    </div>
+    <p class="text-danger error-password error-register"></p>
+</div>
+<div class="lr-tel ch-block" style="display:none" id="password_confirm_register_div">
+    <div class="form-group required">
+        <input type="password" name="password_confirm_register"   placeholder="{{ entry_confirm }}"  class="lr-tel-input-complete  form-control" />
+    </div>
+    <p class="text-danger error-confirm error-register"></p>
+</div>
+<div class="ch-block-btn-wrap text-center"  style="margin-bottom: 10px">
+    <input type="hidden" value="telephone" name="type_register">
+    <input type="button" value="{{ entry_register }}" id="register-button" class="lr-btn-next btn btn-default">
+</div>
+</div>
+<div id="register-ver-block" style="display: none">
+    <div class="lr-tel code-email-register ch-block" style="display: none">
+        <div class="form-group required">
+            <input type="text" name="code_email_register"   placeholder="{{ entry_code_for_email}}"  class="lr-tel-input-complete form-control"   maxlength='4'/>
+        </div>
+        <p class="text-danger error-code-email-register error-register-go"></p>
+    </div>
+    <div class="lr-tel code-telephone-register ch-block" style="display: none">
+        <div class="form-group required">
+            <input type="text" name="code_telephone_register"   placeholder="{{ entry_code_for_telephone }}"  class="lr-tel-input-complete  form-control"  maxlength='4'/>
+        </div>
+        <p class="text-danger error-code-telephone-register error-register-go"></p>
+    </div>
+    <div class="ch-block-btn-wrap text-center" style="margin-bottom: 10px">
+        <input type="button" value="{{ entry_continue }}" id="go-register-button" class="lr-btn-next btn btn-default btn-no-active">
+    </div>
+</div>
+
+
+<script>
+   $("input[name='code_email_register']").keyup(function () {
+     $("#go-register-button").addClass("btn-no-active");
+     if($(this).val().length==4){
+       $("#go-register-button").removeClass("btn-no-active");
+     }
+   })
+   
+   $("input[name='code_telephone_register']").keyup(function () {
+     $("#go-register-button").addClass("btn-no-active");
+     if($(this).val().length==4){
+       $("#go-register-button").removeClass("btn-no-active");
+     }
+   })
+   
+    $('input[name="telephone_register"]').mask("+38 (099) 999-99-99");
+    $('#register-button').on('click',function () {
+        $('.error-register').html('');
+        $.ajax({
+            url: 'index.php?route=extension/module/sirius_auth_register_popup/loginRegister',
+            dataType: 'json',
+            type: 'post',
+            data:{
+                'firstname' : $('input[name="firstname_register"]').val(),
+                'lastname' : $('input[name="lastname_register"]').val(),
+                'email' : $('input[name="email_register"]').val(),
+                'telephone' : $('input[name="telephone_register"]').val(),
+                'password' : $('input[name="password_register"]').val(),
+                'confirm' : $('input[name="password_confirm_register"]').val(),
+                'type_register' : $('input[name="type_register"]').val(),
+            },
+            success: function (json) {
+                if(json['error_register']){
+                        for(error in json['error_register']){
+                            $('.error-'+error).html(json['error_register'][error]);
+                        }
+                }else{
+                    $('#register-block').css('display','none');
+
+                    if(json['register-ver-block']=="email"){
+                        $('.code-email-register').css('display','block');
+                    }else if(json['register-ver-block']=="telephone"){
+                        $('.code-telephone-register').css('display','block');
+                    }
+                    $('#register-ver-block').css('display','block');
+                }
+            }
+        });
+    })
+    $('#go-register-button').on('click',function () {
+        $('.error-register-go').html('');
+        $.ajax({
+            url: 'index.php?route=extension/module/sirius_auth_register_popup/loginRegisterGo',
+            dataType: 'json',
+            type: 'post',
+            data:{
+                'code_telephone_register' : $('input[name="code_telephone_register"]').val(),
+                'code_email_register' : $('input[name="code_email_register"]').val(),
+            },
+            success: function (json) {
+                if(json['register']){
+                    setTimeout(function () {
+                        location.reload();
+                    },1000);
+                }else{
+                    if(json['error']['code-activation-email'].length!=0){
+                        $('.error-code-email-register').html(json['error']['code-activation-email']);
+                    }
+                    if(json['error']['code-activation-telephone'].length!=0){
+                        $('.error-code-telephone-register').html(json['error']['code-activation-telephone']);
+                    }
+                }
+            }
+        });
+    })
+    $(document).ready(function () {
+        $('.register-modal').find("#btel").on('click', function () {
+            $(".l-r-sms-email-btn-wrap button").removeClass("active");
+            $(this).addClass('active');
+            $('input[name="type_register"]').val('telephone');
+            $('#email_register_div').css('display','none');
+            $('#password_confirm_register_div').css('display','none');
+            $('#password_register_div').css('display','none');
+            $('#telephone_register_div').css('display','block');
+        })
+        $('.register-modal').find("#bemail").on('click', function () {
+            $(".l-r-sms-email-btn-wrap button").removeClass("active");
+            $(this).addClass('active');
+            $('input[name="type_register"]').val('email');
+            $('#password_confirm_register_div').css('display','block');
+            $('#password_register_div').css('display','block');
+            $('#email_register_div').css('display','block');
+            //$('#telephone_register_div').css('display','none');
+        })
+    });
+</script>

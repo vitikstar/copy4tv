@@ -1,0 +1,484 @@
+{{ header }}
+<div id="product-category" class="container">
+    <div class="breadcrumb-product-wrap">
+        {{ column_megamenu }}
+        <ul class="breadcrumb">
+            {% set total = breadcrumbs|length %}
+            {% set counter = 0 %}
+            {% for breadcrumb in breadcrumbs %}
+                {{ breadcrumb['separator'] }}
+                {% set counter = counter + 1 %}
+                {% if (counter == total) %}
+                    <li>{{ breadcrumb['text'] }}</li>
+                {% else %}
+                    <li><a href="{{ breadcrumb['href'] }}">{{ breadcrumb['text'] }}</a></li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="ac-row row">
+        <div class="ac-col-left">
+            {{ column_left }}
+        </div>
+
+
+    {% if column_left and column_right %}
+      {% set class = 'col-sm-6' %}
+    {% elseif column_left or column_right %}
+      {% set class = 'col-sm-9' %}
+    {% else %}
+      {% set class = 'col-sm-12' %}
+    {% endif %}
+    <div id="content" class="{{ class }}">
+        
+      {{ content_top }}
+
+      <h1 class="cat-title-1">{{ heading_title }}</h1>
+
+        <div class="category-filter-mob-wrap-main">
+            <div class="category-filter-mob-wrap">
+                <div class="category-filter-mob category-filter-mob-main">
+                    <div class="sort-filter-icon"></div>
+                    <div class="sort-filter-title">Фильтр</div>
+                    <div class="sort-filter-text">{{ text_total_filter_title }}</div>
+                </div>
+                <div class="category-sort-mob category-filter-mob-main">
+                    <div class="sort-filter-icon"></div>
+                    <div class="sort-filter-title">{{ sort_text_title }}</div>
+                    <div class="sort-filter-text">{{ sort_text }}</div>
+                </div>
+                <div class="sort-buttons-mob">
+                    <button type="button" id="button-main-catalog-1" class="active button-view-type btn btn-default"><i class="fa fa-th"></i></button>
+                    <button type="button" id="button-wide-catalog-1" class="button-view-type btn btn-default"><i class="fa fa-th-list"></i></button>
+                </div>
+            </div>
+        </div>
+        <script>
+            $(document).ready(function() {
+                $('.category-filter-mob').click(function() {
+                    $('.mobile-menu').removeClass('category-sort-mob');
+                    $('.mobile-menu').addClass('category-filter-mob');
+
+                    $('body').addClass('modal-open');
+                    $('.ocfilter-mobile').addClass('active');
+                    $('.mobile-menu-blocker-bg').fadeIn();
+                });
+                $('.category-sort-mob').click(function() {
+                    $('.mobile-menu').removeClass('category-filter-mob');
+                    $('.mobile-menu').addClass('category-sort-mob');
+
+                    $('body').addClass('modal-open');
+                    $('.ocfilter-mobile').addClass('active');
+                    $('.mobile-menu-blocker-bg').fadeIn();
+                });
+
+                if (window.innerWidth < 768) {
+                    $('.oc-filter-selected-wrap').appendTo('.oc-filter-selected-wrap-mob');
+                }
+
+                $(document).click(function(e){
+                    var container = $('.mobile-menu, .category-filter-mob-main');
+                    if (!container.is(e.target) && container.has(e.target).length === 0) {
+                       $('body').removeClass('modal-open');
+                       $('.ocfilter-mobile').removeClass('active');
+                       $('.mobile-menu-blocker-bg').fadeOut();
+                    }
+                });
+
+
+                $('.mobile-menu .close-icon').click(function() {
+                    $('body').removeClass('modal-open');
+                    $('.ocfilter-mobile').removeClass('active');
+                    $('.mobile-menu-blocker-bg').fadeOut();
+                })
+            });
+        </script>
+
+
+
+      {% if products %}
+          <div class="main-category-filter">
+              <div class="oc-filter-selected-wrap"></div>
+              <div class="category-sort-wrap">
+                 <!-- <div class="category-sort-select">
+                      <select id="input-sort" class="form-control" onchange="location = this.value;">
+                          {% for sorts in sorts %}
+                              {% if sorts.value == '%s-%s'|format(sort, order) %}
+                                  <option value="{{ sorts.href }}" selected="selected">{{ sorts.text }}</option>
+                              {% else %}
+                                  <option value="{{ sorts.href }}">{{ sorts.text }}</option>
+                              {% endif %}
+                          {% endfor %}
+                      </select>
+                  </div>-->
+                  <button type="button" id="button-main-catalog"  class="{{ main_class }} button-view-type btn btn-default">
+                      {#<i class="fa fa-th"></i>#}
+                      <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 17 17"><g><g><path fill="#019fff" d="M0 0h3v3H0zm7 0h3v3H7zm7 0h3v3h-3zM0 7h3v3H0zm7 0h3v3H7zm7 0h3v3h-3zM0 14h3v3H0zm7 0h3v3H7zm7 0h3v3h-3z"/></g></g></svg>
+                  </button>
+                  <button type="button" id="button-wide-catalog"  class="{{ wide_class }} button-view-type btn btn-default">
+                      {#<i class="fa fa-th-list"></i>#}
+                      <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 17 17"><g><g><path fill="#019fff" d="M0 0h3v3H0zm7 0h10v3H7zM0 7h3v3H0zm7 0h10v3H7zm-7 7h3v3H0zm7 0h10v3H7z"/></g></g></svg>
+                  </button>
+                  <button type="button" id="button-price-catalog"  class="{{ price_class }} button-view-type btn btn-default">
+                      {#<i class="fa fa-align-justify"></i>#}
+                      <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 17 17"><g><g><path fill="#019fff" d="M0 0h17v2H0zm0 5h17v2H0zm0 5h17v2H0zm0 5h17v2H0z"/></g></g></svg>
+                  </button>
+              </div>
+          </div>
+          <script>
+              $(window).on('resize',function () {
+                  if($(this).width()<=767){
+                      $.ajax({
+                          url: 'index.php?route=product/category/setSession',
+                          type: 'post',
+                          dataType: 'json',
+                          data: 'key=button-main-catalog',
+                          crossDomain: true,
+                          success: function(json) {
+                          }
+                      });
+                      $('.button-view-type').removeClass('active');
+                      $('#button-main-catalog-1').addClass('active');
+
+                      $('.catalog-category-wrapper').removeClass('wide-catalog');
+                      $('.catalog-category-wrapper').removeClass('price-catalog');
+                      $('.catalog-category-wrapper').removeClass('wide-price-catalog');
+                  }
+              })
+              $(document).ready(function() {
+
+
+                  $('#button-main-catalog-1').click(function() {
+                      $('.button-view-type').removeClass('active');
+                      $(this).addClass('active');
+                      $('.catalog-category-wrapper').removeClass('wide-catalog-1');
+                  });
+                  $('#button-wide-catalog-1').click(function() {
+                      $('.button-view-type').removeClass('active');
+                      $(this).addClass('active');
+                      $('.catalog-category-wrapper').addClass('wide-catalog-1');
+                  });
+
+
+
+                  $('#button-main-catalog').click(function() {
+                      $.ajax({
+                          url: 'index.php?route=product/category/setSession',
+                          type: 'post',
+                          dataType: 'json',
+                          data: 'key=button-main-catalog',
+                          crossDomain: true,
+                          success: function(json) {
+                          }
+                      });
+                      $('.button-view-type').removeClass('active');
+                      $(this).addClass('active');
+
+                      $('.catalog-category-wrapper').removeClass('wide-catalog');
+                      $('.catalog-category-wrapper').removeClass('price-catalog');
+                      $('.catalog-category-wrapper').removeClass('wide-price-catalog');
+                  });
+
+                  $('#button-wide-catalog').click(function() {
+                      $.ajax({
+                          url: 'index.php?route=product/category/setSession',
+                          type: 'post',
+                          dataType: 'json',
+                          data: 'key=button-wide-catalog',
+                          crossDomain: true,
+                          success: function(json) {
+                          }
+                      });
+                      $('.button-view-type').removeClass('active');
+                      $(this).addClass('active');
+
+                      $('.catalog-category-wrapper').removeClass('price-catalog');
+                      $('.catalog-category-wrapper').addClass('wide-catalog');
+                      $('.catalog-category-wrapper').addClass('wide-price-catalog');
+                  });
+                  $('#button-price-catalog').click(function() {
+                      $.ajax({
+                          url: 'index.php?route=product/category/setSession',
+                          type: 'post',
+                          dataType: 'json',
+                          data: 'key=button-price-catalog',
+                          crossDomain: true,
+                          success: function(json) {
+                          }
+                      });
+                      $('.button-view-type').removeClass('active');
+                      $(this).addClass('active');
+
+                      $('.catalog-category-wrapper').removeClass('wide-catalog');
+                      $('.catalog-category-wrapper').addClass('price-catalog');
+                      $('.catalog-category-wrapper').addClass('wide-price-catalog');
+                  });
+              });
+          </script>
+
+
+
+
+          {#<div class="col-md-2 col-sm-6 hidden-xs">#}
+          {#<div class="btn-group btn-group-sm">#}
+            {#<button type="button" id="list-view" class="btn btn-default" data-toggle="tooltip" title="{{ button_list }}"><i class="fa fa-th-list"></i></button>#}
+            {#<button type="button" id="grid-view" class="btn btn-default" data-toggle="tooltip" title="{{ button_grid }}"><i class="fa fa-th"></i></button>#}
+          {#</div>#}
+        {#</div>#}
+          {#<div class="form-group"><a href="{{ compare }}" id="compare-total" class="btn btn-link">{{ text_compare }}</a></div>#}
+            {#<label class="input-group-addon" for="input-sort">{{ text_sort }}</label>#}
+
+
+      <div class="catalog-category-wrapper products-wrapper {{ catalog_category_wrapper_class }}">
+          {% for product in products %}
+            <div class="product-layout product-layout-catalog">
+              <div class="product-thumb transition">
+
+                  {% if(product.metka_id=='top') %} <div class="product-sticker" style="background: #347ad9;">Топ продаж</div>{% endif %}
+                  {% if(product.metka_id=='new') %}<div class="product-sticker" style="background: #ffc001;">Новинка</div>{% endif %}
+                  {% if(product.metka_id=='super_price') %}<div class="product-sticker" style="background: #ff6e19;">Суперцена</div>{% endif %}
+
+                <div class="image"><a href="{{ product.href }}"><img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" class="img-responsive" /></a></div>
+                <div class="caption">
+                  <div class="products-name give-me-ellipsis"><a href="{{ product.href }}">{{ product.name }}</a></div>
+                  <div class="products-inform">
+                      {% if product.rating %}
+                        <div class="rating">
+                            {% for i in 1..5 %}
+                                {% if product.rating < i %} <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-2x"></i></span> {% else %} <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span> {% endif %}
+                            {% endfor %}
+                        </div>
+                      {% endif %}
+                      {% if product.reviews %}
+                        <div class="products-review-quantity" onclick="location='{{ product.href }}#tab-review'">
+                          <div class="products-review-quantity-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="18" height="18" viewBox="0 0 18 18"><g><g><image width="18" height="18" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAABbklEQVQ4T63UMUiVYRTG8d8ViVzDoKglWgIhDB2CyBaRJkmDiBqCcnJwEgQxqCmQGgJxEAVBvKKIlmuL2FBLVlsIpd5IXJsUhIoD7weXr764ej3j4X3/nPOc55ySv6MBt3AbHTiTnuziLRbxCr+qv5ZynCuYxmlM4g228BsX0ImH+IkH+JD9rwZ1YxbPMYq9f1QbqSYMYgj3sBLJDBSVrOERFgoA+XQPZnAjKgtQaPIRS3haIyR7NoIAtgeoF2O4+J92ivgnsYGBAIUu3/D4kNVkz5/gUoC+437S6CisaygH6CC1VamihFah2WfcTUOZw2XcQWiTRfjsx3GAzqGStRZ+CNceJa6GZQJUxtc6xI4htdQ7/hOpiP7jMGSI35qtSBtW0Yf5GoU6j23E+N/nlzb0eoFn2C8ARjsZ5BNehx2KzsgpTKUzspluT5yRrrTYMfIJrOMlxvOgKKL6sF3HWTRiB+/SSn3BMG6iGct/AFy+UfqaNluTAAAAAElFTkSuQmCC"/></g></g></svg>
+                          </div>
+                          <div class="products-review-quantity-number">{{ product.reviews }}</div>
+                        </div>
+                      {% endif %}
+                    <div class="products-compare-wish-btn">
+                      <button class="product_compare{{ product.product_id }} products-compare-btn" type="button" data-toggle="tooltip" title="{{ button_compare }}" onclick="compare.add('{{ product.product_id }}');">
+                          {% if product.compare_count %}
+                              <img src="/catalog/view/theme/4tv/image/icons-bg/compare-icon-2.png" alt="">
+                            <div class="products-compare-quantity-number product_compare_number{{ product.product_id }}">{{ product.compare_count }}</div>
+                          {% else %}
+                              <img src="/catalog/view/theme/4tv/image/icons-bg/compare-icon-1.png" alt="" class="products-compare-wish-img-black">
+                              <img src="/catalog/view/theme/4tv/image/icons-bg/compare-icon-2.png" alt="" class="products-compare-wish-img-blue" style="display: none;">
+                              {#<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="21" height="18" viewBox="0 0 21 18"><g><g><image width="21" height="18" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAASCAYAAAC0EpUuAAAB/0lEQVQ4T4XUSciPURQG8N9HWSBTSn0RkjKmzGJhKAtDlIUpw0JhIUkRyVSEBckCZWHImAUZFsqwILOFuRAylBKST1KGTt23bm/v///d5b3Pee45z3nOadD86YfDGIwHmI+n9cIaSo+tMAr5/S58xTasQQesyOL+4SZ+F3dl0lXYXpHFQhzCAhyseF+NHVWkLfEK3bEJGxPoJMbgKObiOmamt8BswFv0wp+4zzOdjtMpo0mJPEpqi61Yhj1Yix8IqYLsIqKSGThTJr2M71iCdwl4LGXUA6/RE2/S3ZwkRTfsQztMyEn74zHG4yqOoDdG1iG9hReYh3G4ggF4UpQfP43GwEQyAhE0FPdRznQI7qVPb6eYR7gRlQZpe3zASuzPOnsHz1LHy6ThhL4YnuEXYycagzQ8tx5d0ZSBoqwDCM1aZ5r+TJovSjIVIW3wHpuDNGz0FxcqBmEp1iU7FY2KBm3B3tzwKXYyWgTpLzysMXrTcDwZuyCNAZmNsxVDECM9KEhPoQ/G4ksGjF/PITz7PCs/sOHNqaXqOuFaYIO0MdmhM07gE4ZhCnYnzcuNin2wHOdxF10wC5/DloWlQuTo3sS0MELn6PClOj4NbOyCGM9vCRvuaSovlFobrWqiam6/5khjqqKKkCjcETp/TLP/shZrc6SxR2N/lk+U27EW6X+uvXstUzFpnAAAAABJRU5ErkJggg=="/></g></g></svg>#}
+                          {% endif %}
+                      </button>
+                      <button class="{{ product.class_name }} product{{ product.product_id }} products-wish-btn" type="button"  data-toggle="tooltip" title="{{ button_wishlist }}" onclick="wishlist.add('{{ product.product_id }}');">
+                          {#<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="21" height="18" viewBox="0 0 21 18"><g><g><image width="21" height="18" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAASCAYAAAC0EpUuAAACtklEQVQ4T6WUz0sbURDHZzY/dLEpSBtMokbERQpiUCSKhBwiCP0Dso9iSw+CUOm1BWkLjYeWQktP/YXeWopld+OtvXgQA6JNKIoiUlgFlTU2aQ/WJrG7zb7yghG10TTtHN6yb2c+OzPvOw/hwCRJcnEcdxsRr5im6QYAAwA+UUrHAOANISQfiUS4tra2awAwhIh+SqnNYrEk8/n8O8MwHg8MDHxhOGRLNBoNIOIHnud5QRBstbW1YBgGJJPJzPr6upVSGuM4btA0zTFE7GtubtbdbrfDarXC7u4uqKpqZLPZDKX0cjgc/ogTExMeu93+ubGx8VxXVxdwHFdMvvDc29uD6enpb7qun7fb7d9DodAFh8NxzMc0TUgkElTTtB+6rl/CaDT6oqamZqi/v996EliMzOVysLS09NXn813kef4YsPjCwFNTU78ymcw4Tk5Optrb252CIJR0rmRTVVVYXl5OoyzLNBgMQl1dXSXxJX1TqRTEYjFARVGyfr+f93q9/w3d2tqCeDyeY9D3LpcrFAgESjergl/Nzs7u7+zszLDygwAw09vbC/X19QWJ/Ytpmkbn5uZYaF8BIsvyPUSMMLDH47FUCt3e3mZAEwAehMPh+4eZKYoyCgB3e3p6oKGh4a/Bmqbl5+fngVL6RBTFkcOJOjKqI4j4sLu72/R6vWXBm5ub+Xg8zqZlVBRFllTB/uihJEkFsN/vN5qamuyntWJjY0NPJBI2SukdQsijo34lD0aSpGFEfNbZ2ZlvaWmxnQSvra0ZCwsL7E64RQh5evL7qad9AH7e0dGhC4JQVQxUVXV/cXGxilJ6kxDyslQlZ0pIUZRBSum4z+fTW1tbq1dXV3+urKywkocJIexKLGlldSnL8lUAeO10OvfT6XQ1AFwXRfHtWbIrCz3QMQO/AoAb5YDM/zdAcyC502og9QAAAABJRU5ErkJggg=="/></g></g></svg>#}
+                      </button>
+                    </div>
+                  </div>
+
+
+                    {% if product.attribute_groups %}
+                        <div class="products-attribute-wrap" style="display: none;">
+                            <div class="button-group-new-line"></div>
+                            <div class="products-attribute">
+                                <div class="products-attribute-inner give-me-ellipsis">
+                                    {% for attribute_group in product.attribute_groups %}
+                                        {% for attribute in attribute_group.attribute %}
+                                            <div class="products-attribute-name-text">
+                                                <span class="products-attribute-name">{{ attribute.name }}:</span>
+                                                <span class="products-attribute-text"> {{ attribute.text }}</span>
+                                            </div>
+                                        {% endfor %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+
+
+                </div>
+
+                  <!-- only wide, price view -->
+                  <div class="pc-quantity-wrap" style="display: none;">
+                      <!--pc-quantity-btn-->
+
+                      {% if 1==2 %}
+                      <div class="pc-quantity-price-wrap">
+                          <div class="pc-quantity-price-detail">от 4 штук и более</div>
+                          <div class="pc-quantity-price">77 грн</div>
+                      </div>
+                      {% endif %}
+                  </div>
+                  <!-- end only wide, price view -->
+
+
+                <div class="button-group-new-wrapper">
+                  <div class="button-group-new-line"></div>
+                  <div class="button-group-new">
+                      {% if product.price %}
+                        <p class="price">
+                            {% if not product.special %}
+                                {{ product.price }}
+                            {% else %}
+                              <span class="price-new">{{ product.special }}</span> <span class="price-old">{{ product.price }}</span>
+                            {% endif %}
+                            {% if product.tax %} <span class="price-tax">{{ text_tax }} {{ product.tax }}</span> {% endif %}
+                        </p>
+                      {% endif %}
+                    <button class="products-buy-btn btn btn-default"  type="button" onclick="cart.add('{{ product.product_id }}');">
+                      <span class="products-buy-btn-icon"></span>
+                      <span class="products-buy-btn-text">{{ button_cart }}</span>
+                    </button>
+                  </div>
+
+                    <!-- only wide, price view -->
+                    <div class="wide-price-buy-one-click-wrap" style="display: none;">
+                        <span class="wide-price-buy-one-click" onclick="oneclickModal('{{ product.product_id }}')">{{ buy_one_click_text }}</span>
+                    </div>
+
+
+
+                    <div class="products-compare-wish-btn" style="display: none;">
+                        <button class="product_compare{{ product.product_id }} products-compare-btn" type="button" data-toggle="tooltip" title="{{ button_compare }}" onclick="compare.add('{{ product.product_id }}');">
+                            {% if product.compare_count %}
+                                <img src="/catalog/view/theme/4tv/image/icons-bg/compare-icon-2.png" alt="">
+                                <div class="products-compare-quantity-number product_compare_number{{ product.product_id }}">{{ product.compare_count }}</div>
+                            {% else %}
+                                <img src="/catalog/view/theme/4tv/image/icons-bg/compare-icon-1.png" alt="" class="products-compare-wish-img-black">
+                                <img src="/catalog/view/theme/4tv/image/icons-bg/compare-icon-2.png" alt="" class="products-compare-wish-img-blue" style="display: none;">
+                                {#<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="21" height="18" viewBox="0 0 21 18"><g><g><image width="21" height="18" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAASCAYAAAC0EpUuAAAB/0lEQVQ4T4XUSciPURQG8N9HWSBTSn0RkjKmzGJhKAtDlIUpw0JhIUkRyVSEBckCZWHImAUZFsqwILOFuRAylBKST1KGTt23bm/v///d5b3Pee45z3nOadD86YfDGIwHmI+n9cIaSo+tMAr5/S58xTasQQesyOL+4SZ+F3dl0lXYXpHFQhzCAhyseF+NHVWkLfEK3bEJGxPoJMbgKObiOmamt8BswFv0wp+4zzOdjtMpo0mJPEpqi61Yhj1Yix8IqYLsIqKSGThTJr2M71iCdwl4LGXUA6/RE2/S3ZwkRTfsQztMyEn74zHG4yqOoDdG1iG9hReYh3G4ggF4UpQfP43GwEQyAhE0FPdRznQI7qVPb6eYR7gRlQZpe3zASuzPOnsHz1LHy6ThhL4YnuEXYycagzQ8tx5d0ZSBoqwDCM1aZ5r+TJovSjIVIW3wHpuDNGz0FxcqBmEp1iU7FY2KBm3B3tzwKXYyWgTpLzysMXrTcDwZuyCNAZmNsxVDECM9KEhPoQ/G4ksGjF/PITz7PCs/sOHNqaXqOuFaYIO0MdmhM07gE4ZhCnYnzcuNin2wHOdxF10wC5/DloWlQuTo3sS0MELn6PClOj4NbOyCGM9vCRvuaSovlFobrWqiam6/5khjqqKKkCjcETp/TLP/shZrc6SxR2N/lk+U27EW6X+uvXstUzFpnAAAAABJRU5ErkJggg=="/></g></g></svg>#}
+                            {% endif %}
+                        </button>
+                        <button class="{{ product.class_name }} product{{ product.product_id }}" type="button"  data-toggle="tooltip" title="{{ button_wishlist }}" onclick="wishlist.add('{{ product.product_id }}');">
+                            {#<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="21" height="18" viewBox="0 0 21 18"><g><g><image width="21" height="18" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAASCAYAAAC0EpUuAAACtklEQVQ4T6WUz0sbURDHZzY/dLEpSBtMokbERQpiUCSKhBwiCP0Dso9iSw+CUOm1BWkLjYeWQktP/YXeWopld+OtvXgQA6JNKIoiUlgFlTU2aQ/WJrG7zb7yghG10TTtHN6yb2c+OzPvOw/hwCRJcnEcdxsRr5im6QYAAwA+UUrHAOANISQfiUS4tra2awAwhIh+SqnNYrEk8/n8O8MwHg8MDHxhOGRLNBoNIOIHnud5QRBstbW1YBgGJJPJzPr6upVSGuM4btA0zTFE7GtubtbdbrfDarXC7u4uqKpqZLPZDKX0cjgc/ogTExMeu93+ubGx8VxXVxdwHFdMvvDc29uD6enpb7qun7fb7d9DodAFh8NxzMc0TUgkElTTtB+6rl/CaDT6oqamZqi/v996EliMzOVysLS09NXn813kef4YsPjCwFNTU78ymcw4Tk5Optrb252CIJR0rmRTVVVYXl5OoyzLNBgMQl1dXSXxJX1TqRTEYjFARVGyfr+f93q9/w3d2tqCeDyeY9D3LpcrFAgESjergl/Nzs7u7+zszLDygwAw09vbC/X19QWJ/Ytpmkbn5uZYaF8BIsvyPUSMMLDH47FUCt3e3mZAEwAehMPh+4eZKYoyCgB3e3p6oKGh4a/Bmqbl5+fngVL6RBTFkcOJOjKqI4j4sLu72/R6vWXBm5ub+Xg8zqZlVBRFllTB/uihJEkFsN/vN5qamuyntWJjY0NPJBI2SukdQsijo34lD0aSpGFEfNbZ2ZlvaWmxnQSvra0ZCwsL7E64RQh5evL7qad9AH7e0dGhC4JQVQxUVXV/cXGxilJ6kxDyslQlZ0pIUZRBSum4z+fTW1tbq1dXV3+urKywkocJIexKLGlldSnL8lUAeO10OvfT6XQ1AFwXRfHtWbIrCz3QMQO/AoAb5YDM/zdAcyC502og9QAAAABJRU5ErkJggg=="/></g></g></svg>#}
+                        </button>
+                    </div>
+                    {#<div class="products-compare-wish-btn" style="display: none;">#}
+                        {#<button class="{{ product.class_name_compare }} product_compare{{ product.product_id }}" type="button" data-toggle="tooltip" title="{{ button_compare }}" onclick="compare.add('{{ product.product_id }}');">#}
+                            {#<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="21" height="18" viewBox="0 0 21 18"><g><g><image width="21" height="18" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAASCAYAAAC0EpUuAAAB/0lEQVQ4T4XUSciPURQG8N9HWSBTSn0RkjKmzGJhKAtDlIUpw0JhIUkRyVSEBckCZWHImAUZFsqwILOFuRAylBKST1KGTt23bm/v///d5b3Pee45z3nOadD86YfDGIwHmI+n9cIaSo+tMAr5/S58xTasQQesyOL+4SZ+F3dl0lXYXpHFQhzCAhyseF+NHVWkLfEK3bEJGxPoJMbgKObiOmamt8BswFv0wp+4zzOdjtMpo0mJPEpqi61Yhj1Yix8IqYLsIqKSGThTJr2M71iCdwl4LGXUA6/RE2/S3ZwkRTfsQztMyEn74zHG4yqOoDdG1iG9hReYh3G4ggF4UpQfP43GwEQyAhE0FPdRznQI7qVPb6eYR7gRlQZpe3zASuzPOnsHz1LHy6ThhL4YnuEXYycagzQ8tx5d0ZSBoqwDCM1aZ5r+TJovSjIVIW3wHpuDNGz0FxcqBmEp1iU7FY2KBm3B3tzwKXYyWgTpLzysMXrTcDwZuyCNAZmNsxVDECM9KEhPoQ/G4ksGjF/PITz7PCs/sOHNqaXqOuFaYIO0MdmhM07gE4ZhCnYnzcuNin2wHOdxF10wC5/DloWlQuTo3sS0MELn6PClOj4NbOyCGM9vCRvuaSovlFobrWqiam6/5khjqqKKkCjcETp/TLP/shZrc6SxR2N/lk+U27EW6X+uvXstUzFpnAAAAABJRU5ErkJggg=="/></g></g></svg>#}
+                        {#</button>#}
+                        {#<button class="{{ product.class_name }} product{{ product.product_id }}" type="button" data-toggle="tooltip" title="{{ button_wishlist }}" onclick="wishlist.add('{{ product.product_id }}');">#}
+                            {#<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="21" height="18" viewBox="0 0 21 18"><g><g><image width="21" height="18" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAASCAYAAAC0EpUuAAACtklEQVQ4T6WUz0sbURDHZzY/dLEpSBtMokbERQpiUCSKhBwiCP0Dso9iSw+CUOm1BWkLjYeWQktP/YXeWopld+OtvXgQA6JNKIoiUlgFlTU2aQ/WJrG7zb7yghG10TTtHN6yb2c+OzPvOw/hwCRJcnEcdxsRr5im6QYAAwA+UUrHAOANISQfiUS4tra2awAwhIh+SqnNYrEk8/n8O8MwHg8MDHxhOGRLNBoNIOIHnud5QRBstbW1YBgGJJPJzPr6upVSGuM4btA0zTFE7GtubtbdbrfDarXC7u4uqKpqZLPZDKX0cjgc/ogTExMeu93+ubGx8VxXVxdwHFdMvvDc29uD6enpb7qun7fb7d9DodAFh8NxzMc0TUgkElTTtB+6rl/CaDT6oqamZqi/v996EliMzOVysLS09NXn813kef4YsPjCwFNTU78ymcw4Tk5Optrb252CIJR0rmRTVVVYXl5OoyzLNBgMQl1dXSXxJX1TqRTEYjFARVGyfr+f93q9/w3d2tqCeDyeY9D3LpcrFAgESjergl/Nzs7u7+zszLDygwAw09vbC/X19QWJ/Ytpmkbn5uZYaF8BIsvyPUSMMLDH47FUCt3e3mZAEwAehMPh+4eZKYoyCgB3e3p6oKGh4a/Bmqbl5+fngVL6RBTFkcOJOjKqI4j4sLu72/R6vWXBm5ub+Xg8zqZlVBRFllTB/uihJEkFsN/vN5qamuyntWJjY0NPJBI2SukdQsijo34lD0aSpGFEfNbZ2ZlvaWmxnQSvra0ZCwsL7E64RQh5evL7qad9AH7e0dGhC4JQVQxUVXV/cXGxilJ6kxDyslQlZ0pIUZRBSum4z+fTW1tbq1dXV3+urKywkocJIexKLGlldSnL8lUAeO10OvfT6XQ1AFwXRfHtWbIrCz3QMQO/AoAb5YDM/zdAcyC502og9QAAAABJRU5ErkJggg=="/></g></g></svg>#}
+                        {#</button>#}
+                    {#</div>#}
+                    <!-- end only wide, price view -->
+
+                </div>
+
+
+                  <!-- only wide, price view -->
+                  <div class="wide-price-article" style="display: none;">
+                      <div class="pc-quantity-price-detail">{{ text_model }}:</div>
+                      <div class="pc-quantity-price">{{ product.model }}</div>
+                  </div>
+                  <!-- end only wide, price view -->
+
+                  {% if product.attribute_groups %}
+                    <div class="products-attribute-wrap">
+                      <div class="button-group-new-line"></div>
+                      <div class="products-attribute">
+                        <div class="products-attribute-inner give-me-ellipsis">
+                            {% for attribute_group in product.attribute_groups %}
+                                {% for attribute in attribute_group.attribute %}
+                                  <div class="products-attribute-name-text">
+                                    <span class="products-attribute-name">{{ attribute.name }}:</span>
+                                    <span class="products-attribute-text"> {{ attribute.text }}</span>
+                                  </div>
+                                {% endfor %}
+                            {% endfor %}
+                        </div>
+                      </div>
+                    </div>
+                  {% endif %}
+
+              </div>
+            </div>
+        {% endfor %}
+
+          <!--button show_more-->
+
+      </div>
+
+
+
+
+
+
+      {#<div class="row">#}
+        {#<div class="col-sm-6 text-right">{{ results }}</div>#}
+      {#</div>#}
+
+          <div class="pagination-wrap">{{ pagination }}</div>
+
+          <div class="pagination-wrap-mob" style="display: none">
+{#              <ul class="pagination">#}
+{#                  <li><a href="https://test.uniup.com.ua/resivery-sat-t2-android-iptv">&lt;</a></li>#}
+{#                  <li><a href="https://test.uniup.com.ua/resivery-sat-t2-android-iptv">1</a></li>#}
+{#                  <li class="active"><span>2</span></li>#}
+{#                  <li><a href="https://test.uniup.com.ua/resivery-sat-t2-android-iptv?page=3">3</a></li>#}
+{#                  <li><a href="https://test.uniup.com.ua/resivery-sat-t2-android-iptv?page=4">4</a></li>#}
+{#                  <li><a href="https://test.uniup.com.ua/resivery-sat-t2-android-iptv?page=2">&gt;</a></li>#}
+{#              </ul>#}
+              {{ pagination }}
+          </div>
+          <style>
+              @media (max-width: 767px) {
+                  .pagination-wrap {
+                      display: none;
+                  }
+              }
+              @media (min-width: 768px) {
+                  .pagination-wrap-mob {
+                      display: none;
+                  }
+              }
+          </style>
+
+      {% endif %}
+      {% if not products %}
+      <p>{{ text_empty }}</p>
+      <div class="buttons">
+        <div class="pull-right"><a href="{{ continue }}" class="btn btn-primary">{{ button_continue }}</a></div>
+      </div>
+      {% endif %}
+      {{ content_bottom }}
+    </div>
+        {% if column_right %}
+            <div class="ac-col-right">
+                <div class="ac-banner">
+                    <aside id="column-right" class="col-sm-3 hidden-xs">
+                        {{ column_right }}
+                    </aside>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+    {{ content_bottom }}
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('.newsletter-wrapper-main').appendTo('.category-newsletter-wrap');
+    });
+
+
+    filter_mob_offset();
+    $(document).ready(function() {
+        filter_mob_offset();
+    });
+    $(window).scroll(function() {
+        filter_mob_offset();
+    });
+    function filter_mob_offset() {
+        if (innerWidth < 768) {
+            var el = $('.category-filter-mob-wrap-main');
+            var el_offset_top = el.offset().top;
+            var window_offset_top = $(window).scrollTop();
+            if (el_offset_top <= window_offset_top) {
+                el.find('.category-filter-mob-wrap').addClass('fixed');
+            } else {
+                el.find('.category-filter-mob-wrap').removeClass('fixed');
+            }
+        }
+    }
+</script>
+
+{{ footer }} 

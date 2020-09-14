@@ -1,0 +1,65 @@
+body {
+	background: #FFFFFF;
+}
+body, td, th, input, select, textarea, option, optgroup {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+}
+h1 {
+	text-transform: uppercase;
+	text-align: right;
+	font-size: 24px;
+	font-weight: normal;
+	padding-bottom: 5px;
+	margin-top: 0px;
+	margin-bottom: 15px;
+	border-bottom: 1px solid #DDDDE0;
+}
+.store {
+	width: 100%;
+	margin-bottom: 20px;
+}
+.div2 {
+	float: left;
+	display: inline-block;
+}
+.div3 {
+	float: right;
+	display: inline-block;
+	padding: 5px;
+}
+.heading td {
+	background: #EFEFEF;
+}
+.address, .product {
+	border-collapse: collapse;
+}
+.address {
+	width: 100%;
+	margin-bottom: 20px;
+	border-top: 1px solid #DDDDE0;
+	border-right: 1px solid #DDDDE0;
+}
+.address th, .address td {
+	border-left: 1px solid #DDDDE0;
+	border-bottom: 1px solid #DDDDE0;
+	padding: 5px;
+	vertical-align: text-bottom;
+}
+.address td {
+	width: 50%;
+}
+.product {
+	width: 100%;
+	margin-bottom: 20px;
+	border-top: 1px solid #DDDDE0;
+	border-right: 1px solid #DDDDE0;
+}
+.product td {
+	border-left: 1px solid #DDDDE0;
+	border-bottom: 1px solid #DDDDE0;
+	padding: 5px;
+}
+@media print {
+    .print-buttons { display:none; }
+}

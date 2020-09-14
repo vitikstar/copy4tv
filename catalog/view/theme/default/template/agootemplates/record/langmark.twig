@@ -1,0 +1,28 @@
+{% if languages|length > 1 %}
+
+<div class="pull-left">
+ <div id="form-language">
+ 
+<div class="btn-group">
+ <button class="btn btn-link dropdown-toggle" data-toggle="dropdown">
+ {% for language in languages %}
+ {% if language.current %} 
+ <img src="catalog/language/{{ language.code }}/{{ language.code }}.png" alt="{{ language.name }}" title="{{ language.name }}">
+ {% endif %}
+ {% endfor %}
+ <span class="hidden-xs hidden-sm hidden-md">{{ text_language }}</span> <i class="fa fa-caret-down"></i></button>
+ <ul class="dropdown-menu">
+ {% for language in languages %}
+ <li>
+ <button class="btn btn-link btn-block language-select" onclick="window.location = '{{ language.url }}'"><img src="catalog/language/{{ language.code }}/{{ language.code }}.png" alt="{{ language.name }}" title="{{ language.name }}" /> {{ language.name }}</button>
+ </li>
+ {% endfor %}
+ </ul>
+ </div>
+
+ 
+ 
+ </div>
+</div>
+
+{% endif %}
